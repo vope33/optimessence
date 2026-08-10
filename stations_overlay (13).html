@@ -1,0 +1,2988 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OptimEssence — prix des carburants sur votre trajet et autour de vous</title>
+<meta name="description" content="Comparez le prix du gazole, SP95, SP98, E10, E85 et GPL le long d'un itinéraire ou autour de vous. Prix officiels mis à jour toutes les 10 minutes, coût réel du plein détour compris, et bornes de recharge électrique.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="À COMPLÉTER">
+<link rel="canonical" href="https://example.org/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="OptimEssence">
+<meta property="og:title" content="OptimEssence — prix des carburants sur votre trajet et autour de vous">
+<meta property="og:description" content="Les stations les moins chères sur votre itinéraire ou dans un rayon, classées par coût réel du plein, détour compris.">
+<meta property="og:url" content="https://example.org/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#11141a">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%20%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22oeDrop%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220.35%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%235b95ff%22%2F%3E%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%232456c8%22%2F%3E%20%3C%2FlinearGradient%3E%20%3C%2Fdefs%3E%20%3Cpath%20d%3D%22M32%204%20C32%204%2051.5%2026.5%2051.5%2038.5%20A19.5%2019.5%200%201%201%2012.5%2038.5%20C12.5%2026.5%2032%204%2032%204%20Z%22%20fill%3D%22url(%23oeDrop)%22%2F%3E%20%3Cpath%20d%3D%22M32%2024.5%20L32%2042.5%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%226.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M22.5%2036%20L32%2045.5%20L41.5%2036%22%20fill%3D%22none%22%20stroke%3D%22%2322c55e%22%20stroke-width%3D%226.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3C%2Fsvg%3E">
+<link rel="apple-touch-icon" href="icon-180.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication",
+ "name":"OptimEssence",
+ "url":"https://example.org/",
+ "applicationCategory":"TravelApplication",
+ "operatingSystem":"Tout navigateur web",
+ "inLanguage":"fr-FR",
+ "offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
+ "description":"Comparateur des prix des carburants le long d'un itinéraire ou autour d'une position, à partir des données publiques françaises.",
+ "featureList":["Stations les moins chères sur un trajet","Recherche par rayon","Coût réel du plein détour compris","Bornes de recharge électrique"]}
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+:root{
+  --ink:#11141a; --panel:#181c24; --panel2:#212633; --line:#2b323e;
+  --text:#e8ecf3; --muted:#98a2b1; --accent:#3d7dff; --accent-2:#2b64d8;
+  --block:#ff8a3d; --warn:#ffcf7a;
+  --mono: ui-monospace,"SF Mono","Cascadia Code","Segoe UI Mono",Consolas,monospace;
+  --sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --liste: "Trebuchet MS","Lucida Grande","DejaVu Sans",Verdana,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:var(--sans);color:var(--text);background:var(--ink);font-size:15px}
+#app{display:flex;height:100dvh;overflow:hidden}
+
+#sheetGrip{display:none}
+#side{width:378px;flex:0 0 378px;background:var(--panel);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;overflow-y:auto}
+.head{padding:10px 20px 14px;border-bottom:1px solid var(--line);position:relative}
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;justify-content:space-between;gap:8px;
+  position:absolute;top:8px;right:14px;margin:0;z-index:2}
+#cote{background:transparent;border:1px solid var(--line);border-radius:6px;color:var(--muted);
+  cursor:pointer;font-size:13px;line-height:1;padding:3px 7px;letter-spacing:0}
+#cote:hover{color:var(--text);border-color:var(--accent)}
+/* Panneau à droite : on inverse l'ordre et la bordure de séparation. */
+#app.droite{flex-direction:row-reverse}
+#app.droite #side{border-right:0;border-left:1px solid var(--line)}
+#app.droite #card{right:auto;left:12px}
+.head h1{margin:0 0 2px;font-size:21px;font-weight:400;letter-spacing:-.015em;
+  display:flex;align-items:center;gap:9px}
+.head h1 .mark{width:28px;height:28px;flex:0 0 28px}
+.head h1 .lg{font-weight:300;color:#cfd8e6}
+.head h1 .hv{font-weight:700;color:#fff}
+.head p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}
+
+.modebar{display:flex;padding:12px 20px 0;gap:0}
+.modebar button{flex:1;background:transparent;border:0;border-bottom:2px solid var(--line);
+  color:var(--muted);padding:10px 4px;font:650 15px var(--sans);cursor:pointer}
+.modebar button[aria-pressed=true]{color:var(--text);border-bottom-color:var(--accent)}
+
+.form{padding:16px 20px;display:flex;flex-direction:column;gap:12px;border-bottom:1px solid var(--line)}
+label{display:block;font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px}
+.field{position:relative}
+input[type=text],input[type=password],select{width:100%;background:var(--panel2);border:1px solid var(--line);
+  color:var(--text);border-radius:9px;padding:10px 11px;font:400 14px var(--sans);appearance:none}
+input::placeholder{color:#6b7482}
+.field.loc input{padding-right:40px}
+.geo{position:absolute;right:5px;top:5px;width:32px;height:32px;border:0;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;color:var(--muted);cursor:pointer;font-size:16px}
+.geo:hover{background:#2c3240;color:var(--text)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:3px}
+.seg button{flex:1;border:0;background:transparent;color:var(--muted);padding:8px 4px;border-radius:6px;
+  font:600 13px var(--sans);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--accent);color:#fff}
+.rng{display:flex;align-items:center;gap:10px}
+.rng input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
+.rng output{font:600 13px var(--mono);min-width:56px;text-align:right}
+.src{font-size:11.5px;color:var(--muted);line-height:1.5;margin:6px 0 0}
+details{border-top:1px dashed var(--line);padding-top:10px}
+summary{cursor:pointer;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+ ";color:var(--accent)}
+details[open] summary::before{content:"– "}
+.adv{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.adv .wide{grid-column:1/-1}
+.chk{display:flex;align-items:center;gap:8px;grid-column:1/-1;font-size:13px;color:var(--text);cursor:pointer}
+.chk input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer}
+/* curseur « main » sur tout élément cliquable de formulaire */
+select,input[type=checkbox],input[type=radio],label.chk,label.mc-check,.mc-chip .seg button{cursor:pointer}
+.hint{grid-column:1/-1;font-size:11.5px;color:var(--muted);line-height:1.5;margin:0}
+.hint a{color:var(--accent)}
+button.go{margin-top:2px;background:var(--accent);color:#fff;border:0;border-radius:9px;
+  padding:13px;font:650 15px var(--sans);cursor:pointer}
+button.go:hover{background:var(--accent-2)}
+button.go:disabled{opacity:.55;cursor:progress}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.blockhdr{display:flex;align-items:center;gap:8px}
+button.clear{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:9px;
+  padding:9px 11px;font:600 12px var(--sans);cursor:pointer}
+button.clear:hover{color:var(--text)}
+
+.status{padding:11px 20px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);line-height:1.45}
+.status.err{color:#ffb4b4;background:#3a1d1d}
+.status.warn{color:var(--warn);background:#332a17}
+.status .trip{color:var(--text)}
+.legend{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;padding:10px 20px;font:600 10.5px var(--mono);
+  letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+.legend .bar{flex:1 0 90px;min-width:80px;height:6px;border-radius:3px;
+  background:linear-gradient(90deg,#16a34a,#eab308,#dc2626)}
+#listWrap{display:contents}
+/* ---- liste compacte des résultats ---- */
+#results{list-style:none;margin:0;padding:6px 0}
+.item{display:grid;grid-template-columns:auto auto 1fr auto;gap:10px;align-items:center;
+  padding:11px 20px;cursor:pointer;border-left:3px solid transparent}
+.num{font:700 12px var(--mono);color:var(--muted);min-width:20px;text-align:right}
+.item.on .num,.item:hover .num{color:var(--accent)}
+.item:hover,.item.on{background:var(--panel2);border-left-color:var(--accent)}
+.item.relegue{opacity:.42}
+.item.relegue .pill{filter:grayscale(1)}
+/* meilleur choix : liseré vert + fond très léger + point */
+.item.best{border-left-color:#22c55e;background:rgba(34,197,94,.05)}
+.item.best .num{color:#22c55e}
+.item.best .num::before{content:"● ";font-size:8px;vertical-align:2px}
+.why{display:block;font:600 9.5px var(--mono);color:var(--warn);text-transform:uppercase;letter-spacing:.04em}
+.pill{font:650 13px var(--liste);color:#fff;border-radius:7px;padding:6px 8px;text-align:center;line-height:1.15}
+.pill small{display:block;font:500 9px var(--mono);opacity:.85}
+.who{min-width:0}
+.who b{display:block;font:600 13.5px var(--liste);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who>span{display:block;font:400 12px var(--liste);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag.hw{border:0;padding:0;margin-left:5px;vertical-align:-2px;background:none}
+.tag.hw svg{display:block}
+.tag{display:inline-block;font:600 11.5px var(--liste);color:var(--accent);border:1px solid var(--line);
+  border-radius:4px;padding:0 4px;margin-left:6px;vertical-align:1px}
+.meta{text-align:right;font:600 12px var(--liste);font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.meta b{display:block;color:var(--text);font:700 13px var(--liste);font-variant-numeric:tabular-nums}
+.meta i{font-style:normal;color:var(--accent)}
+/* séparateur entre stations mesurées et estimées */
+li.sep{list-style:none;padding:10px 20px 4px;margin-top:6px;border-top:1px dashed var(--line)}
+li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--warn)}
+/* lignes estimées : légèrement atténuées, prix en gris pour rappeler l'incertitude */
+.item.est{opacity:.86}
+.item.est .meta b{color:var(--warn)}
+.item.est .num::after{content:" ~";color:var(--warn);font-size:10px}
+
+#map{flex:1;background:#e8eaed;position:relative}
+#map.marking{cursor:crosshair}
+.pin{background:#fff;border-radius:50%;border:2px solid #111;width:16px;height:16px;
+  font:700 10px/13px var(--sans);text-align:center;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.leaflet-popup-content{font-family:var(--sans);font-size:13px}
+.leaflet-popup-content b{font-family:var(--mono)}
+[hidden]{display:none !important}
+/* perce le voile sombre : la zone du couloir redevient claire */
+#recentrer{position:absolute;right:12px;bottom:26px;z-index:1100;width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;border:1px solid var(--line);background:rgba(24,28,36,.95);color:var(--text);
+  font-size:19px;line-height:1;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.45)}
+#recentrer:hover{color:var(--accent);border-color:var(--accent)}
+#app.droite #recentrer{right:auto;left:12px}
+/* contrôles de zoom Leaflet, thème sombre, en bas à gauche */
+.leaflet-control-zoom{border:1px solid var(--line)!important;box-shadow:0 3px 12px rgba(0,0,0,.45)!important;
+  margin-left:12px!important;margin-bottom:12px!important;border-radius:9px!important;overflow:hidden}
+.leaflet-control-zoom a{background:rgba(24,28,36,.95)!important;color:var(--text)!important;
+  border-bottom:1px solid var(--line)!important;width:34px!important;height:34px!important;
+  line-height:34px!important;font-size:19px!important}
+.leaflet-control-zoom a:hover{background:#2c3240!important;color:var(--accent)!important}
+.leaflet-control-zoom a:last-child{border-bottom:0!important}
+/* ---- engrenage « réglages avancés » superposé à la carte ---- */
+#advGear{position:absolute;right:12px;bottom:76px;z-index:1150;width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;border-radius:50%;
+  border:1px solid var(--line);background:rgba(24,28,36,.95);color:var(--text);
+  cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.45)}
+#advGear:hover,#advGear.on{color:var(--accent);border-color:var(--accent)}
+#advGear.on svg{transform:rotate(35deg);transition:transform .2s}
+#app.droite #advGear{right:auto;left:12px}
+#advPanel{position:absolute;right:12px;bottom:126px;z-index:1200;width:300px;max-width:calc(100% - 24px);
+  max-height:60dvh;overflow-y:auto;background:rgba(18,22,30,.94);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:13px;padding:14px 16px 16px;
+  box-shadow:0 10px 34px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:12px}
+#app.droite #advPanel{right:auto;left:12px}
+#advPanel[hidden]{display:none}
+#advPanel .advHead{display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+#advPanel #advClose{background:transparent;border:0;color:var(--muted);font-size:20px;
+  line-height:1;cursor:pointer;padding:0 2px}
+#advPanel #advClose:hover{color:var(--text)}
+#advPanel .advIn{display:flex;flex-direction:column;gap:12px}
+
+/* ---- toast de progression au centre de la carte ---- */
+#mapStatus{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:1180;pointer-events:none;max-width:min(84%,420px);
+  display:flex;align-items:center;gap:11px;
+  background:rgba(14,18,26,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:13px;padding:14px 18px;
+  box-shadow:0 10px 34px rgba(0,0,0,.55);
+  font:600 14.5px var(--mono,ui-monospace,monospace);color:var(--text);line-height:1.4;
+}
+#mapStatus[hidden]{display:none}
+#mapStatus .spin{
+  flex:0 0 auto;width:20px;height:20px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.22);border-top-color:var(--accent);
+  animation:mapspin .8s linear infinite;
+}
+@keyframes mapspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){#mapStatus .spin{animation:none}}
+.advIn{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.filtres{padding:8px 20px;font:600 11px var(--mono);letter-spacing:.03em;
+  color:var(--muted);border-bottom:1px solid var(--line);background:var(--panel2)}
+#map.zoomFaible .prixTip{display:none}
+.prixTip{background:rgba(17,20,26,.92);border:1px solid var(--line);border-radius:6px;
+  color:#fff;font:700 11.5px var(--liste);font-variant-numeric:tabular-nums;
+  padding:2px 6px;box-shadow:0 2px 8px rgba(0,0,0,.45);white-space:nowrap}
+.prixTip::before{display:none}
+.legal{padding:14px 20px 22px;border-top:1px solid var(--line);margin-top:8px}
+.legal button{background:none;border:0;color:var(--muted);font:500 11.5px var(--sans);
+  text-decoration:underline;cursor:pointer;padding:0}
+.legal button:hover{color:var(--text)}
+#legalBox{position:fixed;inset:0;z-index:3000;background:rgba(8,10,14,.72);
+  display:flex;align-items:center;justify-content:center;padding:24px}
+#legalIn{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  max-width:620px;max-height:82dvh;overflow-y:auto;padding:22px 26px;
+  font:400 13px/1.6 var(--sans);color:var(--text)}
+#legalIn h2{margin:0 0 4px;font-size:17px}
+#legalIn h3{margin:18px 0 4px;font-size:13px;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono)}
+#legalIn ul{margin:4px 0;padding-left:18px}
+#legalIn a{color:var(--accent)}
+#legalIn code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:12px}
+#legalX{margin-top:18px;background:var(--accent);color:#fff;border:0;border-radius:8px;
+  padding:9px 16px;font:600 13px var(--sans);cursor:pointer}
+/* Fiche d'information : ancrée en haut à droite (la barre de réglages est à gauche). */
+#card{position:absolute;top:12px;right:12px;bottom:auto;width:262px;z-index:1200;
+  background:rgba(24,28,36,.97);border:1px solid var(--line);border-radius:11px;
+  padding:12px 14px;font:400 12.5px/1.5 var(--sans);color:var(--text);
+  box-shadow:0 8px 26px rgba(0,0,0,.45);max-height:calc(100% - 24px);overflow-y:auto}
+#card b{font-family:var(--mono);font-size:13px}
+#card a{color:var(--accent)}
+#cardX{position:absolute;top:6px;right:8px;background:transparent;border:0;
+  color:var(--muted);font-size:17px;cursor:pointer;line-height:1}
+#cardX:hover{color:var(--text)}
+@media (max-width:900px){#card{width:auto;left:12px;right:12px}}
+
+@media (max-width:900px){
+  /* La carte occupe tout l'écran ; le panneau devient une feuille coulissante par-dessus. */
+  #app{flex-direction:column;position:relative}
+  #app.droite{flex-direction:column}
+  #map{order:0;position:fixed;inset:0;height:100dvh;width:100%;min-height:0;z-index:0}
+
+  #side{
+    order:1;position:fixed;left:0;right:0;bottom:0;width:100%;
+    height:90dvh;max-height:90dvh;z-index:1400;
+    border-right:0;border-top:0;border-radius:18px 18px 0 0;
+    background:var(--panel);box-shadow:0 -8px 30px rgba(0,0,0,.5);
+    display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    transform:translateY(var(--sheet-y, 62dvh));
+    transition:transform .28s cubic-bezier(.22,.61,.36,1);
+    overscroll-behavior:contain;
+  }
+  #side.dragging{transition:none}
+  #app.droite #side{border-left:0}
+  /* poignée de préhension, collante en haut de la feuille */
+  #sheetGrip{position:sticky;top:0;z-index:2;flex:0 0 auto;display:flex;align-items:center;
+    justify-content:center;height:26px;cursor:grab;touch-action:none;background:var(--panel);
+    border-radius:18px 18px 0 0}
+  #sheetGrip .gripBar{width:42px;height:5px;border-radius:3px;background:var(--line)}
+  #side.dragging #sheetGrip{cursor:grabbing}
+  .head{padding:4px 16px 8px}
+  .head p{display:none}
+  .head .eyebrow{display:none}
+  .form{padding:12px 16px}
+  #results{flex:0 0 auto}
+
+  #cote{display:none}
+
+  /* cibles tactiles : 44 px minimum */
+  input[type=text],input[type=password],select{padding:13px 12px;font-size:16px}
+  .seg button{padding:11px 4px;font-size:14px}
+  button.go{padding:15px;font-size:15.5px;position:sticky;bottom:0;z-index:5}
+  .chk{padding:6px 0;font-size:14.5px}
+  .chk input{width:20px;height:20px}
+  .modebar button{padding:13px 4px;font-size:15.5px}
+  .geo{width:38px;height:38px;top:6px}
+  #legalBox{padding:12px}
+  #legalIn{padding:18px;font-size:13.5px}
+
+  /* fiche station : au-dessus de la carte, sous la feuille */
+  #card{top:auto;bottom:calc(38dvh + 12px);left:8px;right:8px;width:auto;max-height:44dvh;
+    font-size:14.5px;overflow-wrap:anywhere;line-height:1.55;z-index:1300}
+  #card b{font-size:15px}
+
+  /* boutons flottants : config en haut-gauche, action en bas-droite */
+  #mcToggle{top:8px;left:8px}
+  #advGear{top:8px;bottom:auto;right:auto}
+  #app.droite #advGear{right:auto}
+  #recentrer{right:12px;bottom:calc(38dvh + 12px);width:46px;height:46px}
+  #app.droite #recentrer{right:12px;left:auto}
+  #advPanel{top:56px;left:8px;right:8px;bottom:auto;width:auto;max-width:none}
+  #app.droite #advPanel{left:8px;right:8px}
+  /* le zoom Leaflet remonte au-dessus de la feuille réduite */
+  .leaflet-bottom.leaflet-left{bottom:calc(38dvh)}
+
+  /* .item */
+  .item{padding:12px 16px}
+
+  /* --- polices agrandies sur smartphone --- */
+  label{font-size:13.5px}
+  .head h1{font-size:22px}
+  .head p{font-size:15px}
+  .src,.hint{font-size:14px}
+  .status{font-size:16px;padding:14px 18px;line-height:1.5}
+  .legend{font-size:13px}
+  .item{font-size:16px}
+  .item .who b{font-size:15px}
+  .pill{font-size:14px}
+  .meta{font-size:13px}
+  .meta b{font-size:14px}
+  #legalIn{font-size:15.5px;line-height:1.6}
+  #legalIn h2{font-size:20px}
+  #legalIn h3{font-size:16px}
+  input[type=text],input[type=password],select{font-size:16.5px}
+  .modebar button{font-size:16.5px}
+  button.go{font-size:17px}
+  /* barre de puces overlay */
+  .mc-chip > label{font-size:12.5px}
+  .mc-chip select{font-size:16px;padding:10px 30px 10px 12px}
+  .mc-chip .seg button{font-size:15px;padding:10px 15px}
+  .mc-chip output{font-size:15px}
+  label.chk.mc-check{font-size:15.5px;padding:11px 14px}
+  label.chk.mc-check input{width:20px;height:20px}
+  #mcToggle{font-size:15px}
+  #mapStatus{font-size:16.5px;padding:16px 22px}
+  #advPanel{font-size:16px}
+  #advPanel .advHead{font-size:14px}
+  /* la fiche station couvre le bouton recentrer : on le masque tant qu'elle est ouverte */
+  #map.ficheOuverte #recentrer{display:none}
+  /* annuler les décalages « fiche ouverte » du desktop (fiche en bas sur mobile) */
+  #map.ficheOuverte #advGear{right:auto}
+  #map.ficheOuverte #advPanel{right:8px;left:8px}
+}
+
+/* ---- réglages rapides : colonne verticale à gauche de la carte ---- */
+#mapControls{
+  position:absolute;top:12px;left:12px;bottom:auto;right:auto;z-index:1150;
+  display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:8px;
+  width:210px;max-width:46%;max-height:calc(100% - 108px);overflow-y:auto;padding-right:2px;
+  pointer-events:none;                 /* la carte reste manipulable entre les puces */
+}
+#mapControls > *{pointer-events:auto}
+/* bouton de repli/dépli de la barre : masqué sur desktop (barre toujours visible) */
+#mcToggle{display:none}
+.mc-chip{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(18,22,30,.82);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+  border:1px solid var(--line);border-radius:11px;padding:8px 11px;
+  box-shadow:0 4px 16px rgba(0,0,0,.35);max-width:100%;
+}
+.mc-chip > label{
+  margin:0;font:600 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);white-space:nowrap;flex:0 0 auto;
+}
+/* en colonne, chaque puce prend toute la largeur et le contrôle s'étire */
+.mc-chip .rng{gap:8px;min-width:0;flex:1 1 auto}
+.mc-chip .rng input[type=range]{min-width:0;flex:1 1 auto}
+.mc-chip output{font:600 12px var(--mono);color:var(--accent);min-width:42px;text-align:right;flex:0 0 auto}
+.mc-chip select{
+  background:var(--panel2);border:1px solid var(--line);color:var(--text);
+  border-radius:8px;padding:7px 26px 7px 9px;font-size:13px;flex:1 1 auto;min-width:0;
+}
+.mc-chip .seg{margin:0;flex:1 1 auto}
+.mc-chip .seg button{padding:6px 12px;font-size:12px;white-space:nowrap;flex:1 1 auto}
+/* cases à cocher déplacées dans la barre : même habillage que les puces */
+label.chk.mc-check{
+  display:flex;align-items:center;gap:7px;padding:8px 11px;margin:0;
+  background:rgba(18,22,30,.82);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+  border:1px solid var(--line);border-radius:11px;
+  box-shadow:0 4px 16px rgba(0,0,0,.35);
+  font-size:12.5px;color:var(--text);white-space:normal;line-height:1.25;cursor:pointer;pointer-events:auto;
+}
+label.chk.mc-check input{width:17px;height:17px;flex:0 0 auto}
+label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans prix », « TotalEnergies… ») masquées en puce compacte */
+/* masquer une puce dont le contenu est masqué (mode) */
+.mc-chip[hidden]{display:none}
+
+@media (max-width:900px){
+  /* bouton de repli visible sur mobile */
+  #mcToggle{
+    display:flex;align-items:center;gap:7px;
+    position:absolute;top:8px;left:8px;z-index:1160;
+    background:rgba(18,22,30,.9);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+    border:1px solid var(--line);border-radius:11px;padding:9px 13px;
+    color:var(--text);font:600 14px var(--mono);cursor:pointer;
+    box-shadow:0 4px 16px rgba(0,0,0,.35);
+  }
+  #mcToggle span{line-height:1}
+  #mcToggle svg{color:var(--accent)}
+  /* barre repliée par défaut ; s'ouvre sous le bouton quand #map.mcOpen */
+  #mapControls{
+    top:56px;left:8px;right:auto;bottom:auto;
+    flex-direction:column;flex-wrap:nowrap;gap:8px;
+    width:250px;max-width:calc(100% - 16px);max-height:calc(100dvh - 120px);
+    display:none;
+  }
+  #map.mcOpen #mapControls{display:flex}
+  #map.mcOpen #mcToggle{border-color:var(--accent);color:var(--accent)}
+  .mc-chip{flex:0 0 auto}
+  .mc-chip .rng{min-width:0}
+  .mc-chip .rng input[type=range]{min-width:0}
+}
+</style>
+</head>
+<body>
+<noscript>
+  <div style="padding:24px;max-width:720px;margin:0 auto;font:400 15px/1.6 system-ui,sans-serif;color:#e8ecf3">
+    <h1>OptimEssence — prix des carburants sur votre trajet et autour de vous</h1>
+    <p>Ce comparateur affiche les stations-service les moins chères le long d'un
+    itinéraire ou dans un rayon autour d'une position, à partir des prix officiels
+    déclarés par les exploitants et mis à jour toutes les dix minutes.</p>
+    <p>Il classe les stations par <strong>coût réel du plein</strong> : au prix au litre
+    s'ajoute le carburant consommé par le détour nécessaire pour s'y rendre. Carburants
+    couverts : gazole, SP95, SP98, E10, E85 (superéthanol) et GPL. Les bornes de recharge
+    pour véhicules électriques peuvent également être affichées.</p>
+    <p>Sources : prix des carburants du ministère de l'Économie, itinéraires et fonds de
+    carte de l'IGN, données OpenStreetMap, base nationale des bornes de recharge.</p>
+    <p><strong>L'activation de JavaScript est nécessaire pour utiliser la carte et les
+    calculs.</strong></p>
+  </div>
+</noscript>
+
+<div id="app">
+  <aside id="side">
+    <div id="sheetGrip" aria-hidden="true"><span class="gripBar"></span></div>
+    <div class="head">
+      <div class="eyebrow" style="justify-content:flex-end"><button type="button" id="cote" title="Basculer le panneau à gauche ou à droite">⇄</button></div>
+      <h1><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><defs>
+        <linearGradient id="oeDrop" x1="0" y1="0" x2=".35" y2="1">
+          <stop offset="0" stop-color="#5b95ff"/><stop offset="1" stop-color="#2456c8"/></linearGradient></defs>
+        <path d="M32 4C32 4 51.5 26.5 51.5 38.5A19.5 19.5 0 1 1 12.5 38.5C12.5 26.5 32 4 32 4Z" fill="url(#oeDrop)"/>
+        <path d="M32 24.5L32 42.5" fill="none" stroke="#fff" stroke-width="6.2" stroke-linecap="round"/>
+        <path d="M22.5 36L32 45.5L41.5 36" fill="none" stroke="#22c55e" stroke-width="6.4"
+              stroke-linecap="round" stroke-linejoin="round"/></svg><span
+        ><span class="lg">Optim</span><span class="hv">Essence</span></span></h1>
+      <p>Prix officiels mis à jour toutes les ~10&nbsp;min, classés par coût réel du plein.</p>
+    </div>
+
+    <div class="modebar" id="modebar">
+      <button data-v="around" aria-pressed="true">Autour de moi</button>
+      <button data-v="route" aria-pressed="false">Sur un trajet</button>
+    </div>
+
+    <div class="form">
+      <div>
+        <label for="dep" id="depLabel">Départ</label>
+        <div class="field loc">
+          <input id="dep" type="text" placeholder="Ville, adresse, ou 44.80,-0.60" autocomplete="off">
+          <button class="geo" id="geoBtn" title="Ma position" type="button"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.4"/><circle cx="12" cy="12" r="7.3"/><line x1="12" y1="1.4" x2="12" y2="4.6"/><line x1="12" y1="19.4" x2="12" y2="22.6"/><line x1="1.4" y1="12" x2="4.6" y2="12"/><line x1="19.4" y1="12" x2="22.6" y2="12"/></svg></button>
+        </div>
+      </div>
+
+      <div id="arrBox">
+        <label for="arr">Arrivée</label>
+        <div class="field"><input id="arr" type="text" placeholder="Ville, adresse, ou lat,lon" autocomplete="off"></div>
+      </div>
+
+      <!-- mode « autour de moi » -->
+      <div id="aroundBox" hidden>
+        <label for="rad">Rayon de recherche <span style="text-transform:none;letter-spacing:0;font-weight:400">(rayon, pas diamètre)</span></label>
+        <div class="rng">
+          <input id="rad" type="range" min="1" max="30" step="1" value="8">
+          <output id="radOut">8 km</output>
+        </div>
+      </div>
+
+      <!-- mode « sur un trajet » -->
+      <div>
+        <label for="distMode">Distance des détours</label>
+        <select id="distMode">
+          <option value="road">Routière réelle — aller et retour mesurés</option>
+          <option value="crow">À vol d'oiseau — instantané, sous-estimé</option>
+        </select>
+        <p class="src" id="distNote"></p>
+      </div>
+
+      <div>
+        <label for="engine">Moteur d'itinéraire</label>
+        <select id="engine">
+          <option value="ign-osrm">BD TOPO (IGN) — graphe OSRM</option>
+          <option value="ign-valhalla">BD TOPO (IGN) — graphe Valhalla</option>
+          <option value="ign-pgr">BD TOPO (IGN) — graphe pgRouting</option>
+          <option value="osrm">OpenStreetMap — OSRM démo</option>
+          <option value="ors">OpenStreetMap — openrouteservice (clé)</option>
+        </select>
+        <p class="src" id="engineNote"></p>
+      </div>
+
+      <div id="routeBox">
+        <div class="row2" style="margin-top:12px">
+          <div>
+            <label for="optim">Optimisation</label>
+            <select id="optim">
+              <option value="fastest">Le plus rapide</option>
+              <option value="shortest">Le plus court</option>
+            </select>
+          </div>
+          <div>
+            <label for="buf">Couloir</label>
+            <div class="rng">
+              <input id="buf" type="range" min="0.5" max="15" step="0.5" value="3">
+              <output id="bufOut">3 km</output>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label for="carb">Carburant</label>
+          <select id="carb">
+            <option value="gazole_prix">Gazole</option>
+            <option value="sp95_prix">SP95</option>
+            <option value="sp98_prix" selected>SP98</option>
+            <option value="e10_prix">E10 (SP95-E10)</option>
+            <option value="e85_prix">E85 (superéthanol)</option>
+            <option value="gplc_prix">GPLc</option>
+          </select>
+        </div>
+        <div>
+          <label for="fond">Fond de carte</label>
+          <select id="fond">
+            <option value="osm">OpenStreetMap</option>
+            <option value="ign">Plan IGN</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label>Classement</label>
+          <div class="seg" id="tri">
+            <button data-v="total" aria-pressed="true">Coût réel</button>
+            <button data-v="prix" aria-pressed="false">Prix brut</button>
+          </div>
+        </div>
+        <div>
+          <label for="clickMode">Clic sur la carte</label>
+          <select id="clickMode">
+            <option value="">Ne rien placer</option>
+            <option value="dep">Définir le point de départ</option>
+            <option value="arr">Définir l'arrivée</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="chk" style="padding:2px 0"><input id="noHw" type="checkbox">
+        Exclure les stations d'autoroute</label>
+      <label class="chk" style="padding:2px 0"><input id="major" type="checkbox">
+        Compagnies pétrolières seulement <span id="majorNote" style="color:var(--muted)"></span></label>
+      <label class="chk" style="padding:2px 0"><input id="irve" type="checkbox">
+        Afficher les bornes de recharge <span style="color:var(--muted)">(sans prix)</span></label>
+
+      <div id="orsBox" hidden>
+        <label for="orsKey">Clé openrouteservice</label>
+        <div class="field"><input id="orsKey" type="password"
+          placeholder="Requise pour le moteur openrouteservice" autocomplete="off"></div>
+      </div>
+
+      <details>
+        <summary>Paramètres du coût réel</summary>
+        <div class="adv">
+          <div>
+            <label for="res">Plein (litres)</label>
+            <input id="res" type="text" inputmode="decimal" value="35">
+          </div>
+          <div>
+            <label for="conso">Conso L/100 km</label>
+            <input id="conso" type="text" inputmode="decimal" value="6.2">
+          </div>
+
+
+          <p class="hint">Le coût réel = prix du plein + carburant brûlé pour s'y rendre.
+          Il ne valorise pas ton temps : à &minus;10&nbsp;cts/L, il justifie près de 40&nbsp;km d'aller-retour.
+          Regarde aussi la colonne durée.</p>
+        </div>
+      </details>
+
+      <button class="go" id="go">Rechercher</button>
+    </div>
+
+    <div id="listWrap">
+    <div class="filtres" id="filtres"></div>
+    <div class="status" id="status">Saisis un point de départ.</div>
+    <div class="legend" id="legend" hidden>
+      <span>Moins cher</span><span class="bar"></span><span>Plus cher</span>
+      <span style="text-transform:none;letter-spacing:0">+km = aller-retour</span>
+      <span style="text-transform:none;letter-spacing:0;white-space:nowrap">
+        <b style="color:#22c55e">— aller</b> <b style="color:#ef4444">— retour</b></span>
+    </div>
+    <ul id="results"></ul>
+    <footer class="legal">
+      <button type="button" id="legalBtn">Mentions légales, sources et données personnelles</button>
+    </footer>
+    </div>
+  </aside>
+  <div id="legalBox" hidden><div id="legalIn">
+    <h2>Mentions légales et sources</h2>
+    <p style="color:var(--muted);margin:2px 0 0">Comparateur de prix des carburants à partir de données publiques.</p>
+
+    <h3>Éditeur et hébergeur</h3>
+    <p><b>À COMPLÉTER AVANT PUBLICATION.</b> Nom ou raison sociale, adresse, adresse
+    de contact et directeur de la publication ; nom et adresse de l'hébergeur.
+    Ces mentions sont obligatoires pour tout site accessible au public en France
+    (loi pour la confiance dans l'économie numérique, art. 6-III).</p>
+
+    <h3>Données personnelles</h3>
+    <ul>
+      <li>Ce site <b>ne collecte, ne stocke et ne transmet aucune donnée personnelle</b>
+      vers un serveur de l'éditeur : il n'a pas de serveur applicatif.</li>
+      <li>Aucun cookie, aucun traceur, aucune mesure d'audience.</li>
+      <li>Vos réglages (clé d'API, moteur choisi) restent dans le
+      <code>localStorage</code> de votre navigateur. Vider les données du site les efface.</li>
+      <li>La géolocalisation n'est utilisée que si vous cliquez le bouton prévu, et la
+      position n'est envoyée qu'aux services de calcul ci-dessous.</li>
+      <li>Les requêtes partent <b>directement de votre navigateur</b> vers des services
+      tiers, qui reçoivent donc votre adresse IP et les points demandés. Leurs
+      politiques respectives s'appliquent.</li>
+    </ul>
+
+    <h3>Sources et licences</h3>
+    <ul>
+      <li><b>Prix des carburants</b> — flux instantané, ministère de l'Économie
+      (<a href="https://data.economie.gouv.fr" target="_blank" rel="noopener">data.economie.gouv.fr</a>),
+      Licence Ouverte Etalab 2.0.</li>
+      <li><b>Itinéraires, géocodage et fond Plan IGN</b> — Géoplateforme / IGN
+      (<a href="https://geoservices.ign.fr" target="_blank" rel="noopener">geoservices.ign.fr</a>),
+      BD TOPO®, Licence Ouverte Etalab 2.0.</li>
+      <li><b>Fond de carte et bornes de recharge OSM</b> — © les contributeurs
+      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>,
+      licence ODbL. Interrogation via Overpass API.</li>
+      <li><b>Bornes de recharge</b> — base nationale IRVE, Licence Ouverte Etalab 2.0.</li>
+      <li><b>Itinéraires OSM</b> — OSRM (projet de démonstration, usage non commercial)
+      et <a href="https://openrouteservice.org" target="_blank" rel="noopener">openrouteservice</a> (HeiGIT).</li>
+      <li><b>Enseignes des stations</b> — table communautaire du dépôt
+      <code>Aohzan/hass-prixcarburant</code>. Donnée <b>non officielle</b>, fournie
+      à titre indicatif ; vérifiez sa licence avant toute réutilisation.</li>
+      <li><b>Cartographie</b> — bibliothèque <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>, licence BSD-2-Clause.</li>
+    </ul>
+
+    <h3>Limitation de responsabilité</h3>
+    <ul>
+      <li>Les prix sont <b>déclarés par les exploitants</b> et peuvent être erronés ou
+      périmés. Seul le prix affiché à la station fait foi.</li>
+      <li>Les itinéraires sont calculés sur des données de référence qui ignorent les
+      fermetures temporaires et les travaux. Ils ne remplacent ni la signalisation
+      routière ni le code de la route.</li>
+      <li>Les coûts affichés sont des estimations reposant sur les paramètres que vous
+      saisissez, sans valeur contractuelle.</li>
+      <li>Les tarifs de recharge électrique <b>ne figurent pas</b> dans les données
+      publiques et ne sont donc pas affichés.</li>
+    </ul>
+
+    <h3>Marques citées</h3>
+    <p>Les noms d'enseignes sont cités à titre informatif pour identifier les points de
+    vente. Ils restent la propriété de leurs titulaires respectifs, sans lien ni
+    partenariat avec ce site.</p>
+
+    <button id="legalX" type="button">Fermer</button>
+  </div></div>
+
+  <div id="map"><button id="mcToggle" type="button" aria-expanded="false" title="Réglages rapides"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="9" cy="7" r="2" fill="var(--panel)"/><circle cx="15" cy="12" r="2" fill="var(--panel)"/><circle cx="9" cy="17" r="2" fill="var(--panel)"/></svg><span>Réglages</span></button><div id="mapControls" aria-label="Réglages rapides"></div><div id="mapStatus" hidden><span class="spin" aria-hidden="true"></span><span id="mapStatusTxt"></span></div><button id="recentrer" type="button" title="Recentrer sur ma position"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.4"/><circle cx="12" cy="12" r="7.3"/><line x1="12" y1="1.4" x2="12" y2="4.6"/><line x1="12" y1="19.4" x2="12" y2="22.6"/><line x1="1.4" y1="12" x2="4.6" y2="12"/><line x1="19.4" y1="12" x2="22.6" y2="12"/></svg></button><div id="card" hidden><button id="cardX" type="button" title="Fermer">×</button><div id="cardBody"></div></div></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+"use strict";
+
+// ------------------------------------------------------------ endpoints
+const GEOCODE    = "https://data.geopf.fr/geocodage/search";
+const ITINERAIRE = "https://data.geopf.fr/navigation/itineraire";
+const ORS        = "https://api.openrouteservice.org/v2/directions/driving-car/geojson";
+const OSRM       = "https://router.project-osrm.org/route/v1/driving/";
+const OSRM_TABLE = "https://router.project-osrm.org/table/v1/driving/";
+const STATIONS   = "https://data.economie.gouv.fr/api/explore/v2.1/catalog/"
+                 + "datasets/prix-des-carburants-en-france-flux-instantane-v2/exports/json";
+// Le jeu officiel ne contient PAS l'enseigne. Table de correspondance id -> {name, brand},
+// maintenue par la communauté Home Assistant (9200+ stations, 154 enseignes).
+const BRANDS     = "https://raw.githubusercontent.com/Aohzan/hass-prixcarburant/master/"
+                 + "custom_components/prix_carburant/stations_name.json";
+// Pas de restriction de colonnes : un « select » trop étroit masquerait un champ
+// officiel d'enseigne. On prend tout, puis on repère le champ à l'exécution.
+const SELECT = "";
+// Bornes de recharge : base nationale IRVE. Contient localisation, puissance, prises,
+// opérateur — PAS de prix : l'obligation légale ne porte que sur la localisation et
+// les caractéristiques techniques. Le champ tarification est facultatif et libre.
+// OpenStreetMap recense aussi les bornes (amenity=charging_station), souvent là où
+// l'IRVE est lacunaire : l'IRVE ne contient que ce que les aménageurs ont déclaré.
+// Overpass est interrogeable depuis un navigateur (CORS ouvert).
+// Plusieurs instances : la principale est souvent saturée (429/504), ce qui faisait
+// disparaître silencieusement toutes les bornes OSM.
+const OVERPASS_MIRRORS = [
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://overpass.private.coffee/api/interpreter"
+];
+async function overpass(q){
+  let dernier = "";
+  for(const url of OVERPASS_MIRRORS){
+    try{
+      // Délai court par instance : mieux vaut basculer vite sur la suivante que
+      // d'attendre 25 s sur une seule qui ne répondra pas.
+      const r = await fetchDelai(url, {method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: "data=" + encodeURIComponent(q)}, 11000);
+      if(!r.ok){ dernier = `${r.status} sur ${url.split("/")[2]}`; continue; }
+      return await r.json();
+    }catch(e){ dernier = `${e.message} sur ${url.split("/")[2]}`; }
+  }
+  throw new Error(dernier || "aucune instance Overpass joignable");
+}
+const IRVE_JEUX = [
+  "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/mobilityref-france-irve-220/records",
+  "https://odre.opendatasoft.com/api/explore/v2.1/catalog/datasets/bornes-irve/records",
+  "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve/records"
+];
+const LS_KEY = "carb.orskey", LS_ENGINE = "carb.engine";
+const MAX_MATRIX = 45;   // OSRM démo : garder la matrice petite
+
+const IGN_RESOURCE = {
+  "ign-osrm": "bdtopo-osrm", "ign-valhalla": "bdtopo-valhalla", "ign-pgr": "bdtopo-pgr"
+};
+const ENGINE_NOTE = {
+  "ign-osrm":     "BD TOPO, graphe OSRM. Le plus rapide, celui recommandé par l'IGN. Sans clé.",
+  "ign-valhalla": "BD TOPO, graphe Valhalla. Graphe construit séparément : peut différer à un carrefour. Sans clé.",
+  "ign-pgr":      "BD TOPO, graphe pgRouting. Nettement plus lent, gère mieux les contraintes. Sans clé.",
+  "osrm":         "OpenStreetMap, serveur de démo : usage non commercial, 1 requête/s. Sans clé.",
+  "ors":          "OpenStreetMap, moteur HeiGIT. Clé gratuite."
+};
+const DIST_NOTE = {
+  road: "Distances réelles par la route, aller et retour mesurés séparément (les sens uniques comptent). Serveur de démo OSRM, données OpenStreetMap.",
+  crow: "Distance directe, sans tenir compte des routes. Instantané, mais sous-estime toujours le vrai trajet."
+};
+
+// ------------------------------------------------------------ géométrie (km)
+const R_TERRE = 6371.0088;
+const toRad = d => d * Math.PI / 180;
+const proj = (lon, lat, lat0) => [lon * 111.320 * Math.cos(toRad(lat0)), lat * 110.574];
+
+function haversine(la1, lo1, la2, lo2){
+  const p = Math.PI / 180;
+  const a = Math.sin((la2 - la1) * p / 2) ** 2
+          + Math.cos(la1 * p) * Math.cos(la2 * p) * Math.sin((lo2 - lo1) * p / 2) ** 2;
+  return 2 * R_TERRE * Math.asin(Math.sqrt(a));
+}
+function distSeg(plat, plon, alat, alon, blat, blon){
+  const lat0 = (alat + blat + plat) / 3;
+  const [px,py] = proj(plon,plat,lat0), [ax,ay] = proj(alon,alat,lat0), [bx,by] = proj(blon,blat,lat0);
+  const dx = bx-ax, dy = by-ay, seg2 = dx*dx + dy*dy;
+  if(seg2 === 0) return Math.hypot(px-ax, py-ay);
+  const t = Math.max(0, Math.min(1, ((px-ax)*dx + (py-ay)*dy) / seg2));
+  return Math.hypot(px - (ax + t*dx), py - (ay + t*dy));
+}
+function distPoly(plat, plon, poly){
+  let best = Infinity;
+  for(let i = 0; i < poly.length - 1; i++){
+    const d = distSeg(plat, plon, poly[i][0], poly[i][1], poly[i+1][0], poly[i+1][1]);
+    if(d < best){ best = d; if(best < 0.01) break; }
+  }
+  return best;
+}
+
+/**
+ * Précalcul fait UNE fois par itinéraire. Tout ce qui ne dépend pas de la station
+ * (projection, longueurs, cumuls) est calculé ici, pour que la boucle par station
+ * ne contienne plus aucune trigonométrie.
+ */
+const KY = phi => 111.132 - 0.559 * Math.cos(2 * phi);              // km / degré de latitude
+const KX = phi => 111.320 * Math.cos(phi) - 0.094 * Math.cos(3 * phi); // km / degré de longitude
+
+function prepRoute(poly){
+  const n = poly.length - 1;
+  const kx = new Float64Array(n), ky = new Float64Array(n),
+        ax = new Float64Array(n), ay = new Float64Array(n),
+        dx = new Float64Array(n), dy = new Float64Array(n),
+        seg2 = new Float64Array(n), len = new Float64Array(n),
+        cum = new Float64Array(n + 1),
+        ymin = new Float64Array(n), ymax = new Float64Array(n);
+  for(let i = 0; i < n; i++){
+    const a = poly[i], b = poly[i+1], phi = toRad((a[0] + b[0]) / 2);
+    const kxi = KX(phi), kyi = KY(phi);
+    kx[i] = kxi; ky[i] = kyi;
+    ax[i] = a[1] * kxi; ay[i] = a[0] * kyi;
+    const bx = b[1] * kxi, by = b[0] * kyi;
+    dx[i] = bx - ax[i]; dy[i] = by - ay[i];
+    seg2[i] = dx[i] * dx[i] + dy[i] * dy[i];
+    len[i] = Math.sqrt(seg2[i]);
+    cum[i+1] = cum[i] + len[i];
+    ymin[i] = Math.min(ay[i], by); ymax[i] = Math.max(ay[i], by);
+  }
+  return {poly, n, kx, ky, ax, ay, dx, dy, seg2, len, cum, ymin, ymax, total: cum[n]};
+}
+
+// Station -> {d: écart au trajet, snap: point du trajet, along: km depuis le départ}
+function snapTo(P, plat, plon){
+  let best = Infinity, bi = 0, bt = 0;
+  for(let i = 0; i < P.n; i++){
+    const py = plat * P.ky[i];
+    if(py - P.ymax[i] > best || P.ymin[i] - py > best) continue;   // rejet par bande
+    const px = plon * P.kx[i], s2 = P.seg2[i];
+    let t = s2 === 0 ? 0 : ((px - P.ax[i]) * P.dx[i] + (py - P.ay[i]) * P.dy[i]) / s2;
+    t = t < 0 ? 0 : (t > 1 ? 1 : t);
+    const ex = px - (P.ax[i] + t * P.dx[i]), ey = py - (P.ay[i] + t * P.dy[i]);
+    const d = Math.sqrt(ex * ex + ey * ey);
+    if(d < best){ best = d; bi = i; bt = t; if(best < 0.01) break; }
+  }
+  const a = P.poly[bi], b = P.poly[bi+1];
+  return {d: best, snap: [a[0] + bt * (b[0] - a[0]), a[1] + bt * (b[1] - a[1])],
+          along: P.cum[bi] + bt * P.len[bi]};
+}
+
+// Point situé à `along` km du départ, le long du trajet. Sert à choisir où
+// quitter l'itinéraire et où le rejoindre, de part et d'autre de la station.
+function pointAt(P, along){
+  along = Math.max(0, Math.min(P.total, along));
+  let lo = 0, hi = P.n - 1;
+  while(lo < hi){ const m = (lo + hi) >> 1; if(P.cum[m+1] < along) lo = m + 1; else hi = m; }
+  const t = P.len[lo] === 0 ? 0 : (along - P.cum[lo]) / P.len[lo];
+  const a = P.poly[lo], b = P.poly[lo+1];
+  return [a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])];
+}
+
+function bbox(poly, m){
+  let laN = Infinity, laX = -Infinity, loN = Infinity, loX = -Infinity;
+  for(const p of poly){
+    if(p[0] < laN) laN = p[0];
+    if(p[0] > laX) laX = p[0];
+    if(p[1] < loN) loN = p[1];
+    if(p[1] > loX) loX = p[1];
+  }
+  const lat0 = (laN + laX) / 2;
+  const dla = m / 110.574, dlo = m / (111.320 * Math.cos(toRad(lat0)));
+  return [laN - dla, laX + dla, loN - dlo, loX + dlo];
+}
+const priceColor = n => `hsl(${140 * (1 - Math.max(0, Math.min(1, n)))} 70% 44%)`;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// ------------------------------------------------------------ réseau
+async function geocodeBrut(q, opts){
+  const p = new URLSearchParams({q: q.trim(), limit: (opts && opts.limit) || "1"});
+  if(opts && opts.type) p.set("type", opts.type);
+  const r = await fetch(`${GEOCODE}?${p}`);
+  if(!r.ok) throw new Error(`géocodage indisponible (${r.status})`);
+  const j = await r.json();
+  return (j.features || []);
+}
+
+// Normalise pour comparer des noms de communes (sans accents/casse/traits d'union).
+const normVille = s => (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase().replace(/[-'\s]+/g, " ").trim();
+
+async function geocode(q){
+  const t = q.trim();
+  const m = t.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+  if(m) return [parseFloat(m[1]), parseFloat(m[2])];
+
+  // Saisie « commune seule » (aucun chiffre) : on récupère plusieurs résultats et
+  // on choisit la bonne commune — nom exact d'abord, puis meilleur score, puis
+  // population (pour écarter un homonyme minuscule). L'API renvoie déjà le centre
+  // de la commune (proche du bourg) pour un résultat de type « municipality ».
+  const communeSeule = /^[^\d]+$/.test(t);
+  if(communeSeule){
+    try{
+      const feats = await geocodeBrut(t, {limit: "10"});
+      const communes = feats.filter(f => {
+        const p = f.properties || {};
+        return (p.type === "municipality" || p._type === "municipality" || p.citycode);
+      });
+      const pool = communes.length ? communes : feats;
+      if(pool.length){
+        const cible = normVille(t);
+        const score = f => {
+          const p = f.properties || {};
+          const nom = normVille(p.city || p.name || p.municipality);
+          const exact = nom === cible ? 1e6 : (nom.startsWith(cible) ? 1e5 : 0);
+          return exact + (p.score || 0) * 1000 + Math.log10((p.population || 0) + 1);
+        };
+        pool.sort((a, b) => score(b) - score(a));
+        const c = pool[0].geometry.coordinates;
+        return [c[1], c[0]];
+      }
+    }catch(_){ /* on retombe sur le géocodage standard */ }
+  }
+
+  const f = await geocodeBrut(t);
+  if(!f.length) throw new Error(`adresse introuvable : « ${q} »`);
+  const c = f[0].geometry.coordinates;
+  return [c[1], c[0]];
+}
+
+async function routeIGN(dep, arr, resource, optim){
+  const p = new URLSearchParams({resource: resource,
+    start:`${dep[1]},${dep[0]}`, end:`${arr[1]},${arr[0]}`, profile:"car",
+    optimization: optim, geometryFormat:"geojson", getSteps:"false",
+    distanceUnit:"kilometer", timeUnit:"minute"});
+  const url = `${ITINERAIRE}?${p}`;
+  const r = await fetch(url);
+  if(!r.ok) throw new Error(`itinéraire IGN, ressource ${resource} (${r.status})`);
+  const j = await r.json();
+  return {poly: j.geometry.coordinates.map(c => [c[1], c[0]]),
+          dist: j.distance, dur: j.duration, url: url,
+          engine: `IGN · ${resource} · ${optim} · graphe du ${j.resourceVersion || "?"}`};
+}
+
+async function routeOSRM(dep, arr){
+  const url = `${OSRM}${dep[1]},${dep[0]};${arr[1]},${arr[0]}`
+            + `?overview=full&geometries=geojson&alternatives=false&steps=false`;
+  const r = await fetch(url);
+  if(!r.ok) throw new Error(`OSRM démo (${r.status})`);
+  const j = await r.json();
+  if(j.code !== "Ok" || !j.routes || !j.routes.length){
+    throw new Error(`OSRM démo : ${j.message || j.code || "aucun itinéraire"}`);
+  }
+  const rt = j.routes[0];
+  return {poly: rt.geometry.coordinates.map(c => [c[1], c[0]]),
+          dist: rt.distance / 1000, dur: rt.duration / 60, url: url,
+          engine: `OSRM démo · OpenStreetMap`};
+}
+
+async function routeORS(dep, arr, key){
+  const body = {coordinates: [[dep[1], dep[0]], [arr[1], arr[0]]]};
+  const r = await fetch(ORS, {method: "POST",
+    headers: {"Authorization": key, "Content-Type": "application/json"},
+    body: JSON.stringify(body)});
+  const j = await r.json().catch(() => null);
+  if(!r.ok){
+    const msg = j && j.error ? (j.error.message || JSON.stringify(j.error)) : `HTTP ${r.status}`;
+    throw new Error(`openrouteservice : ${msg}`);
+  }
+  const f = j && j.features && j.features[0];
+  if(!f) throw new Error("aucun itinéraire possible.");
+  const s = (f.properties && f.properties.summary) || {};
+  return {poly: f.geometry.coordinates.map(c => [c[1], c[0]]),
+          dist: (s.distance || 0) / 1000, dur: (s.duration || 0) / 60,
+          engine: `openrouteservice · OpenStreetMap`};
+}
+
+/**
+ * Matrice OSRM depuis/vers un point unique.
+ * sens "out"  : origine → chaque station   (1 × N)
+ * sens "back" : chaque station → origine   (N × 1)
+ * Renvoie {dist:[km], dur:[min]} indexés comme pts, valeurs null si non routable.
+ */
+async function osrmTable(origin, pts, sens){
+  const coords = [origin].concat(pts).map(p => `${p[1].toFixed(6)},${p[0].toFixed(6)}`).join(";");
+  const idx = pts.map((_, i) => i + 1).join(";");
+  const q = sens === "out" ? `sources=0&destinations=${idx}` : `sources=${idx}&destinations=0`;
+  const r = await fetch(`${OSRM_TABLE}${coords}?${q}&annotations=distance,duration`);
+  if(!r.ok) throw new Error(`matrice OSRM (${r.status})`);
+  const j = await r.json();
+  if(j.code !== "Ok") throw new Error(`matrice OSRM : ${j.message || j.code}`);
+  const D = j.distances, T = j.durations;
+  if(!D) throw new Error("matrice OSRM : distances absentes de la réponse");
+  const pick = M => sens === "out" ? M[0] : M.map(row => row[0]);
+  const dist = pick(D), dur = T ? pick(T) : null;
+  return {
+    dist: dist.map(v => v == null ? null : v / 1000),
+    dur:  dur ? dur.map(v => v == null ? null : v / 60) : pts.map(() => null)
+  };
+}
+
+// Le schéma IRVE a connu plusieurs versions : on sonde plusieurs noms de champs.
+const champ = (o, ...noms) => {
+  for(const n of noms) if(o[n] !== undefined && o[n] !== null && o[n] !== "") return o[n];
+  return null;
+};
+// Reconnaît un point géographique quelle que soit sa forme, sans supposer son nom.
+function extrairePoint(v){
+  if(!v) return null;
+  if(typeof v === "object"){
+    if(v.lat != null && (v.lon != null || v.lng != null)) return [+v.lat, +(v.lon != null ? v.lon : v.lng)];
+    if(Array.isArray(v.coordinates) && v.coordinates.length >= 2) return [+v.coordinates[1], +v.coordinates[0]];
+    if(Array.isArray(v) && v.length >= 2 && Math.abs(+v[0]) <= 90) return [+v[0], +v[1]];
+  }
+  if(typeof v === "string"){
+    const m = v.match(/^\s*\[?\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*\]?\s*$/);
+    if(m){
+      const a = +m[1], b = +m[2];
+      // "coordonneesXY" est en lon,lat ; d'autres champs sont en lat,lon. Les deux
+      // valeurs pouvant être <= 90, on tranche par les bornes plausibles en France.
+      const estLat = x => x >= 40 && x <= 52, estLon = x => x >= -6 && x <= 11;
+      if(estLat(b) && estLon(a)) return [b, a];
+      if(estLat(a) && estLon(b)) return [a, b];
+      return Math.abs(a) <= 90 ? [a, b] : [b, a];
+    }
+  }
+  return null;
+}
+// Trouve, dans un enregistrement, le champ qui porte la position.
+function champGeo(rec){
+  for(const [k, v] of Object.entries(rec)) if(extrairePoint(v)) return k;
+  return null;
+}
+
+let irveCfg = null;   // {base, geo} découvert une fois
+async function irveConfig(){
+  if(irveCfg) return irveCfg;
+  let dernierMsg = "";
+  for(const base of IRVE_JEUX){
+    try{
+      const r = await fetch(`${base}?limit=1`);
+      if(!r.ok){ dernierMsg = `${r.status} sur ${base.split("/datasets/")[1]}`; continue; }
+      const j = await r.json();
+      const rec = (j.results || [])[0];
+      if(!rec){ dernierMsg = "jeu vide"; continue; }
+      const geo = champGeo(rec);
+      if(!geo){ dernierMsg = "aucun champ de position reconnu"; continue; }
+      irveCfg = {base, geo, cles: Object.keys(rec)};
+      return irveCfg;
+    }catch(e){ dernierMsg = e.message; }
+  }
+  throw new Error(dernierMsg || "aucun jeu IRVE accessible");
+}
+
+/**
+ * L'API Opendatasoft plafonne à 100 enregistrements par requête : sans pagination,
+ * on n'obtenait jamais plus de 100 bornes, d'où celles qui manquaient à l'appel.
+ */
+async function loadIrve(lat, lon, rayonKm, onProgress, maxPages){
+  const cfg = await irveConfig();
+  const where = `within_distance(${cfg.geo}, geom'POINT(${lon} ${lat})', ${rayonKm}km)`;
+  const PAGE = 100, MAX_PAGES = maxPages || 12;
+  const tout = [];
+  let geoOk = true;
+  for(let page = 0; page < MAX_PAGES; page++){
+    const url = geoOk
+      ? `${cfg.base}?where=${encodeURIComponent(where)}&limit=${PAGE}&offset=${page * PAGE}`
+      : `${cfg.base}?limit=${PAGE}&offset=${page * PAGE}`;
+    const r = await fetch(url);
+    if(!r.ok){
+      if(page === 0 && geoOk){ geoOk = false; page = -1; continue; }  // filtre géo refusé
+      break;
+    }
+    const j = await r.json();
+    const lot = j.results || [];
+    tout.push(...lot);
+    if(onProgress) onProgress(tout.length);
+    if(lot.length < PAGE) break;
+  }
+  const dans = tout.filter(o => {
+    const c = extrairePoint(o[cfg.geo]);
+    return c && haversine(lat, lon, c[0], c[1]) <= rayonKm;
+  });
+  // un même emplacement peut apparaître une fois par point de charge
+  const vus = new Set(), uniq = [];
+  for(const o of dans){
+    const c = extrairePoint(o[cfg.geo]);
+    const k = `${c[0].toFixed(5)},${c[1].toFixed(5)}`;
+    if(vus.has(k)) continue;
+    vus.add(k); uniq.push(o);
+  }
+  return uniq;
+}
+
+/**
+ * Distances routières entre des paires (origine i -> cible i), dans les deux sens.
+ * Les services de matrice renvoient un produit croisé N×N : on n'en garde que la
+ * diagonale, ce qui donne le trajet réel de chaque station vers SON point de
+ * raccordement sur l'itinéraire, et non une distance à vol d'oiseau.
+ */
+async function matriceParPaires(origines, cibles, eng, key, optim, onProgress){
+  const N = origines.length;
+  const vide = () => new Array(N).fill(null);
+
+  if(eng === "ors" && key){
+    const loc = origines.concat(cibles).map(p => [p[1], p[0]]);
+    const idxO = origines.map((_, i) => i), idxC = cibles.map((_, i) => N + i);
+    const appel = async (src, dst) => {
+      const r = await fetchDelai("https://api.openrouteservice.org/v2/matrix/driving-car",
+        {method: "POST", headers: {"Authorization": key, "Content-Type": "application/json"},
+         body: JSON.stringify({locations: loc, sources: src, destinations: dst,
+                               metrics: ["distance","duration"], units: "km"})}, 25000);
+      const j = await r.json().catch(() => null);
+      if(!r.ok) throw new Error(`matrice ORS : ${(j && j.error && (j.error.message || j.error)) || r.status}`);
+      return j;
+    };
+    const a = await appel(idxO, idxC), b = await appel(idxC, idxO);
+    return {
+      aller:  origines.map((_, i) => (a.distances && a.distances[i]) ? a.distances[i][i] : null),
+      retour: origines.map((_, i) => (b.distances && b.distances[i]) ? b.distances[i][i] : null),
+      durAller: origines.map((_, i) => (a.durations && a.durations[i]) ? a.durations[i][i] / 60 : null),
+      note: "openrouteservice (OpenStreetMap)"
+    };
+  }
+
+  if(eng.startsWith("ign-")){
+    const res = IGN_RESOURCE[eng] || "bdtopo-osrm";
+    const aller = vide(), retour = vide(), durAller = vide();
+    // Par lots de 4 : l'IGN tolère 5 requêtes/s, le strict séquentiel gaspillait
+    // l'essentiel du temps à attendre chaque réponse l'une après l'autre.
+    for(let d = 0; d < N; d += 4){
+      const lot = [];
+      for(let i = d; i < Math.min(d + 4, N); i++){
+        lot.push((async () => {
+          try{
+            const x = await routeIGN(origines[i], cibles[i], res, optim);
+            const y = await routeIGN(cibles[i], origines[i], res, optim);
+            aller[i] = x.dist; retour[i] = y.dist; durAller[i] = x.dur;
+          }catch(e){ /* station non routable : l'estimation est conservée */ }
+        })());
+      }
+      await Promise.all(lot);
+      if(onProgress) onProgress(Math.min(d + 4, N), N);
+      await sleep(250);
+    }
+    return {aller, retour, durAller, note: `${res} (BD TOPO)`};
+  }
+
+  // OSRM : deux appels de matrice, dont on extrait la diagonale
+  const coords = origines.concat(cibles)
+    .map(p => `${p[1].toFixed(6)},${p[0].toFixed(6)}`).join(";");
+  const iO = origines.map((_, i) => i).join(";");
+  const iC = cibles.map((_, i) => N + i).join(";");
+  const appel = async (src, dst) => {
+    const r = await fetchDelai(`${OSRM_TABLE}${coords}?sources=${src}&destinations=${dst}`
+      + `&annotations=distance,duration`, null, 25000);
+    if(!r.ok) throw new Error(`matrice OSRM (${r.status})`);
+    const j = await r.json();
+    if(j.code !== "Ok") throw new Error(`matrice OSRM : ${j.message || j.code}`);
+    return j;
+  };
+  const a = await appel(iO, iC), b = await appel(iC, iO);
+  const diag = (M, f) => origines.map((_, i) => (M && M[i] && M[i][i] != null) ? f(M[i][i]) : null);
+  return {
+    aller:  diag(a.distances, v => v / 1000),
+    retour: diag(b.distances, v => v / 1000),
+    durAller: diag(a.durations, v => v / 60),
+    note: "OSRM (OpenStreetMap)"
+  };
+}
+
+/**
+ * Distances depuis UN point unique vers N stations, aller et retour mesurés
+ * séparément — jamais déduits l'un de l'autre : sens uniques, terre-pleins et
+ * bretelles font que le retour n'est pas le miroir de l'aller.
+ */
+async function matriceDistances(origin, pts, eng, key, optim, onProgress){
+  const N = pts.length;
+
+  if(eng === "ors" && key){
+    const loc = [[origin[1], origin[0]]].concat(pts.map(p => [p[1], p[0]]));
+    const tous = pts.map((_, i) => i + 1);
+    const appel = async (src, dst) => {
+      const r = await fetchDelai("https://api.openrouteservice.org/v2/matrix/driving-car",
+        {method: "POST", headers: {"Authorization": key, "Content-Type": "application/json"},
+         body: JSON.stringify({locations: loc, sources: src, destinations: dst,
+                               metrics: ["distance","duration"], units: "km"})}, 25000);
+      const j = await r.json().catch(() => null);
+      if(!r.ok) throw new Error(`matrice ORS : ${(j && j.error && (j.error.message || j.error)) || r.status}`);
+      return j;
+    };
+    // aller : 1 -> N   |   retour : N -> 1, mesuré et non supposé symétrique
+    const a = await appel([0], tous);
+    const b = await appel(tous, [0]);
+    return {
+      aller:  (a.distances && a.distances[0]) ? a.distances[0].slice() : new Array(N).fill(null),
+      retour: (b.distances || []).map(row => (row && row[0] != null) ? row[0] : null),
+      durAller: (a.durations && a.durations[0]) ? a.durations[0].map(v => v == null ? null : v / 60)
+                                                : new Array(N).fill(null),
+      note: "openrouteservice (OSM), aller et retour mesurés séparément"
+    };
+  }
+
+  if(eng.startsWith("ign-")){
+    const res = IGN_RESOURCE[eng] || "bdtopo-osrm";
+    const aller = [], retour = [], durAller = [];
+    for(let i = 0; i < N; i++){
+      if(onProgress) onProgress(i + 1, N);
+      try{
+        const x = await routeIGN(origin, pts[i], res, optim);
+        const y = await routeIGN(pts[i], origin, res, optim);
+        aller.push(x.dist); retour.push(y.dist); durAller.push(x.dur);
+      }catch(e){ aller.push(null); retour.push(null); durAller.push(null); }
+      await sleep(120);                      // l'IGN limite à 5 requêtes/s
+    }
+    return {aller, retour, durAller, note: `${res} (BD TOPO), aller et retour mesurés séparément`};
+  }
+
+  const out = await osrmTable(origin, pts, "out");
+  await sleep(400);
+  const back = await osrmTable(origin, pts, "back");
+  return {aller: out.dist, retour: back.dist, durAller: out.dur,
+          note: "OSRM (OSM), aller et retour mesurés séparément"};
+}
+
+let stationsCache = null, stationsCacheAt = 0;
+const STATIONS_TTL = 10 * 60 * 1000;   // 10 min : au-delà, on rafraîchit les prix
+function cacheValide(){ return stationsCache && (Date.now() - stationsCacheAt) < STATIONS_TTL; }
+async function loadStations(force){
+  if(!force && cacheValide()) return stationsCache;
+  const r = await fetch(STATIONS + (SELECT ? `?select=${SELECT}` : ""));
+  if(!r.ok){
+    if(stationsCache) return stationsCache;   // repli sur l'ancien cache si le réseau échoue
+    throw new Error(`prix carburants (${r.status})`);
+  }
+  stationsCache = await r.json();
+  stationsCacheAt = Date.now();
+  detecterChampMarque(stationsCache);
+  return stationsCache;
+}
+
+// Enseignes : jamais bloquant. En cas d'échec, on affiche la ville comme avant.
+let brandMap = null, brandTried = false;
+async function loadBrands(){
+  if(brandMap || brandTried) return brandMap;
+  brandTried = true;
+  try{
+    const r = await fetch(BRANDS);
+    if(!r.ok) throw new Error(String(r.status));
+    const j = await r.json();
+    brandMap = (j && typeof j === "object") ? j : null;
+  }catch(e){ brandMap = null; }
+  return brandMap;
+}
+const infoOf = s => {
+  if(!brandMap || s.id == null) return null;
+  return brandMap[String(s.id)] || null;
+};
+const brandOf = s => { const i = infoOf(s); return i && i.brand ? i.brand : null; };
+const nameOf  = s => { const i = infoOf(s); return i && i.name ? i.name : null; };
+
+/**
+ * Trajet aller-retour origine -> station -> origine, en une requête.
+ * continue_straight=false autorise le demi-tour à la station, comme dans la vraie vie,
+ * et fait correspondre chaque leg au trajet mesuré par la matrice.
+ */
+/**
+ * Itinéraire Départ -> Station -> Arrivée, avec le moteur qui a produit le tracé bleu.
+ * On ne force plus la rejointe sur le tracé : le routeur choisit librement la suite
+ * vers la destination. Le surcoût est la différence avec le trajet direct.
+ */
+async function routeViaEngine(dep, station, arr, eng, key, optim){
+  if(eng === "ors"){
+    const body = {coordinates: [[dep[1],dep[0]], [station[1],station[0]], [arr[1],arr[0]]]};
+    const r = await fetch(ORS, {method:"POST",
+      headers:{"Authorization":key,"Content-Type":"application/json"}, body:JSON.stringify(body)});
+    const j = await r.json().catch(()=>null);
+    if(!r.ok) throw new Error(`openrouteservice : ${(j&&j.error&&(j.error.message||j.error))||r.status}`);
+    const f = j.features && j.features[0];
+    if(!f) throw new Error("aucun itinéraire par cette station");
+    const segs = (f.properties && f.properties.segments) || [];
+    const all = f.geometry.coordinates.map(c => [c[1], c[0]]);
+    const n1 = segs.length ? Math.round(all.length * (segs[0].distance /
+      (segs[0].distance + (segs[1] ? segs[1].distance : 0)))) : Math.floor(all.length/2);
+    return {aller: all.slice(0, n1+1), retour: all.slice(n1),
+            total: (f.properties.summary.distance||0)/1000,
+            duree: (f.properties.summary.duration||0)/60};
+  }
+  if(eng === "osrm"){
+    const t = await osrmVia(dep, station, arr);
+    return {aller:t.aller, retour:t.retour,
+            total:(t.distAller||0)+(t.distRetour||0), duree:(t.durAller||0)+(t.durRetour||0)};
+  }
+  // moteurs IGN : un seul point intermédiaire, donc pas de question de séparateur
+  const pr = new URLSearchParams({resource: IGN_RESOURCE[eng] || "bdtopo-osrm",
+    start:`${dep[1]},${dep[0]}`, end:`${arr[1]},${arr[0]}`,
+    intermediates:`${station[1]},${station[0]}`, profile:"car",
+    optimization: optim, geometryFormat:"geojson", getSteps:"true",
+    distanceUnit:"kilometer", timeUnit:"minute"});
+  const r = await fetch(`${ITINERAIRE}?${pr}`);
+  if(!r.ok) throw new Error(`itinéraire IGN via station (${r.status})`);
+  const j = await r.json();
+  const all = j.geometry.coordinates.map(c => [c[1], c[0]]);
+  // découpe par "portions" (départ->intermédiaire, intermédiaire->arrivée) si fournies
+  const por = j.portions || [];
+  const geomPortion = q => (q.steps || []).reduce((acc,s) => {
+    const g = s.geometry && s.geometry.coordinates;
+    if(g) for(const pt of g) acc.push([pt[1], pt[0]]);
+    return acc; }, []);
+  let aller = por[0] ? geomPortion(por[0]) : [], retour = por[1] ? geomPortion(por[1]) : [];
+  if(!aller.length){ aller = all; retour = []; }
+  return {aller, retour, total: j.distance, duree: j.duration};
+}
+
+async function osrmVia(from, via, to){
+  const c = `${from[1]},${from[0]};${via[1]},${via[0]};${to[1]},${to[0]}`;
+  const r = await fetch(`${OSRM}${c}?overview=full&geometries=geojson&steps=true&continue_straight=false`);
+  if(!r.ok) throw new Error(`trajet OSRM (${r.status})`);
+  const j = await r.json();
+  if(j.code !== "Ok" || !j.routes || !j.routes.length){
+    throw new Error(`trajet OSRM : ${j.message || j.code || "introuvable"}`);
+  }
+  const rt = j.routes[0], legs = rt.legs || [];
+  const geomLeg = leg => (leg.steps || []).reduce((acc, s) => {
+    const g = s.geometry && s.geometry.coordinates;
+    if(g) for(const p of g) acc.push([p[1], p[0]]);
+    return acc;
+  }, []);
+  let aller = legs[0] ? geomLeg(legs[0]) : [];
+  let retour = legs[1] ? geomLeg(legs[1]) : [];
+  // Repli si le serveur n'a pas renvoyé les steps : une seule trace, non séparée.
+  if(!aller.length && rt.geometry && rt.geometry.coordinates){
+    aller = rt.geometry.coordinates.map(p => [p[1], p[0]]);
+    retour = [];
+  }
+  return {
+    aller, retour,
+    distAller:  legs[0] ? legs[0].distance / 1000 : null,
+    distRetour: legs[1] ? legs[1].distance / 1000 : null,
+    durAller:   legs[0] ? legs[0].duration / 60 : null,
+    durRetour:  legs[1] ? legs[1].duration / 60 : null
+  };
+}
+
+// ------------------------------------------------------------ sélection
+function lisible(s, champ, noHw, majorOnly){
+  if(majorOnly && !estMajor(s)) return null;
+  const raw = s[champ];
+  if(raw === null || raw === undefined || raw === "") return null;
+  const prix = parseFloat(raw);
+  if(!isFinite(prix)) return null;
+  if(noHw && String(s.pop || "").toUpperCase() === "A") return null;
+  const la = +s.latitude / 1e5, lo = +s.longitude / 1e5;
+  if(!isFinite(la) || !isFinite(lo)) return null;
+  return {s, la, lo, prix};
+}
+
+// mode trajet : couloir autour de la polyligne
+function collectRoute(stations, P, champ, buffer, noHw, resv, conso, majorOnly){
+  const poly = P.poly;
+  const b = bbox(poly, buffer), out = [];
+  for(const s of stations){
+    const c = lisible(s, champ, noHw, majorOnly);
+    if(!c) continue;
+    if(c.la < b[0] || c.la > b[1] || c.lo < b[2] || c.lo > b[3]) continue;
+    const info = snapTo(P, c.la, c.lo);
+    const ecart = info.d;
+    if(ecart > buffer) continue;
+    c.aller = ecart; c.retour = ecart;      // détour estimé : écart au trajet, dans les deux sens
+    c.snap = info.snap;                     // point du trajet d'où part le détour
+    c.along = info.along;                   // km depuis le départ, pour départager à prix égal
+    c.surcout = 2 * ecart * (conso / 100) * c.prix;
+    c.total = c.prix * resv + c.surcout;
+    out.push(c);
+  }
+  return out;
+}
+
+// mode autour de moi : disque autour de l'origine
+function collectAround(stations, origin, champ, rayon, noHw, majorOnly){
+  const out = [];
+  const dla = rayon / 110.574, dlo = rayon / (111.320 * Math.cos(toRad(origin[0])));
+  for(const s of stations){
+    const c = lisible(s, champ, noHw, majorOnly);
+    if(!c) continue;
+    if(Math.abs(c.la - origin[0]) > dla || Math.abs(c.lo - origin[1]) > dlo) continue;
+    const vol = haversine(origin[0], origin[1], c.la, c.lo);
+    if(vol > rayon) continue;
+    c.vol = vol;
+    out.push(c);
+  }
+  return out;
+}
+
+// garde les meilleures candidates : les moins chères ET les plus proches
+function shortlist(cands, n){
+  if(cands.length <= n) return cands.slice();
+  const parPrix = cands.slice().sort((a, b) => a.prix - b.prix).slice(0, Math.ceil(n * 0.7));
+  const parProx = cands.slice().sort((a, b) => a.vol - b.vol).slice(0, Math.ceil(n * 0.6));
+  const vus = new Set(), keep = [];
+  for(const c of parPrix.concat(parProx)){
+    const k = c.s.id != null ? c.s.id : `${c.la},${c.lo}`;
+    if(vus.has(k)) continue;
+    vus.add(k); keep.push(c);
+    if(keep.length >= n) break;
+  }
+  return keep;
+}
+
+function chiffrer(cands, resv, conso){
+  for(const c of cands){
+    const ar = (c.aller || 0) + (c.retour || 0);
+    c.surcout = ar * (conso / 100) * c.prix;
+    c.total = c.prix * resv + c.surcout;
+    // Catégorie de distance explicite : "road" si mesurée, sinon "estimated".
+    // Garantit qu'aucun chemin de re-classement ne laisse une station ambiguë.
+    c.distanceMode = c.reel ? "road" : "estimated";
+  }
+  return cands;
+}
+
+// ------------------------------------------------------------ carte
+const reduced = matchMedia("(prefers-reduced-motion:reduce)").matches;
+// Recentre sur une station sans « flash » : si un changement de zoom est nécessaire,
+// on saute sans animation (pan animé + zoom révèle des tuiles non chargées = fond sombre).
+function recadrerStation(la, lo){
+  const zCible = Math.max(map.getZoom(), 15);
+  const memeZoom = map.getZoom() >= 15;
+  map.setView([la, lo], zCible, {animate: memeZoom && !reduced});
+}
+const map = L.map("map", {preferCanvas: false, zoomControl: false}).setView([46.6, 2.4], 6);
+L.control.zoom({position: "bottomleft"}).addTo(map);
+map.createPane("masque");
+Object.assign(map.getPane("masque").style,
+  {zIndex: 395, pointerEvents: "none"});   // sous le trajet et les marqueurs
+const FONDS = {
+  osm: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {maxZoom: 19, keepBuffer: 4, updateWhenIdle: false, updateWhenZooming: false, attribution: "© OpenStreetMap"}),
+  ign: L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0"
+        + "&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&FORMAT=image/png"
+        + "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}",
+        {maxNativeZoom: 19, maxZoom: 19, keepBuffer: 4, updateWhenIdle: false, attribution: "Plan IGN © IGN/Géoplateforme"})
+};
+let fondActuel = FONDS.osm.addTo(map);
+const routeLayer = L.layerGroup().addTo(map);
+const markLayer  = L.layerGroup().addTo(map);
+const tripLayer  = L.layerGroup().addTo(map);
+const irveLayer  = L.layerGroup().addTo(map);
+const markers = new Map();
+
+// Bulles compactes, qui se recalent automatiquement pour rester visibles.
+// Affiche une fiche dans le coin de la carte au lieu d'une bulle ancrée au marqueur.
+const cacherFiche = () => {
+  const e = document.getElementById("card"); if(e) e.hidden = true;
+  const mp = document.getElementById("map"); if(mp) mp.classList.remove("ficheOuverte");
+};
+function montrerFiche(html){
+  $("cardBody").innerHTML = html;
+  $("card").hidden = false;
+  const mp = document.getElementById("map"); if(mp) mp.classList.add("ficheOuverte");
+}
+// Attache l'info à un marqueur sans bulle : le clic remplit la fiche du coin.
+function infoMarqueur(m, html){
+  m.on("click", () => montrerFiche(html));
+  m._info = html;
+  return m;
+}
+const pin = (txt, color) => L.divIcon({className: "",
+  html: `<div class="pin" style="background:${color}">${txt}</div>`,
+  iconSize: [16, 16], iconAnchor: [8, 8]});
+// Pictogramme d'autoroute dessiné en SVG : l'emoji Unicode est rendu en couleur
+// par la police système, impossible à recolorer en bleu et blanc.
+const PICTO_AUTOROUTE = `<span class="tag hw" title="Station d'autoroute">`
+  + `<svg viewBox="0 0 16 16" width="13" height="13" aria-label="Autoroute" role="img">`
+  + `<rect width="16" height="16" rx="3" fill="#0a53a8"/>`
+  + `<path d="M3.4 14 L6.3 2.2 L9.7 2.2 L12.6 14 L10.1 14 L8 4.8 L5.9 14 Z" fill="#fff"/>`
+  + `<rect x="2.1" y="6.6" width="11.8" height="1.5" fill="#fff"/>`
+  + `</svg></span>`;
+
+/**
+ * Champ officiel d'enseigne, s'il existe : on inspecte les clés réellement
+ * présentes dans le jeu de données plutôt que de supposer. Si le ministère publie
+ * cette information, elle prime sur la table communautaire.
+ */
+let champMarque = null, champMarqueVu = false;
+function detecterChampMarque(stations){
+  if(champMarqueVu) return champMarque;
+  champMarqueVu = true;
+  const rec = stations && stations.find(s => s && typeof s === "object");
+  if(!rec) return null;
+  const motifs = /(marque|enseigne|brand|major|groupe|reseau|réseau)/i;
+  for(const k of Object.keys(rec)){
+    if(!motifs.test(k)) continue;
+    // le champ doit être exploitable : au moins quelques valeurs non vides
+    const remplis = stations.slice(0, 400).filter(s => s[k] !== null && s[k] !== undefined && s[k] !== "").length;
+    if(remplis > 20){ champMarque = k; break; }
+  }
+  const el = document.getElementById("majorNote");
+  if(el) el.textContent = champMarque ? `(champ « ${champMarque} »)`
+                                      : "(TotalEnergies, Esso, BP, Shell…)";
+  return champMarque;
+}
+
+const sansAccent = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+/**
+ * Vrai si la station relève d'un réseau, faux si elle est explicitement indépendante.
+ * Une enseigne INCONNUE renvoie true : sans information, on n'écarte rien — c'est à
+ * la donnée de trancher, pas à une interprétation de ma part.
+ */
+// Une « major » désigne une compagnie pétrolière, par opposition à la grande
+// distribution (Leclerc, Intermarché, Carrefour…) et aux indépendants. Ce n'est
+// pas une question de taille de réseau.
+const PETROLIERES = ["totalenergies","total","esso","exxon","mobil","bp","shell","eni",
+  "agip","avia","elan","dyneff","gulf","texaco","oil!","q8","repsol","cepsa"];
+function estMajor(s){
+  if(champMarque){
+    const v = s[champMarque];
+    if(v === null || v === undefined || v === "") return false;
+    const n = sansAccent(String(v));
+    if(n === "true" || n === "oui" || n === "1") return true;
+    if(n === "false" || n === "non" || n === "0") return false;
+    return PETROLIERES.some(m => n.includes(m));
+  }
+  const b = brandOf(s);
+  if(!b) return false;
+  const n = sansAccent(b);
+  return PETROLIERES.some(m => n.includes(m));
+}
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/**
+ * Bande du couloir. L'épaisseur d'une polyligne Leaflet est en pixels : on la
+ * recalcule à chaque zoom pour qu'elle corresponde exactement à la largeur en km.
+ * Les jointures et extrémités arrondies donnent un vrai tampon autour du tracé.
+ */
+let corridorLine = null, corridorKm = 0;
+// Contour du couloir : deux traits bleus pointillés épais, pas de remplissage.
+let bordsLayer = null;
+/**
+ * Voile sombre percé du couloir, via un masque SVG. Contrairement à mix-blend-mode,
+ * les masques SVG sont appliqués partout ; et comme le couloir est un TRAIT épais
+ * (jointures rondes), il ne peut pas se replier dans les virages.
+ */
+function initMasque(){
+  const pane = map.getPane("masque");
+  if(!pane || pane.querySelector("svg")) return;
+  pane.innerHTML =
+    '<svg id="msvg" style="position:absolute;left:0;top:0;display:none">'
+    + '<defs><mask id="mkm" maskUnits="userSpaceOnUse">'
+    + '<rect id="mkbg" fill="#fff"/>'
+    + '<path id="mkpath" stroke="#000" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+    + '</mask></defs>'
+    + '<rect id="mkrect" fill="#080b10" fill-opacity="0.6" mask="url(#mkm)"/></svg>';
+}
+
+function majMasque(){
+  const svg = document.getElementById("msvg");
+  if(!svg) return;
+  if(!prepActuelle || !corridorKm){ svg.style.display = "none"; return; }
+  const size = map.getSize();
+  const mpp = 156543.03392 * Math.cos(toRad(map.getCenter().lat)) / Math.pow(2, map.getZoom());
+  const larg = Math.max(2, (2 * corridorKm * 1000) / mpp);
+  const poly = prepActuelle.poly;
+  const pas = Math.max(1, Math.ceil(poly.length / 500));
+  let d = "";
+  for(let i = 0; i < poly.length; i += pas){
+    const q = map.latLngToContainerPoint(poly[i]);
+    d += (d ? "L" : "M") + q.x.toFixed(1) + " " + q.y.toFixed(1) + " ";
+  }
+  const fin = map.latLngToContainerPoint(poly[poly.length - 1]);
+  d += "L" + fin.x.toFixed(1) + " " + fin.y.toFixed(1);
+  const path = document.getElementById("mkpath");
+  path.setAttribute("d", d);
+  path.setAttribute("stroke-width", larg);
+  for(const id of ["mkbg", "mkrect"]){
+    const e = document.getElementById(id);
+    e.setAttribute("x", 0); e.setAttribute("y", 0);
+    e.setAttribute("width", size.x); e.setAttribute("height", size.y);
+  }
+  svg.setAttribute("width", size.x);
+  svg.setAttribute("height", size.y);
+  L.DomUtil.setPosition(svg, map.containerPointToLayerPoint([0, 0]));
+  svg.style.display = "";
+}
+
+function dessinerBordsCouloir(bufferKm){
+  if(bordsLayer){ map.removeLayer(bordsLayer); bordsLayer = null; }
+  corridorKm = bufferKm || 0;
+  corridorLine = null;
+  initMasque();
+  majMasque();
+}
+
+function majCorridor(){
+  if(!corridorLine) return;
+  const mpp = 156543.03392 * Math.cos(toRad(map.getCenter().lat)) / Math.pow(2, map.getZoom());
+  const px = (2 * corridorKm * 1000) / mpp;
+  corridorLine.setStyle({weight: Math.max(2, Math.min(3000, px))});
+}
+const ZOOM_ETIQUETTES = 12;
+function majEtiquettes(){
+  $("map").classList.toggle("zoomFaible", map.getZoom() < ZOOM_ETIQUETTES);
+}
+map.on("zoomend", majEtiquettes);
+map.on("move zoom moveend zoomend viewreset resize", majMasque);
+map.on("zoomend", majCorridor);
+map.on("moveend", majCorridor);
+
+
+
+function drawStations(cands, top){
+  markLayer.clearLayers(); markers.clear();
+  const shown = cands.slice(0, top);
+  if(!shown.length) return;
+  const min = Math.min(...shown.map(c => c.prix)), max = Math.max(...shown.map(c => c.prix));
+  const conso = parseFloat($("conso").value) || 6.2;
+  const resv = parseFloat($("res").value) || 35;
+  const eurFr = v => v.toFixed(2).replace(".", ",") + " €";
+  shown.forEach((c, i) => {
+    const col = c.relegue ? "#6b7280" : priceColor(max > min ? (c.prix - min) / (max - min) : 0);
+    const s = seuilContreLesPlusProches(c, shown, conso);
+    const nomRef = r => `${esc(brandOf(r.s) || r.s.ville || "une station")} à ${parcours(r).toFixed(1)} km, ${r.prix.toFixed(3)} €/L`;
+    const seuil = s === null
+      ? `<br><span style="color:#22c55e">Aucune station plus proche : rien à arbitrer.</span>`
+      : s.impossible
+        ? `<br><span style="color:#98a2b1">Sans intérêt : ${nomRef(s.ref)} est plus proche <i>et</i> moins chère.</span>`
+        : s.volume === 0
+          ? `<br><span style="color:#22c55e">Rentable dès le premier litre face à toutes les stations plus proches.</span>`
+          : s.volume > 120
+            ? `<br><span style="color:#98a2b1">Il faudrait ${Math.round(s.volume)} L pour amortir le détour face à ${nomRef(s.ref)} : jamais en pratique.</span>`
+            : `<br><span style="color:#22c55e">Rentable à partir de <b>${s.volume.toFixed(1)} L</b>, seuil fixé par ${nomRef(s.ref)}.</span>`;
+    const ar = (c.aller != null && c.retour != null)
+      ? `aller ${c.aller.toFixed(1)} km / retour ${c.retour.toFixed(1)} km` : "";
+    const mk = L.marker([c.la, c.lo], {icon: pin(String(i + 1), col)}).addTo(markLayer);
+    mk.on("click", () => selectionner(i + 1, false));
+    // Prix affiché en permanence, seulement pour les stations retenues : sur les
+    // grisées, ce serait du bruit puisqu'elles sont écartées du classement.
+    if(!c.relegue){
+      majEtiquettes();
+      mk.bindTooltip(`${c.prix.toFixed(3)} €/L`, {permanent: true, direction: "top",
+        offset: [0, -9], className: "prixTip", opacity: 1});
+    }
+    const plein = c.prix * resv;
+    const detour = c.surcout != null ? c.surcout : 0;
+    const decomp = `<div style="margin:7px 0;padding:7px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums">`
+      + `<div style="display:flex;justify-content:space-between;color:var(--muted)"><span>Plein (${resv.toFixed(0)} L)</span><b style="color:var(--text)">${eurFr(plein)}</b></div>`
+      + `<div style="display:flex;justify-content:space-between;color:var(--muted)"><span>Détour</span><b style="color:var(--text)">+${eurFr(detour)}</b></div>`
+      + `<div style="display:flex;justify-content:space-between;margin-top:3px"><span><b>Coût réel</b></span><b style="color:var(--accent);font-size:14px">${eurFr(c.total)}</b></div>`
+      + `</div>`;
+    markers.set(i + 1, infoMarqueur(mk,
+      `<b>#${i + 1} · ${esc(brandOf(c.s) || c.s.ville || "Station")} — ${c.prix.toFixed(3)} €/L</b><br>`
+        + (nameOf(c.s) ? esc(nameOf(c.s)) + "<br>" : "")
+        + `${esc(c.s.ville || "")} (${esc(c.s.cp || "")})<br>${esc(c.s.adresse || "")}<br>`
+        + (ar ? ar + "<br>" : "")
+        + decomp
+        + seuil
+        + `<br><a target="_blank" rel="noopener" href="https://www.google.com/maps?q=${c.la.toFixed(5)},${c.lo.toFixed(5)}">Ouvrir dans Maps</a>`));
+  });
+}
+
+// ---- Rendu unifié : garantit que réel et estimé ne sont jamais mélangés ----
+// Sépare les stations mesurées (distanceMode "road") des estimées ("estimated"),
+// trie chaque groupe indépendamment, et les affiche l'un sous l'autre avec un
+// séparateur explicite. TOUS les chemins (recherche, rejouerRoute, rejouerAutour,
+// repli) passent par ici — impossible qu'une estimation soit classée comme réelle.
+function afficherResultats(cands, top){
+  const road = cands.filter(c => c.distanceMode === "road");
+  const est  = cands.filter(c => c.distanceMode !== "road");
+  road.sort(comparerAvecRelegation);
+  est.sort(comparerAvecRelegation);
+  // Le groupe "réel" est prioritaire et plafonné à TOP ; les estimées complètent.
+  const roadShown = road.slice(0, top);
+  const reste = Math.max(0, top - roadShown.length);
+  const estShown = est.slice(0, reste);
+  const combined = roadShown.concat(estShown);
+  drawStations(combined, combined.length);
+  renderList(combined, combined.length, roadShown.length);
+}
+
+function renderList(cands, top, cutIndex){
+  const ul = $("results"); ul.innerHTML = "";
+  const shown = cands.slice(0, top);
+  if(!shown.length) return;
+  const min = Math.min(...shown.map(c => c.prix)), max = Math.max(...shown.map(c => c.prix));
+  shown.forEach((c, i) => {
+    // Séparateur explicite entre les stations mesurées et les estimées.
+    if(cutIndex != null && i === cutIndex && cutIndex > 0 && i < shown.length){
+      const sep = document.createElement("li");
+      sep.className = "sep";
+      sep.innerHTML = `<span>Estimations à vol d'oiseau — non comparables aux coûts réels</span>`;
+      ul.appendChild(sep);
+    }
+    const col = priceColor(max > min ? (c.prix - min) / (max - min) : 0);
+    const hw = String(c.s.pop || "").toUpperCase() === "A" ? PICTO_AUTOROUTE : "";
+    // Détour aller-retour affiché à droite (celui qui est facturé dans le coût réel).
+    const ar  = (c.aller != null && c.retour != null) ? c.aller + c.retour : null;
+    const km  = ar != null ? (c.reel ? "" : "~") + "+" + ar.toFixed(1) + " km" : "—";
+    const mins = (c.durAller != null ? c.durAller : 0) + (c.durRetour != null ? c.durRetour : 0);
+    const mn  = mins > 0 ? `<i>${Math.round(mins)} min</i>` : "";
+    const estBest = i === 0 && !c.relegue && c.distanceMode === "road";
+    const li = document.createElement("li");
+    li.className = "item" + (c.relegue ? " relegue" : "")
+                 + (estBest ? " best" : "")
+                 + (c.distanceMode !== "road" ? " est" : "");
+    li.tabIndex = 0;
+    c.rang = i + 1;
+    const marque = brandOf(c.s);
+    const titre  = marque ? esc(marque) : esc(c.s.ville || "?");
+    const soust  = marque ? `${esc(c.s.ville || "")} — ${esc(c.s.adresse || "")}`
+                          : esc(c.s.adresse || "");
+    li.innerHTML = `<div class="num">${i + 1}</div>`
+      + `<div class="pill" style="background:${col}">${c.prix.toFixed(3)}<small>€/L</small></div>`
+      + `<div class="who"><b>${titre}<span class="tag">${esc(c.s.cp || "")}</span>${hw}</b>`
+      + `<span>${soust}</span>`
+      + (c.horsRayon ? `<span class="why">hors rayon demandé</span>`
+         : c.plusLoinPlusCher ? `<span class="why">plus loin, et plus cher au total</span>` : "")
+      + `</div>`
+      + `<div class="meta" title="Détour aller-retour ajouté, et coût réel du plein">`
+      + `<b>${km}</b>${c.total.toFixed(2)} €${mn ? "<br>" + mn : ""}</div>`;
+    li.dataset.rang = String(i + 1);
+    const focus = () => selectionner(i + 1, true);
+    li.onclick = focus;
+    li.onkeydown = e => { if(e.key === "Enter") focus(); };
+    ul.appendChild(li);
+  });
+  // Point d'entrée unique : appelé depuis la liste ET depuis un clic sur un numéro.
+  selectionner = (rang, depuisListe) => {
+    const c = shown[rang - 1];
+    if(!c) return;
+    document.querySelectorAll(".item.on").forEach(e => e.classList.remove("on"));
+    const li = document.querySelector(`.item[data-rang="${rang}"]`);
+    if(li){
+      li.classList.add("on");
+      if(!depuisListe) li.scrollIntoView({block: "center", behavior: reduced ? "auto" : "smooth"});
+    }
+    // En mode trajet on zoome sur la station ; en mode autour, c'est le tracé
+    // aller-retour qui sera cadré une fois calculé — inutile de bouger deux fois.
+    if(mode !== "around")
+      recadrerStation(c.la, c.lo);
+    const m = markers.get(rang);
+    if(m && m._info) montrerFiche(m._info);
+    if(mode === "around") tracerAllerRetour(c, brandOf(c.s));
+    else if(c.snap)       tracerDetour(c, brandOf(c.s));
+  };
+}
+
+/**
+ * Classement. Clé principale selon le mode choisi ; si prix net ET prix brut sont
+ * identiques, on départage par la station la plus proche du point de départ
+ * (distance le long du trajet en mode trajet, distance à l'origine en mode autour).
+ */
+const EPS = 1e-9;
+function comparer(a, b){
+  const k1 = tri === "prix" ? a.prix - b.prix : a.total - b.total;
+  if(Math.abs(k1) > EPS) return k1;
+  const k2 = tri === "prix" ? a.total - b.total : a.prix - b.prix;
+  if(Math.abs(k2) > EPS) return k2;
+  const pa = a.along != null ? a.along : parcours(a);
+  const pb = b.along != null ? b.along : parcours(b);
+  return pa - pb;
+}
+
+/**
+ * Volume du plein à partir duquel une station moins chère mais plus éloignée
+ * devient rentable face à une station de référence plus proche.
+ *   coût = prix × V + parcours × (conso/100) × prix
+ * L'égalité des deux coûts donne :
+ *   V* = (conso/100) × (dCible×pCible − dRéf×pRéf) / (pRéf − pCible)
+ * Renvoie null si la cible n'est pas moins chère, 0 si elle gagne dès le 1er litre.
+ */
+/**
+ * Seuil face à l'ensemble des stations plus proches, pas seulement la première.
+ * Une station lointaine n'est intéressante que si elle bat TOUTES celles qu'on
+ * croise avant elle : on retient donc le seuil le plus exigeant, et la station
+ * qui l'impose. Renvoie null si aucune comparaison n'a de sens.
+ */
+function seuilContreLesPlusProches(cible, lot, conso){
+  let pire = null, quiFixe = null;
+  for(const r of lot){
+    if(r === cible) continue;
+    if(parcours(r) >= parcours(cible)) continue;      // pas plus proche : hors sujet
+    if(r.prix <= cible.prix) return {impossible: true, ref: r};  // plus proche ET moins chère
+    const v = volumeRentable(r, cible, conso);
+    if(v === null) continue;
+    if(pire === null || v > pire){ pire = v; quiFixe = r; }
+  }
+  return pire === null ? null : {volume: pire, ref: quiFixe};
+}
+
+function volumeRentable(ref, cible, conso){
+  if(!ref || !cible || !(ref.prix > cible.prix)) return null;
+  const dRef = parcours(ref), dCible = parcours(cible);
+  const v = (conso / 100) * (dCible * cible.prix - dRef * ref.prix) / (ref.prix - cible.prix);
+  return v <= 0 ? 0 : v;
+}
+
+// Distance réellement parcourue pour ce plein : l'aller-retour. C'est ce que montre
+// la colonne de gauche et ce que chiffre le coût — donc c'est ce qui doit servir à
+// comparer deux stations. L'aller seul peut classer autrement (sens uniques).
+const parcours = c => (c.aller || 0) + (c.retour || 0);
+
+// Les stations écartées passent APRÈS toutes les autres, quel que soit leur prix.
+function comparerAvecRelegation(a, b){
+  const ra = a.relegue ? 1 : 0, rb = b.relegue ? 1 : 0;
+  if(ra !== rb) return ra - rb;
+  return comparer(a, b);
+}
+
+/**
+ * Marque les stations à reléguer :
+ *  - hors rayon : l'aller-retour réel divisé par deux dépasse le rayon demandé
+ *  - sans intérêt : on roule PLUS pour payer PLUS CHER que la meilleure option
+ */
+function marquerRelegations(cands, rayon, dominance){
+  // 1. hors rayon : l'aller-retour réel divisé par deux dépasse le rayon demandé
+  for(const c of cands){
+    const moyenne = ((c.aller || 0) + (c.retour || 0)) / 2;
+    c.horsRayon = rayon != null && moyenne > rayon + 1e-9;
+    c.plusLoinPlusCher = false;
+  }
+  // 2. dominance : rouler plus pour payer plus cher n'a aucun intérêt s'il existe
+  //    une station à la fois plus proche ET moins chère. Ce qui survit forme le
+  //    front des compromis utiles : la plus proche, la moins chère, et l'entre-deux.
+  // On compare sur le COÛT TOTAL du plein, pas sur le prix au litre. Une station
+  // peut être moins chère d'un dixième de centime au litre tout en revenant plus
+  // cher une fois le détour payé : c'est le cas qui échappait au grisage.
+  const cout = c => (c.total != null ? c.total : c.prix);
+  const vivantes = dominance ? cands.filter(c => !c.horsRayon && isFinite(c.prix)) : [];
+  for(const c of vivantes){
+    for(const d of vivantes){
+      if(d === c) continue;
+      const pasPlusLoin = parcours(d) <= parcours(c);
+      const pasPlusCher = cout(d) <= cout(c);
+      const strictement = parcours(d) < parcours(c) || cout(d) < cout(c);
+      if(pasPlusLoin && pasPlusCher && strictement){ c.plusLoinPlusCher = true; break; }
+    }
+  }
+  let n = 0;
+  for(const c of cands){
+    c.relegue = c.horsRayon || c.plusLoinPlusCher;
+    if(c.relegue) n++;
+  }
+  return n;
+}
+
+// Trace le vrai détour en mode trajet : on quitte l'itinéraire au point le plus proche,
+// on va à la station, on revient. En orange pointillé, comme demandé.
+async function tracerDetour(c, marque){
+  if(!dernier || !dernier.dep || !dernier.arr) return;
+  const seq = ++tripSeq;
+  const nom = marque || c.s.ville || "la station";
+  setStatus(`Calcul du trajet passant par ${esc(nom)}…`);
+  try{
+    const t = await routeViaEngine(dernier.dep, [c.la, c.lo], dernier.arr,
+                                   dernier.eng, $("orsKey").value.trim(), dernier.optim);
+    if(seq !== tripSeq) return;
+    tripLayer.clearLayers();
+    const pts = [];
+    if(t.aller.length){
+      L.polyline(t.aller, {color:"#22c55e", weight:5, opacity:.95, dashArray:"10 6"})
+        .addTo(tripLayer).bindTooltip("Départ → station", {sticky:true});
+      pts.push(...t.aller);
+    }
+    if(t.retour.length){
+      L.polyline(t.retour, {color:"#ef4444", weight:4, opacity:.95, dashArray:"3 7"})
+        .addTo(tripLayer).bindTooltip("Station → arrivée", {sticky:true});
+      pts.push(...t.retour);
+    }
+    // Aucun recadrage : la station cliquée doit rester au centre de la carte.
+    recadrerStation(c.la, c.lo);
+
+    const conso = parseFloat($("conso").value) || 6.2;
+    const direct = dernier.res.dist;
+    const ajoute = Math.max(0, t.total - direct);
+    const tempsPlus = Math.max(0, t.duree - dernier.res.dur);
+    const cout = ajoute * (conso/100) * c.prix;
+    const estime = c.aller + c.retour;
+    const pct = estime > 0 ? Math.round((ajoute/estime - 1) * 100) : 0;
+    setStatus(`<span class="trip">#${c.rang} · ${esc(nom)} — ${c.prix.toFixed(3)} €/L</span><br>`
+      + `<span style="font-size:11.5px">Trajet par la station ${t.total.toFixed(1)} km contre `
+      + `${direct.toFixed(1)} km en direct, soit <b>+${ajoute.toFixed(1)} km</b>`
+      + `${tempsPlus > 0.5 ? ` et +${Math.round(tempsPlus)} min` : ""}, `
+      + `${cout.toFixed(2)} € de carburant en plus. `
+      + `L'estimation du classement donnait +${estime.toFixed(1)} km`
+      + `${pct !== 0 ? ` (${pct > 0 ? "+" : ""}${pct} %)` : ""}.</span>`,
+      Math.abs(pct) >= 50 ? "warn" : null);
+  }catch(e){
+    if(seq !== tripSeq) return;
+    tripLayer.clearLayers();
+    setStatus(`Trajet indisponible : ${esc(e.message)}`, "warn");
+  }
+}
+
+// Affiche les bornes IRVE autour d'un point. Aucun classement par prix : il n'existe pas.
+/**
+ * Bornes OSM dans un COULOIR entier, en une seule requête : Overpass accepte un
+ * filtre polygonal. Couverture complète du trajet, sans découpage en disques.
+ */
+// Les deux bords du couloir, décalés perpendiculairement au tracé.
+function bordsCouloir(P, bufferKm, nPts){
+  // Un point tous les 2 km au plus (et plus serré si le couloir est étroit) :
+  // avec un échantillonnage grossier, les bords coupaient les virages en droite.
+  const pas = Math.max(0.4, Math.min(2, bufferKm));
+  const n = Math.min(nPts || 28, Math.max(8, Math.ceil(P.total / pas)));
+  const gauche = [], droite = [];
+  for(let i = 0; i < n; i++){
+    const t = P.total * i / (n - 1);
+    const a = pointAt(P, Math.max(0, t - 0.5));
+    const b = pointAt(P, Math.min(P.total, t + 0.5));
+    const phi = toRad(a[0]), kx = KX(phi), ky = KY(phi);
+    let dx = (b[1] - a[1]) * kx, dy = (b[0] - a[0]) * ky;
+    const L2 = Math.hypot(dx, dy) || 1; dx /= L2; dy /= L2;
+    const dlon = bufferKm * (-dy) / kx, dlat = bufferKm * dx / ky;
+    const c = pointAt(P, t);
+    gauche.push([c[0] + dlat, c[1] + dlon]);
+    droite.push([c[0] - dlat, c[1] - dlon]);
+  }
+  // Dans un virage serré, le bord intérieur se replie et croise le tracé : le point
+  // décalé se retrouve alors PLUS PRÈS du trajet que la largeur demandée. On écarte
+  // ces points, ce qui supprime les segments qui se croisaient.
+  // Deux signatures d'un repli dans un virage serré :
+  //   - le point décalé se retrouve plus près du tracé que la largeur demandée ;
+  //   - sa projection sur le tracé RECULE par rapport au point précédent, ce qui
+  //     fait revenir le contour en arrière et croiser les segments déjà tracés.
+  const garder = arr => {
+    const out = [];
+    let dernier = -Infinity;
+    for(const q of arr){
+      const s = snapTo(P, q[0], q[1]);
+      if(s.d < bufferKm * 0.82) continue;
+      if(s.along < dernier - 1e-9) continue;
+      dernier = s.along;
+      out.push(q);
+    }
+    return out;
+  };
+  const g2 = garder(gauche), d2 = garder(droite);
+  return {gauche: g2.length > 2 ? g2 : gauche, droite: d2.length > 2 ? d2 : droite};
+}
+
+async function loadOsmCouloir(P, bufferKm){
+  const n = Math.min(16, Math.max(4, Math.ceil(P.total / 25)));
+  const gauche = [], droite = [];
+  for(let i = 0; i < n; i++){
+    const t = P.total * i / (n - 1);
+    const a = pointAt(P, Math.max(0, t - 0.5));
+    const b = pointAt(P, Math.min(P.total, t + 0.5));
+    const phi = toRad(a[0]), kx = KX(phi), ky = KY(phi);
+    let dx = (b[1] - a[1]) * kx, dy = (b[0] - a[0]) * ky;
+    const L2 = Math.hypot(dx, dy) || 1; dx /= L2; dy /= L2;
+    const dlon = bufferKm * (-dy) / kx, dlat = bufferKm * dx / ky;
+    const c = pointAt(P, t);
+    gauche.push([c[0] + dlat, c[1] + dlon]);
+    droite.push([c[0] - dlat, c[1] - dlon]);
+  }
+  const anneau = gauche.concat(droite.reverse());
+  const poly = anneau.map(q => `${q[0].toFixed(5)} ${q[1].toFixed(5)}`).join(" ");
+  const q = `[out:json][timeout:25];node(poly:"${poly}")["amenity"="charging_station"];out body 1200;`;
+  return normOsm(await overpass(q));
+}
+
+function normOsm(j){
+  return (j.elements || []).filter(e => e.lat != null).map(e => {
+    const t = e.tags || {};
+    const prises = Object.keys(t).filter(k => k.startsWith("socket:") && t[k] !== "no")
+      .map(k => k.replace("socket:", "").replace(/_/g, " ").toUpperCase());
+    return {lat: e.lat, lon: e.lon, source: "OSM",
+      nom: t.name || t.operator || "Borne de recharge",
+      operateur: t.operator || t.brand || t.network || null,
+      puissance: t["charging_station:output"] || t.output || null,
+      prises, tarif: t.charge || t.fee || null};
+  });
+}
+
+/**
+ * IRVE sur tout le couloir en une seule requête paginée. Opendatasoft accepte une
+ * géométrie WKT : on lui passe la polyligne du trajet. Remplace les dizaines de
+ * requêtes par cercle, qui étaient lentes ET laissaient des trous.
+ * Repli en cascade : polygone du couloir -> boîte englobante.
+ */
+// Aucune de ces API ne garantit de répondre : sans délai maximal, une requête
+// qui reste en suspens fige l'affichage sur « 1/2 requêtes » indéfiniment.
+async function fetchDelai(url, opts, ms){
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms || 20000);
+  try{
+    return await fetch(url, Object.assign({}, opts, {signal: ctrl.signal}));
+  }catch(e){
+    throw new Error(e.name === "AbortError" ? `pas de réponse après ${(ms||20000)/1000} s` : e.message);
+  }finally{ clearTimeout(t); }
+}
+
+let irveCache = {cle: null, data: null};
+async function loadIrveCouloir(P, bufferKm, onProgress){
+  const cle = `${P.total.toFixed(1)}|${P.poly[0]}|${P.poly[P.poly.length-1]}|${bufferKm}`;
+  if(irveCache.cle === cle) return irveCache.data;
+  const cfg = await irveConfig();
+  // Peu de points : une polyligne trop détaillée produit une URL énorme, que
+  // certains serveurs refusent ou traitent très lentement.
+  const n = Math.min(24, Math.max(2, Math.ceil(P.total / 20)));
+  const pts = [];
+  for(let i = 0; i < n; i++){
+    const c = pointAt(P, P.total * i / (n - 1));
+    pts.push(`${c[1].toFixed(4)} ${c[0].toFixed(4)}`);
+  }
+  // Opendatasoft n'accepte pas n'importe quelle géométrie : within_distance attend
+  // un POINT, pas une LINESTRING — d'où le rejet. On passe donc le polygone du
+  // couloir à within_polygon, puis on se rabat sur within_bbox (et non « in_bbox »,
+  // qui n'existe pas dans ODSQL : c'était la seconde cause du rejet).
+  const b = bordsCouloir(P, bufferKm, 40);
+  const anneau = b.gauche.concat(b.droite.slice().reverse());
+  anneau.push(anneau[0]);
+  const wktPoly = `POLYGON((${anneau.map(q => `${q[1].toFixed(4)} ${q[0].toFixed(4)}`).join(",")}))`;
+  const bb = bbox(P.poly, bufferKm);
+  const filtres = [
+    `within_polygon(${cfg.geo}, geom'${wktPoly}')`,
+    `within_bbox(${cfg.geo}, ${bb[0]}, ${bb[2]}, ${bb[1]}, ${bb[3]})`
+  ];
+
+  for(const f of filtres){
+    let avecSel = !!sel;
+    let r0 = await page(f, 0, avecSel);
+    if(!r0.ok && avecSel){                    // la sélection de colonnes gêne : on l'abandonne
+      avecSel = false;
+      r0 = await page(f, 0, false);
+    }
+    if(!r0.ok) continue;                      // filtre refusé : on tente le suivant
+    const j0 = await r0.json();
+    const tout = j0.results || [];
+    const dispo = j0.total_count != null ? j0.total_count : tout.length;
+    // Plafond volontairement bas : au-delà, on passe plus de temps à filtrer des
+    // bornes hors couloir qu'à en afficher.
+    const pages = Math.min(9, Math.ceil(Math.min(dispo, 1000) / 100) - 1);
+    if(onProgress) onProgress(tout.length, dispo);
+    // toutes les pages restantes d'un coup, par lots de 6
+    for(let d = 1; d <= pages; d += 6){
+      const lot = [];
+      for(let k = d; k < Math.min(d + 6, pages + 1); k++) lot.push(page(f, k, avecSel));
+      const reps = await Promise.all(lot);
+      for(const rr of reps){
+        if(!rr.ok) continue;
+        const jj = await rr.json();
+        tout.push(...(jj.results || []));
+      }
+      if(onProgress) onProgress(tout.length, dispo);
+    }
+    irveCache = {cle, data: tout};
+    return tout;
+  }
+  throw new Error("filtre géographique refusé par l'API IRVE");
+}
+
+// Bornes OpenStreetMap autour d'un point.
+async function loadOsmBornes(lat, lon, rayonKm){
+  const q = `[out:json][timeout:25];`
+    + `node(around:${Math.round(rayonKm*1000)},${lat.toFixed(5)},${lon.toFixed(5)})`
+    + `["amenity"="charging_station"];out body 600;`;
+  return normOsm(await overpass(q));
+}
+
+// Normalise un enregistrement IRVE dans la même forme que ceux d'OSM.
+function normIrve(b, geo){
+  const c = extrairePoint(b[geo]);
+  if(!c) return null;
+  const prises = ["prise_type_2","prise_type_combo_ccs","prise_type_chademo","prise_type_ef"]
+    .filter(k => { const v = b[k]; return v === true || v === "true" || v === "TRUE" || v === 1; })
+    .map(k => k.replace("prise_type_","").replace("combo_ccs","CCS").toUpperCase());
+  return {lat: c[0], lon: c[1], source: "IRVE",
+    nom: champ(b, "nom_station", "nom_enseigne") || "Borne de recharge",
+    operateur: champ(b, "nom_operateur", "nom_enseigne", "nom_amenageur"),
+    puissance: champ(b, "puissance_nominale"),
+    prises, tarif: champ(b, "tarification"),
+    gratuit: champ(b, "gratuit")};
+}
+
+/**
+ * Fusionne les sources. Indexation par grille (~60 m) au lieu d'une comparaison
+ * de tous avec tous : indispensable dès quelques centaines de bornes.
+ * Un doublon n'est pas jeté en silence : les deux origines sont conservées.
+ */
+function fusionnerBornes(listes){
+  const PAS = 0.00055;                       // ~60 m en degrés de latitude
+  const grille = new Map(), out = [];
+  const cle = (la, lo) => `${Math.round(la/PAS)}|${Math.round(lo/PAS)}`;
+  for(const lot of listes) for(const b of lot){
+    if(!b || !isFinite(b.lat) || !isFinite(b.lon)) continue;
+    let deja = null;
+    for(let dy = -1; dy <= 1 && !deja; dy++) for(let dx = -1; dx <= 1 && !deja; dx++){
+      const v = grille.get(cle(b.lat + dy*PAS, b.lon + dx*PAS));
+      if(v && haversine(v.lat, v.lon, b.lat, b.lon) < 0.06) deja = v;
+    }
+    if(deja){
+      if(deja.source !== b.source && deja.source.indexOf(b.source) < 0)
+        deja.source = "IRVE+OSM";
+      if(!deja.puissance && b.puissance) deja.puissance = b.puissance;
+      if(!deja.tarif && b.tarif) deja.tarif = b.tarif;
+      continue;
+    }
+    grille.set(cle(b.lat, b.lon), b);
+    out.push(b);
+  }
+  return out;
+}
+
+/**
+ * Affiche les bornes autour d'un ou plusieurs centres (le long d'un trajet, il en
+ * faut plusieurs : un seul point ne couvre pas 400 km). Deux sources fusionnées.
+ */
+/**
+ * Affiche les bornes. Les requêtes partent EN PARALLELE (4 à la fois) au lieu
+ * d'être enchaînées : c'était la cause de la lenteur. `filtre` permet d'écarter
+ * ce qui tombe hors du couloir en mode trajet.
+ */
+async function afficherBornes(centres, rayonKm, filtre, sourceCouloir, avertir, sourceIrve){
+  irveLayer.clearLayers();
+  if(!$("irve").checked) return;
+  const base = $("status").innerHTML.split('<br><span style="font-size:11.5px">Bornes')[0];
+  const dire = t => setStatus(base + `<br><span style="font-size:11.5px">${t}</span>`);
+  const listes = [], soucis = new Set();
+  let faits = 0;
+  const total = centres.length * (sourceCouloir ? 1 : 2)
+              + (sourceCouloir ? 1 : 0) + (sourceIrve ? 1 : 0);
+
+  // une tâche = une source pour un centre
+  const taches = [];
+  for(const [la, lo] of centres){
+    taches.push(async () => {
+      try{
+        const irve = await loadIrve(la, lo, rayonKm, null, centres.length === 1 ? 12 : 3);
+        listes.push(irve.map(b => normIrve(b, irveCfg.geo)).filter(Boolean));
+      }catch(e){ soucis.add("IRVE : " + e.message); }
+    });
+    if(!sourceCouloir) taches.push(async () => {
+      try{ listes.push(await loadOsmBornes(la, lo, rayonKm)); }
+      catch(e){ soucis.add("OSM : " + e.message); }
+    });
+  }
+  if(sourceCouloir) taches.push(async () => {
+    try{ listes.push(await sourceCouloir()); }
+    catch(e){ soucis.add("OSM : " + e.message); }
+  });
+  if(sourceIrve) taches.push(async () => {
+    try{ listes.push(await sourceIrve()); }
+    catch(e){ soucis.add("IRVE : " + e.message); }
+  });
+  const suivante = (() => { let i = 0; return () => taches[i++]; })();
+  const ouvrier = async () => {
+    let t;
+    while((t = suivante())){
+      await t();
+      faits++;
+      dire(`Bornes de recharge : ${faits}/${total} requêtes…`);
+    }
+  };
+  await Promise.all([ouvrier(), ouvrier(), ouvrier(), ouvrier()]);
+
+  let bornes = fusionnerBornes(listes);
+  const avant = bornes.length;
+  if(filtre) bornes = bornes.filter(filtre);
+  const ecartees = avant - bornes.length;
+
+  for(const b of bornes){
+    const coul = b.source === "OSM" ? "#22c55e" : b.source === "IRVE+OSM" ? "#a855f7" : "#0ea5e9";
+    infoMarqueur(L.circleMarker([b.lat, b.lon], {radius: 6, color: coul,
+      fillColor: coul, fillOpacity: .55}).addTo(irveLayer),
+      `<b>⚡ ${esc(b.nom)}</b><br>`
+        + (b.operateur ? esc(String(b.operateur)) + "<br>" : "")
+        + (b.puissance ? `${esc(String(b.puissance))} kW<br>` : "")
+        + (b.prises && b.prises.length ? `Prises : ${esc(b.prises.join(", "))}<br>` : "")
+        + (b.gratuit === true || b.gratuit === "true" ? "<i>Gratuit</i><br>" : "")
+        + (b.tarif ? `Tarif déclaré : ${esc(String(b.tarif))}<br>`
+                   : `<i>Tarif non publié en open data</i><br>`)
+        + `<span style="color:#98a2b1">source ${esc(b.source)}</span><br>`
+        + `<a target="_blank" rel="noopener" href="https://www.google.com/maps?q=${b.lat.toFixed(5)},${b.lon.toFixed(5)}">Ouvrir dans Maps</a>`);
+  }
+  const n = s => bornes.filter(b => b.source === s).length;
+  dire(`${bornes.length} bornes — IRVE ${n("IRVE")}, OSM ${n("OSM")}, les deux ${n("IRVE+OSM")}`
+    + (ecartees ? `, ${ecartees} hors couloir écartées` : "")
+    + (soucis.size ? `<br><span style="color:var(--warn)">${esc([...soucis].join(" · "))}</span>` : "")
+    + (avertir ? `<br><span style="color:var(--warn)">${esc(avertir)}</span>` : ""));
+}
+
+/**
+ * Centres d'interrogation le long d'un itinéraire. Espacés à 1.4 fois le rayon
+ * pour que les disques SE RECOUVRENT : avec un espacement supérieur au rayon,
+ * des tronçons entiers n'étaient jamais interrogés.
+ * Renvoie aussi si la couverture est complète, pour pouvoir le dire honnêtement.
+ */
+function centresLeLongDuTrajet(P, rayonKm, maxCentres){
+  const pas = Math.max(1, rayonKm * 1.4);
+  const voulu = Math.max(1, Math.ceil(P.total / pas));
+  const n = Math.min(voulu, maxCentres || 14);
+  const c = [];
+  for(let i = 0; i < n; i++) c.push(pointAt(P, P.total * (i + 0.5) / n));
+  return {centres: c, complet: n >= voulu, voulu, retenus: n};
+}
+
+// Interroge les bornes le long du trajet courant, en n'affichant que le couloir.
+function bornesSurTrajet(){
+  if(!prepActuelle) return;
+  const buffer = parseFloat($("buf").value);
+  const rayon = Math.max(buffer, 5);
+  // Les deux sources couvrent désormais tout le couloir en une requête chacune.
+  afficherBornes([], rayon,
+    b => snapTo(prepActuelle, b.lat, b.lon).d <= buffer,
+    () => loadOsmCouloir(prepActuelle, buffer),
+    null,
+    async () => (await loadIrveCouloir(prepActuelle, buffer,
+                   (n, tot) => setStatus($("status").innerHTML
+                     .split('<br><span style="font-size:11.5px">Bornes')[0]
+                     + `<br><span style="font-size:11.5px">Bornes IRVE : ${n}${tot ? "/" + tot : ""} chargées…</span>`)))
+                  .map(x => normIrve(x, irveCfg.geo)).filter(Boolean));
+}
+
+function setStatus(html, kind){
+  // Détecte un message de progression (finit par « … », hors erreur/avertissement).
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  const txt = (tmp.textContent || "").trim();
+  const progression = kind !== "err" && kind !== "warn" && /…$/.test(txt);
+
+  const box = document.getElementById("mapStatus");
+  if(progression){
+    // Progression : affichée uniquement au centre de la carte, pas dans le bandeau gauche.
+    if(box){
+      const t = document.getElementById("mapStatusTxt");
+      if(t) t.textContent = txt;
+      box.hidden = false;
+    }
+    return;
+  }
+  // Message final (résultat, erreur, invite) : bandeau gauche + fermeture du toast.
+  const el = $("status");
+  el.innerHTML = html;
+  el.classList.toggle("err", kind === "err");
+  el.classList.toggle("warn", kind === "warn");
+  if(box) box.hidden = true;
+}
+
+// Trace l'aller (plein) et le retour (pointillés) entre l'origine et la station cliquée.
+let origineActuelle = null, prepActuelle = null, tripSeq = 0;
+async function tracerAllerRetour(c, marque){
+  if(!origineActuelle) return;
+  const seq = ++tripSeq;
+  // On NE vide PAS la couche ici : l'ancien tracé reste affiché pendant le calcul,
+  // ce qui évite l'instant où la carte est nue. Il est remplacé d'un coup à l'arrivée.
+  const nom = marque || c.s.ville || "la station";
+  setStatus(`Calcul de l'aller-retour vers ${esc(nom)}…`);
+  try{
+    const t = await osrmVia(origineActuelle, [c.la, c.lo], origineActuelle);
+    if(seq !== tripSeq) return;            // un autre clic a pris la main
+    tripLayer.clearLayers();
+    const bounds = [];
+    if(t.aller.length){
+      L.polyline(t.aller, {color: "#22c55e", weight: 5, opacity: .95, dashArray: "10 6"}).addTo(tripLayer)
+        .bindTooltip("Aller", {sticky: true});
+      bounds.push(...t.aller);
+    }
+    if(t.retour.length){
+      L.polyline(t.retour, {color: "#ef4444", weight: 4, opacity: .95, dashArray: "3 7"}).addTo(tripLayer)
+        .bindTooltip("Retour", {sticky: true});
+      bounds.push(...t.retour);
+    }
+    // En « autour de moi », on cadre l'aller-retour entier : c'est lui qu'on veut voir.
+    if(bounds.length > 1) map.fitBounds(L.latLngBounds(bounds).pad(0.18), {animate: !reduced});
+    const conso = parseFloat($("conso").value) || 6.2;
+    const a = t.distAller, r = t.distRetour;
+    if(a != null && r != null){
+      const cout = (a + r) * (conso / 100) * c.prix;
+      const mins = (t.durAller || 0) + (t.durRetour || 0);
+      setStatus(`<span class="trip">${esc(nom)} — ${c.prix.toFixed(3)} €/L</span><br>`
+        + `<span style="font-size:11.5px">Aller ${a.toFixed(1)} km · retour ${r.toFixed(1)} km · `
+        + `${Math.round(mins)} min au total · ${cout.toFixed(2)} € de carburant brûlé · `
+        + `plein ${c.total.toFixed(2)} €</span>`);
+    }else{
+      setStatus(`<span class="trip">${esc(nom)}</span><br>`
+        + `<span style="font-size:11.5px">Trajet tracé, mais le serveur n'a pas séparé aller et retour.</span>`, "warn");
+    }
+  }catch(e){
+    if(seq !== tripSeq) return;
+    tripLayer.clearLayers();
+    setStatus(`Tracé indisponible : ${esc(e.message)}`, "warn");
+  }
+}
+
+// ------------------------------------------------------------ recherche
+let mode = "around", tri = "total", busy = false;
+let selectionner = () => {};   // remplacé à chaque rendu de liste
+const TOP = 40;   // aligné sur le calcul de distance routière réelle : aucune valeur estimée affichée
+
+// Résultat du dernier calcul réseau, pour rejouer le filtrage sans rien redemander.
+let dernier = null;   // {res, stations, prep}
+
+/**
+ * Rejoue filtrage + classement + rendu à partir des données déjà en mémoire.
+ * Changer la largeur du couloir, le carburant ou le classement ne nécessite
+ * aucun appel réseau : l'itinéraire et les prix sont déjà là.
+ */
+function rejouerRoute(){
+  if(!dernier || mode !== "route") return;
+  const {res, stations, prep} = dernier;
+  const buffer = parseFloat($("buf").value);
+  const conso  = parseFloat($("conso").value) || 6.2;
+  const resv   = parseFloat($("res").value) || 35;
+  const cands  = collectRoute(stations, prep, $("carb").value, buffer,
+                              $("noHw").checked, resv, conso, $("major").checked);
+  // on réinjecte les détours déjà mesurés : inutile de refaire des appels réseau
+  if(dernier && dernier.mesures){
+    for(const c of cands){
+      const m = dernier.mesures[c.s.id];
+      if(m){ c.aller = m.a; c.retour = m.r; c.durAller = m.d; c.reel = true; c.distanceMode = "road"; }
+    }
+  }
+  // toujours rechiffrer : pose c.total ET c.distanceMode ("road" si mesurée, sinon "estimated")
+  chiffrer(cands, resv, conso);
+  marquerRelegations(cands, null, true);
+  cands.sort(comparerAvecRelegation);
+
+  corridorKm = buffer;
+  dessinerBordsCouloir(buffer);
+  tripLayer.clearLayers();
+
+  if(!cands.length){
+    markLayer.clearLayers(); $("results").innerHTML = ""; $("legend").hidden = true;
+    setStatus(`Aucune station à moins de ${buffer} km du trajet. Élargis le couloir.`, "err");
+    return;
+  }
+  afficherResultats(cands, TOP);
+  $("legend").hidden = false;
+  const caches = Math.max(0, cands.length - TOP);
+  setStatus(`<span class="trip">${res.dist.toFixed(0)} km · ${res.dur.toFixed(0)} min</span> — `
+    + `<b>${cands.length} stations dans un couloir de ${buffer} km</b>`
+    + `${caches ? ` (les ${TOP} meilleures affichées, ${caches} autres masquées)` : ""}`
+    + ` · moins chère ${cands[0].prix.toFixed(3)} €/L<br>`
+    + `<span style="font-size:11.5px">Tracé : ${esc(res.engine)}.</span>`);
+}
+
+// Re-classe le mode « autour de moi » sans refaire de matrice.
+let dernierAutour = null;   // {cands, totalTrouve, note}
+function rejouerAutour(){
+  if(!dernierAutour || mode !== "around") return;
+  const resv  = parseFloat($("res").value) || 35;
+  const conso = parseFloat($("conso").value) || 6.2;
+  const cands = dernierAutour.cands;
+  chiffrer(cands, resv, conso);
+  marquerRelegations(cands, parseFloat($("rad").value), true);
+  cands.sort(comparerAvecRelegation);
+  afficherResultats(cands, TOP);
+}
+
+async function search(){
+  if(busy) return;
+  busy = true; $("go").disabled = true;
+  $("legend").hidden = true; $("results").innerHTML = ""; cacherFiche();
+  try{
+    if(mode === "around") await searchAround();
+    else                  await searchRoute();
+  }catch(err){
+    setStatus(`Échec : ${esc(err.message)}<br>`
+      + `<span style="font-size:11.5px">Si la page tourne dans un aperçu intégré, ouvre-la dans un vrai onglet.</span>`, "err");
+  }finally{
+    busy = false; $("go").disabled = false;
+  }
+}
+
+async function searchRoute(){
+  const depV = $("dep").value.trim(), arrV = $("arr").value.trim();
+  if(!depV || !arrV){ setStatus("Renseigne le départ et l'arrivée.", "err"); return; }
+  const eng = $("engine").value, key = $("orsKey").value.trim();
+  if(eng === "ors" && !key){
+    setStatus("Le moteur openrouteservice demande une clé (Réglages avancés).", "err");
+    return;
+  }
+  let warn = "";
+  setStatus("Géocodage…");
+  const pts = await Promise.all([geocode(depV), geocode(arrV)]);
+  const dep = pts[0], arr = pts[1];
+
+  setStatus("Calcul de l'itinéraire…");
+  let res;
+  if(eng === "ors")       res = await routeORS(dep, arr, key);
+  else if(eng === "osrm") res = await routeOSRM(dep, arr);
+  else                    res = await routeIGN(dep, arr, IGN_RESOURCE[eng] || "bdtopo-osrm", $("optim").value);
+
+  setStatus(`Chargement des prix${cacheValide() ? " (cache)" : ""}…`);
+  const stations = await loadStations();
+  await loadBrands();
+  origineActuelle = null;
+  tripLayer.clearLayers();
+
+  const buffer = parseFloat($("buf").value);
+  const conso  = parseFloat($("conso").value) || 6.2;
+  const resv   = parseFloat($("res").value) || 35;
+  prepActuelle = prepRoute(res.poly);
+  const cands  = collectRoute(stations, prepActuelle, $("carb").value, buffer, $("noHw").checked, resv, conso, $("major").checked);
+  marquerRelegations(cands, null, true);
+  cands.sort(comparerAvecRelegation);
+
+  routeLayer.clearLayers();
+  corridorKm = buffer;
+  corridorLine = null;
+  dessinerBordsCouloir(buffer);
+  const line = L.polyline(res.poly, {color: "#3d7dff", weight: 4, opacity: .9}).addTo(routeLayer);
+  L.marker(res.poly[0], {icon: pin("D", "#fff")}).addTo(routeLayer).bindPopup("Départ");
+  L.marker(res.poly[res.poly.length - 1], {icon: pin("A", "#fff")}).addTo(routeLayer).bindPopup("Arrivée");
+  map.fitBounds(line.getBounds().pad(0.15), {animate: !reduced});
+
+  if(!cands.length){
+    markLayer.clearLayers();
+    setStatus(`Aucune station à moins de ${buffer} km du trajet. Élargis le couloir.`, "err");
+    return;
+  }
+  if($("irve").checked) bornesSurTrajet();
+  const mesures = {};
+  for(const c of cands) if(c.reel) mesures[c.s.id] = {a: c.aller, r: c.retour, d: c.durAller};
+  dernier = {res, stations, prep: prepActuelle, dep, arr, eng, optim: $("optim").value, mesures};
+  const modeRoad = $("distMode").value === "road";
+  // En mode routier, on n'affiche la liste qu'APRÈS la mesure réelle, pour ne
+  // jamais montrer de distance estimée (« ~ »). En vol d'oiseau, affichage direct.
+  if(!modeRoad){ afficherResultats(cands, TOP); }
+  $("legend").hidden = false;
+  const caches = Math.max(0, cands.length - TOP);
+  const dbg = res.url
+    ? ` <a href="${esc(res.url)}" target="_blank" rel="noopener" style="color:var(--accent)">voir la requête brute</a>`
+    : "";
+  const resume = note => setStatus(
+    `<span class="trip">${res.dist.toFixed(0)} km · ${res.dur.toFixed(0)} min</span> — `
+    + `<b>${cands.length} stations dans un couloir de ${buffer} km</b>`
+    + `${caches ? ` (les ${TOP} meilleures affichées, ${caches} autres masquées)` : ""}`
+    + ` · moins chère ${cands[0].prix.toFixed(3)} €/L<br>`
+    + `<span style="font-size:11.5px">Tracé : ${esc(res.engine)} · ${note}.${dbg}${esc(warn)}</span>`,
+    warn ? "warn" : null);
+  resume(modeRoad ? "mesure des détours en cours…" : "détours estimés à vol d'oiseau");
+
+  // La liste est déjà à l'écran. On mesure ensuite les vrais détours routiers et on
+  // reclasse : l'attente ne bloque plus l'affichage, elle l'affine.
+  if($("distMode").value === "road"){
+    const plafond = 40;   // toutes les stations affichées (TOP) sont mesurées en réel
+    const court = cands.slice(0, plafond);
+    try{
+      const m = await matriceParPaires(court.map(c => c.snap), court.map(c => [c.la, c.lo]),
+        eng, key, $("optim").value,
+        (i, n) => resume(`mesure des détours réels ${i}/${n}…`));
+      let ok = 0;
+      court.forEach((c, i) => {
+        if(m.aller[i] != null && m.retour[i] != null){
+          c.aller = m.aller[i]; c.retour = m.retour[i];
+          c.durAller = m.durAller[i]; c.reel = true; c.distanceMode = "road"; ok++;
+        }
+      });
+      chiffrer(cands, resv, conso);
+      marquerRelegations(cands, null, true);
+      for(const c of cands) if(c.reel) mesures[c.s.id] = {a: c.aller, r: c.retour, d: c.durAller};
+      afficherResultats(cands, TOP);
+      const nEst = cands.filter(c => c.distanceMode !== "road").length;
+      resume(`détours réels via ${m.note} — ${ok} stations mesurées`
+        + (nEst ? `, ${nEst} estimée(s) listée(s) à part` : ""));
+    }catch(e){
+      resume(`détours estimés à vol d'oiseau — mesure indisponible : ${esc(e.message)}`);
+    }
+  }
+}
+
+async function searchAround(){
+  const depV = $("dep").value.trim();
+  if(!depV){ setStatus("Renseigne ta position (ou clique le bouton position).", "err"); return; }
+  setStatus("Géocodage…");
+  const origin = await geocode(depV);
+  origineActuelle = origin;
+  prepActuelle = null;
+  tripLayer.clearLayers();
+
+  setStatus(`Chargement des prix${cacheValide() ? " (cache)" : ""}…`);
+  const stations = await loadStations();
+  await loadBrands();
+
+  const rayon = parseFloat($("rad").value);
+  const conso = parseFloat($("conso").value) || 6.2;
+  const resv  = parseFloat($("res").value) || 35;
+  let cands = collectAround(stations, origin, $("carb").value, rayon, $("noHw").checked, $("major").checked);
+
+  routeLayer.clearLayers();
+  corridorLine = null;
+  L.marker(origin, {icon: pin("★", "#fff")}).addTo(routeLayer).bindPopup("Ma position");
+  const disque = L.circle(origin, {radius: rayon * 1000, color: "#3d7dff", weight: 3.5,
+    opacity: .85, dashArray: "12 9", fill: false, interactive: false}).addTo(routeLayer);
+  map.fitBounds(disque.getBounds().pad(0.05), {animate: !reduced});
+
+  if(!cands.length){
+    markLayer.clearLayers();
+    setStatus(`Aucune station à moins de ${rayon} km à vol d'oiseau. Élargis le rayon.`, "err");
+    return;
+  }
+
+  let note, degrade = "";
+  const totalTrouve = cands.length;
+  const voulu = $("distMode").value;
+  // Socle : chaque station reçoit d'emblée son estimation à vol d'oiseau. Les
+  // mesures réelles viendront l'écraser. Sans ce socle, les stations hors du lot
+  // mesuré se retrouvaient sans distance du tout — d'où le plantage.
+  for(const c of cands){ c.aller = c.vol; c.retour = c.vol; c.durAller = null; }
+
+  if(voulu === "road"){
+    const eng = $("engine").value, key = $("orsKey").value.trim();
+    const plafond = 40;   // toutes les stations affichées (TOP) sont mesurées en réel
+    const court = shortlist(cands, plafond);
+    setStatus(`Distances routières pour ${court.length} stations…`);
+    try{
+      const pts = court.map(c => [c.la, c.lo]);
+      const m = await matriceDistances(origin, pts, eng, key, $("optim").value,
+        (i, n) => setStatus(`Distances routières : station ${i} sur ${n}…`));
+      court.forEach((c, i) => {
+        if(m.aller[i] != null && m.retour[i] != null){
+          c.aller = m.aller[i]; c.retour = m.retour[i]; c.durAller = m.durAller[i];
+          c.durRetour = null; c.reel = true; c.distanceMode = "road";
+        }
+      });
+      const mesurees = court.filter(c => c.reel).length;
+      if(!mesurees) throw new Error("aucune station routable depuis ce point");
+      note = `${mesurees} stations mesurées`;
+    }catch(e){
+      cands = cands.map(c => { c.aller = c.vol; c.retour = c.vol; c.durAller = null; return c; });
+      note = "distances à vol d'oiseau";
+      degrade = ` Repli : ${e.message}.`;
+    }
+  }else{
+    cands.forEach(c => { c.aller = c.vol; c.retour = c.vol; c.durAller = null; });
+    note = "distances à vol d'oiseau";
+  }
+
+  chiffrer(cands, resv, conso);
+  const nRel = marquerRelegations(cands, rayon, true);
+  cands.sort(comparerAvecRelegation);
+
+  dernierAutour = {cands, totalTrouve, note};
+  afficherBornes([origin], rayon);
+  afficherResultats(cands, TOP);
+  $("legend").hidden = false;
+  // Résumé fondé sur la meilleure station MESURÉE (jamais une estimation).
+  const road = cands.filter(c => c.distanceMode === "road" && !c.relegue)
+                    .sort(comparerAvecRelegation);
+  const best = road[0] || cands[0];
+  const nEst = cands.filter(c => c.distanceMode !== "road").length;
+  const eco = road.length > 1
+    ? ` · ${(road[road.length - 1].total - best.total).toFixed(2)} € d'écart dans le lot mesuré` : "";
+  setStatus(`<span class="trip">${totalTrouve} stations dans ${rayon} km</span> — `
+    + `meilleure : ${best.prix.toFixed(3)} €/L, aller ${(best.aller || 0).toFixed(1)} km, `
+    + `plein ${best.total.toFixed(2)} €${eco}<br>`
+    + `<span style="font-size:11.5px">Classement sur l'aller-retour, ${note}.`
+    + `${nEst ? ` ${nEst} station(s) estimée(s) listée(s) à part.` : ""}`
+    + `${nRel ? ` ${nRel} grisée(s) et reléguée(s) en fin de liste.` : ""}${degrade}</span>`,
+    degrade ? "warn" : null);
+}
+
+// ---------------------------------------------- réglages sur la carte
+// On déplace les nœuds réels (pas de duplication) : tous les écouteurs
+// attachés plus bas via $("rad"), #tri button… retrouvent les mêmes éléments.
+(function deporterControles(){
+  const host = document.getElementById("mapControls");
+  if(!host) return;
+  const chip = (label, node, cls) => {
+    const d = document.createElement("div");
+    d.className = "mc-chip" + (cls ? " " + cls : "");
+    if(label){ const l = document.createElement("label"); l.textContent = label; d.appendChild(l); }
+    d.appendChild(node);
+    host.appendChild(d);
+    return d;
+  };
+
+  // Rayon (mode « autour ») — on prend la .rng et on neutralise le bloc vidé
+  const around = document.getElementById("aroundBox");
+  const radRng = around && around.querySelector(".rng");
+  if(radRng){
+    const c = chip("Rayon", radRng);
+    c.id = "chipRad";
+    if(around) around.hidden = true;   // ne plus afficher le label orphelin dans le panneau
+  }
+
+  // Couloir (mode « trajet ») — vit dans un <div> (label + .rng) au sein d'un .row2
+  const bufEl  = document.getElementById("buf");
+  const bufRng = bufEl && bufEl.closest(".rng");
+  const bufCell = bufEl && bufEl.closest(".row2 > div");
+  if(bufRng){
+    const c = chip("Couloir", bufRng);
+    c.id = "chipBuf";
+    if(bufCell) bufCell.remove();       // retire la case « Couloir » désormais vide
+    // (l'optimisation restée seule dans ce .row2 est ensuite repliée dans « Réglages avancés »)
+  }
+
+  // Carburant — on prend le <select> et on retire sa case du panneau (le label « Carburant »
+  // deviendrait sinon orphelin, car #fond part dans les réglages avancés).
+  const carb = document.getElementById("carb");
+  if(carb){
+    const carbCell = carb.closest(".row2 > div");
+    chip("Carburant", carb);
+    if(carbCell) carbCell.remove();
+  }
+
+  // Classement (segmented coût réel / prix brut) — on retire aussi sa case du panneau
+  const tri = document.getElementById("tri");
+  if(tri){
+    const triCell = tri.closest(".row2 > div");
+    chip("Tri", tri);
+    if(triCell){
+      const clickCell = document.getElementById("clickMode") && document.getElementById("clickMode").closest(".row2 > div");
+      triCell.remove();
+      if(clickCell) clickCell.style.gridColumn = "1 / -1";   // « Clic sur la carte » pleine largeur
+    }
+  }
+
+  // Optimisation (le plus rapide / le plus court) — sortie des « Réglages avancés »
+  const optim = document.getElementById("optim");
+  if(optim){
+    const c = chip("Optim.", optim);
+    c.id = "chipOptim";
+  }
+
+  // Cases à cocher : hors autoroute, pétroliers, bornes de recharge
+  const chkChip = (id, court, titre) => {
+    const input = document.getElementById(id);
+    if(!input) return;
+    const lab = input.closest("label.chk");
+    if(!lab) return;
+    // remplacer le libellé texte (nœuds texte hors <input>/<span>) par une version courte
+    [...lab.childNodes].forEach(n => { if(n.nodeType === 3) n.textContent = ""; });
+    input.insertAdjacentText("afterend", " " + court + " ");
+    if(titre) lab.title = titre;
+    lab.classList.add("mc-check");
+    lab.removeAttribute("style");
+    host.appendChild(lab);              // on déplace le <label> entier (input + texte + spans)
+  };
+  chkChip("noHw",  "Hors autoroute", "Exclure les stations d'autoroute");
+  chkChip("major", "Pétroliers", "Compagnies pétrolières seulement (TotalEnergies, Esso, BP, Shell…)");
+  chkChip("irve",  "Bornes électriques", "Afficher les bornes de recharge (sans prix)");
+
+  // --- Empêcher la carte de se déplacer/zoomer quand on manipule la barre ---
+  if(window.L && L.DomEvent){
+    L.DomEvent.disableClickPropagation(host);
+    L.DomEvent.disableScrollPropagation(host);
+    ["pointerdown","mousedown","touchstart","dblclick","wheel"].forEach(ev =>
+      L.DomEvent.on(host, ev, L.DomEvent.stopPropagation));
+  }
+
+  // --- Bouton de repli/dépli de la barre (surtout utile sur mobile) ---
+  const toggle = document.getElementById("mcToggle");
+  const mapEl2 = document.getElementById("map");
+  if(toggle && mapEl2){
+    const setOpen = (open) => {
+      mapEl2.classList.toggle("mcOpen", open);
+      toggle.setAttribute("aria-expanded", String(open));
+    };
+    setOpen(false);                 // replié par défaut (dégage la carte)
+    toggle.onclick = () => setOpen(!mapEl2.classList.contains("mcOpen"));
+    if(window.L && L.DomEvent){
+      L.DomEvent.disableClickPropagation(toggle);
+      ["pointerdown","mousedown","touchstart","dblclick","wheel"].forEach(ev =>
+        L.DomEvent.on(toggle, ev, L.DomEvent.stopPropagation));
+    }
+  }
+})();
+
+// La visibilité des puces rayon/couloir suit le mode courant.
+function syncChipsMode(){
+  const around = mode === "around";
+  const cr = document.getElementById("chipRad");
+  const cb = document.getElementById("chipBuf");
+  const co = document.getElementById("chipOptim");
+  if(cr) cr.hidden = !around;
+  if(cb) cb.hidden = around;
+  if(co) co.hidden = false;   // optimisation visible dans les deux onglets
+}
+
+// ------------------------------------------------------------ UI
+function applyMode(){
+  const around = mode === "around";
+  $("arrBox").hidden    = around;
+  $("routeBox").hidden  = around;
+  // #aroundBox a été vidé (le rayon vit dans la puce carte) : on le garde masqué.
+  $("aroundBox").hidden = true;
+  $("depLabel").textContent = around ? "Ma position" : "Départ";
+  $("dep").placeholder = around ? "Adresse, ou bouton position" : "Ville, adresse, ou 44.80,-0.60";
+  $("go").textContent = around ? "Chercher autour de moi" : "Rechercher";
+  document.querySelectorAll("#modebar button")
+    .forEach(b => b.setAttribute("aria-pressed", b.dataset.v === mode));
+  syncChipsMode();
+  // Défaut d'optimisation par onglet : autour → le plus court, trajet → le plus rapide.
+  const opt = document.getElementById("optim");
+  if(opt) opt.value = around ? "shortest" : "fastest";
+}
+document.querySelectorAll("#modebar button").forEach(b => {
+  b.onclick = () => { mode = b.dataset.v; tripLayer.clearLayers(); applyMode(); majResume(); };
+});
+
+let debTimer = null;
+const rejouer = () => { majResume(); rejouerRoute(); rejouerAutour(); };
+const rejouerDiffere = () => { clearTimeout(debTimer); debTimer = setTimeout(rejouer, 180); };
+
+$("buf").oninput  = e => { $("bufOut").textContent = e.target.value + " km"; rejouerDiffere(); };
+["carb", "noHw", "major"].forEach(id => $(id).addEventListener("change", rejouer));
+$("irve").addEventListener("change", () => {
+  if(!$("irve").checked){ irveLayer.clearLayers(); return; }
+  if(mode === "around" && origineActuelle)
+    afficherBornes([origineActuelle], parseFloat($("rad").value));
+  else if(prepActuelle) bornesSurTrajet();
+});
+["res", "conso"].forEach(id => $(id).addEventListener("input", rejouerDiffere));
+$("rad").oninput  = e => { $("radOut").textContent  = e.target.value + " km"; };
+
+$("engine").value = localStorage.getItem(LS_ENGINE) || "ign-osrm";
+if(!$("engine").value) $("engine").value = "ign-osrm";
+const refreshEngineNote = () => {
+  $("engineNote").textContent = ENGINE_NOTE[$("engine").value] || "";
+  $("orsBox").hidden = $("engine").value !== "ors";
+};
+$("engine").onchange = e => {
+  try { localStorage.setItem(LS_ENGINE, e.target.value); } catch(err){}
+  refreshEngineNote();
+  dernier = null;          // l'itinéraire change : il faut relancer une recherche
+};
+refreshEngineNote();
+
+const refreshDistNote = () => { $("distNote").textContent = DIST_NOTE[$("distMode").value] || ""; };
+$("distMode").onchange = refreshDistNote;
+refreshDistNote();
+
+$("optim").addEventListener("change", () => { dernier = null; });
+
+$("fond").onchange = e => {
+  map.removeLayer(fondActuel);
+  fondActuel = FONDS[e.target.value].addTo(map);
+  fondActuel.bringToBack();
+};
+
+document.querySelectorAll("#tri button").forEach(b => {
+  b.onclick = () => {
+    tri = b.dataset.v;
+    document.querySelectorAll("#tri button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    rejouer();
+  };
+});
+
+let clickMode = "";
+$("clickMode").onchange = e => {
+  clickMode = e.target.value;
+  $("map").classList.toggle("marking", !!clickMode);
+};
+map.on("click", e => {
+  if(!clickMode) return;
+  const la = e.latlng.lat, lo = e.latlng.lng;
+  const txt = la.toFixed(5) + "," + lo.toFixed(5);
+  $(clickMode === "dep" ? "dep" : "arr").value = txt;
+  setStatus(`${clickMode === "dep" ? "Point de départ" : "Arrivée"} placé : ${txt}`);
+});
+
+$("orsKey").value = localStorage.getItem(LS_KEY) || "";
+$("orsKey").onchange = e => { try { localStorage.setItem(LS_KEY, e.target.value.trim()); } catch(err){} };
+
+$("cardX").onclick = () => { $("card").hidden = true; $("map").classList.remove("ficheOuverte"); };
+// Côté du panneau, mémorisé d'une session à l'autre.
+const LS_COTE = "carb.cote";
+function appliquerCote(){
+  const droite = localStorage.getItem(LS_COTE) === "droite";
+  document.getElementById("app").classList.toggle("droite", droite);
+  $("cote").title = droite ? "Remettre le panneau à gauche" : "Passer le panneau à droite";
+  if(map && map.invalidateSize) setTimeout(() => map.invalidateSize(), 60);
+}
+$("cote").onclick = () => {
+  const droite = document.getElementById("app").classList.contains("droite");
+  try { localStorage.setItem(LS_COTE, droite ? "gauche" : "droite"); } catch(e){}
+  appliquerCote();
+};
+appliquerCote();
+
+// Réglages « une fois pour toutes » : accessibles via un engrenage superposé à la carte.
+(function(){
+  const mapEl = document.getElementById("map");
+  if(!mapEl) return;
+
+  // Popover qui recevra les blocs avancés
+  const panel = document.createElement("div");
+  panel.id = "advPanel";
+  panel.hidden = true;
+  panel.innerHTML = '<div class="advHead"><b>Réglages avancés</b>'
+                  + '<button type="button" id="advClose" title="Fermer">×</button></div>'
+                  + '<div class="advIn"></div>';
+  mapEl.appendChild(panel);
+  const dedans = panel.querySelector(".advIn");
+  for(const id of ["distMode", "engine", "fond", "orsKey"]){
+    const el = $(id);
+    if(!el) continue;
+    const bloc = (id === "orsKey") ? $("orsBox") : el.parentElement;
+    if(bloc) dedans.appendChild(bloc);
+  }
+
+  // Bouton engrenage flottant
+  const gear = document.createElement("button");
+  gear.id = "advGear";
+  gear.type = "button";
+  gear.title = "Réglages avancés";
+  gear.setAttribute("aria-expanded", "false");
+  gear.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">'
+                 + '<path fill="currentColor" fill-rule="evenodd" d="'
+                 + 'M23 12L22.79 14.15L19.11 14.95L18.4 16.28L19.78 19.78L18.11 21.15L14.95 19.11'
+                 + 'L13.5 19.55L12 23L9.85 22.79L9.05 19.11L7.72 18.4L4.22 19.78L2.85 18.11L4.89 14.95'
+                 + 'L4.45 13.5L1 12L1.21 9.85L4.89 9.05L5.6 7.72L4.22 4.22L5.89 2.85L9.05 4.89'
+                 + 'L10.5 4.45L12 1L14.15 1.21L14.95 4.89L16.28 5.6L19.78 4.22L21.15 5.89L19.11 9.05'
+                 + 'L19.55 10.5Z'
+                 + 'M12 8.3a3.7 3.7 0 1 0 0 7.4 3.7 3.7 0 0 0 0-7.4Z"/>'
+                 + '</svg>';
+  mapEl.appendChild(gear);
+
+  const toggle = (ouvrir) => {
+    const open = ouvrir === undefined ? panel.hidden : ouvrir;
+    panel.hidden = !open;
+    gear.setAttribute("aria-expanded", String(open));
+    gear.classList.toggle("on", open);
+  };
+  gear.onclick = () => toggle();
+  panel.querySelector("#advClose").onclick = () => toggle(false);
+
+  // clic hors du popover → fermeture ; empêcher la carte de bouger sous le popover
+  if(window.L && L.DomEvent){
+    L.DomEvent.disableClickPropagation(panel);
+    L.DomEvent.disableScrollPropagation(panel);
+    L.DomEvent.disableClickPropagation(gear);
+    ["pointerdown","mousedown","touchstart","wheel","dblclick"].forEach(ev => {
+      L.DomEvent.on(panel, ev, L.DomEvent.stopPropagation);
+      L.DomEvent.on(gear,  ev, L.DomEvent.stopPropagation);
+    });
+    map.on("click", () => { if(!panel.hidden) toggle(false); });
+  }
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && !panel.hidden) toggle(false); });
+
+  // Sur mobile, coller l'engrenage juste à droite du bouton « Réglages ».
+  const mqM = window.matchMedia("(max-width:900px)");
+  const placerGear = () => {
+    const tg = document.getElementById("mcToggle");
+    if(mqM.matches && tg){
+      const w = tg.offsetWidth || 128;
+      gear.style.left = (8 + w + 8) + "px";
+      gear.style.right = "auto";
+    } else {
+      gear.style.left = "";
+      gear.style.right = "";
+    }
+  };
+  placerGear();
+  window.addEventListener("resize", placerGear);
+  mqM.addEventListener ? mqM.addEventListener("change", placerGear) : mqM.addListener(placerGear);
+})();
+
+// Résumé compact des filtres actifs, sous le bouton.
+function majResume(){
+  const el = $("filtres");
+  if(!el) return;
+  const carb = $("carb").options[$("carb").selectedIndex].text;
+  const bits = [carb];
+  bits.push(mode === "around" ? `rayon ${$("rad").value} km` : `couloir ${$("buf").value} km`);
+  bits.push(tri === "prix" ? "prix brut" : "coût réel");
+  if($("noHw").checked) bits.push("hors autoroute");
+  if($("major").checked) bits.push("pétroliers");
+  if($("irve").checked) bits.push("bornes");
+  if($("distMode").value === "crow") bits.push("vol d'oiseau");
+  el.textContent = bits.join(" · ");
+}
+
+// Recentre sur la position déjà saisie, sinon la demande au navigateur.
+$("recentrer").onclick = () => {
+  const m = $("dep").value.trim().match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+  if(m){ map.setView([parseFloat(m[1]), parseFloat(m[2])], Math.max(map.getZoom(), 14), {animate: !reduced}); return; }
+  if(origineActuelle){ map.setView(origineActuelle, Math.max(map.getZoom(), 14), {animate: !reduced}); return; }
+  $("geoBtn").onclick();
+};
+
+$("legalBtn").onclick = () => { $("legalBox").hidden = false; };
+$("legalX").onclick = () => { $("legalBox").hidden = true; };
+$("legalBox").onclick = e => { if(e.target === $("legalBox")) $("legalBox").hidden = true; };
+$("go").onclick = search;
+["dep", "arr"].forEach(id => $(id).addEventListener("keydown", e => { if(e.key === "Enter") search(); }));
+
+/**
+ * Géolocalisation. Les navigateurs la réservent aux « contextes sécurisés » :
+ * https ou localhost. Ouverte par double-clic (file://), la page se voit refuser
+ * l'accès — souvent sans message, d'où l'impression que le bouton ne fait rien.
+ * On détecte le cas AVANT d'appeler l'API, et on nomme chaque motif d'échec.
+ */
+$("geoBtn").onclick = () => {
+  const dire = (t, k) => setStatus(t, k || "err");
+  if(!navigator.geolocation){
+    dire("Ce navigateur ne propose pas de géolocalisation."); return;
+  }
+  const sur = window.isSecureContext
+           || ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
+  if(!sur){
+    dire(`La géolocalisation exige une page servie en <b>https</b> (ou localhost).`
+      + `<br><span style="font-size:11.5px">Cette page est ouverte en `
+      + `<code>${esc(location.protocol)}</code> : le navigateur bloque l'accès. `
+      + `Publie-la en https, ou saisis tes coordonnées `
+      + `<code>lat,lon</code> à la main — le clic droit dans Google Maps les donne.</span>`);
+    return;
+  }
+  setStatus("Localisation en cours…");
+  const ok = p => {
+    $("dep").value = p.coords.latitude.toFixed(5) + "," + p.coords.longitude.toFixed(5);
+    const prec = p.coords.accuracy != null ? ` (précision ~${Math.round(p.coords.accuracy)} m)` : "";
+    setStatus(`Position récupérée${prec}.`);
+  };
+  const ko = e => {
+    const motifs = {
+      1: "Autorisation refusée. Vérifie l'icône de localisation dans la barre d'adresse, "
+       + "et sur Android le droit de localisation accordé au navigateur.",
+      2: "Position indisponible : aucun signal exploitable. Sur un poste fixe sans GPS ni "
+       + "Wi-Fi connu, le navigateur ne peut souvent rien déterminer.",
+      3: "Délai dépassé. Réessaie près d'une fenêtre, ou saisis les coordonnées à la main."
+    };
+    dire((motifs[e && e.code] || "Échec de la géolocalisation.")
+      + (e && e.message ? `<br><span style="font-size:11.5px">${esc(e.message)}</span>` : ""));
+  };
+  // 1re tentative rapide sur le réseau, 2e plus longue avec le GPS si besoin
+  navigator.geolocation.getCurrentPosition(ok,
+    e => {
+      if(e && e.code === 3){
+        setStatus("Localisation… (recherche GPS, patiente un instant)");
+        navigator.geolocation.getCurrentPosition(ok, ko,
+          {enableHighAccuracy: true, timeout: 25000, maximumAge: 0});
+      }else ko(e);
+    },
+    {enableHighAccuracy: false, timeout: 8000, maximumAge: 60000});
+};
+
+// ------------------------------------------------------ bottom-sheet mobile
+(function bottomSheet(){
+  const side = document.getElementById("side");
+  const grip = document.getElementById("sheetGrip");
+  if(!side || !grip) return;
+  const mq = window.matchMedia("(max-width:900px)");
+
+  const crans = () => {
+    const h = window.innerHeight;
+    return { plein: Math.round(h*0.00), moyen: Math.round(h*0.52), reduit: Math.round(h*0.84) };
+  };
+  let etat = "moyen";
+
+  const poser = (y, anim=true) => {
+    side.style.setProperty("--sheet-y", y + "px");
+    if(anim) setTimeout(() => { if(window.map) map.invalidateSize(); }, 300);
+  };
+  const allerA = (nom) => { etat = nom; poser(crans()[nom]); };
+  const appliquer = () => {
+    if(mq.matches){ side.style.removeProperty("transform"); allerA(etat); }
+    else { side.style.removeProperty("--sheet-y"); }
+  };
+
+  let dragging = false, y0 = 0, base = 0;
+  const currentY = () => parseFloat(getComputedStyle(side).getPropertyValue("--sheet-y")) || 0;
+  const onDown = (e) => {
+    if(!mq.matches) return;
+    dragging = true; side.classList.add("dragging");
+    y0 = (e.touches ? e.touches[0].clientY : e.clientY);
+    base = currentY(); e.preventDefault();
+  };
+  const onMove = (e) => {
+    if(!dragging) return;
+    const y = (e.touches ? e.touches[0].clientY : e.clientY);
+    const c = crans();
+    let ny = Math.max(c.plein - 20, Math.min(c.reduit + 40, base + (y - y0)));
+    side.style.setProperty("--sheet-y", ny + "px");
+  };
+  const onUp = () => {
+    if(!dragging) return;
+    dragging = false; side.classList.remove("dragging");
+    const c = crans(), y = currentY();
+    const proche = [["plein",c.plein],["moyen",c.moyen],["reduit",c.reduit]]
+      .map(([k,v]) => [k, Math.abs(v - y)]).sort((a,b) => a[1]-b[1])[0][0];
+    allerA(proche);
+  };
+  grip.addEventListener("touchstart", onDown, {passive:false});
+  grip.addEventListener("touchmove", onMove, {passive:false});
+  grip.addEventListener("touchend", onUp);
+  grip.addEventListener("mousedown", onDown);
+  window.addEventListener("mousemove", onMove);
+  window.addEventListener("mouseup", onUp);
+  grip.addEventListener("click", () => {
+    if(!mq.matches || dragging) return;
+    allerA(etat === "plein" ? "moyen" : "plein");
+  });
+
+  const go = document.getElementById("go");
+  if(go) go.addEventListener("click", () => { if(mq.matches) setTimeout(() => allerA("moyen"), 50); });
+
+  mq.addEventListener ? mq.addEventListener("change", appliquer) : mq.addListener(appliquer);
+  window.addEventListener("resize", () => { if(mq.matches && !dragging) allerA(etat); });
+  appliquer();
+  setTimeout(() => { if(window.map) map.invalidateSize(); }, 400);
+})();
+
+applyMode();
+majResume();
+</script>
+</body>
+</html>
