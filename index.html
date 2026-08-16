@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<!--
+  OptimEssence — comparateur de prix des carburants (France & Espagne).
+  © 2026 OptimEssence. Tous droits réservés.
+  Ce code source et son organisation sont protégés par le droit d'auteur.
+  Toute reproduction, réutilisation ou diffusion, totale ou partielle, sans
+  autorisation écrite préalable est interdite. Les données affichées restent
+  soumises aux licences de leurs producteurs respectifs (voir mentions légales).
+-->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -6,7 +14,8 @@
 <title>OptimEssence — prix des carburants sur votre trajet et autour de vous</title>
 <meta name="description" content="Comparez le prix du gazole, SP95, SP98, E10, E85 et GPL le long d'un itinéraire ou autour de vous. Prix officiels mis à jour toutes les 10 minutes, coût réel du plein détour compris, et bornes de recharge électrique.">
 <meta name="robots" content="index, follow, max-image-preview:large">
-<meta name="author" content="À COMPLÉTER">
+<meta name="author" content="OptimEssence">
+<meta name="copyright" content="© 2026 OptimEssence — Tous droits réservés">
 <link rel="canonical" href="https://example.org/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
@@ -16,7 +25,7 @@
 <meta property="og:url" content="https://example.org/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#11141a">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%20%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22oeDrop%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220.35%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%235b95ff%22%2F%3E%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%232456c8%22%2F%3E%20%3C%2FlinearGradient%3E%20%3C%2Fdefs%3E%20%3Cpath%20d%3D%22M32%204%20C32%204%2051.5%2026.5%2051.5%2038.5%20A19.5%2019.5%200%201%201%2012.5%2038.5%20C12.5%2026.5%2032%204%2032%204%20Z%22%20fill%3D%22url(%23oeDrop)%22%2F%3E%20%3Cpath%20d%3D%22M32%2024.5%20L32%2042.5%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%226.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M22.5%2036%20L32%2045.5%20L41.5%2036%22%20fill%3D%22none%22%20stroke%3D%22%2322c55e%22%20stroke-width%3D%226.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3C%2Fsvg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22-46%20-30%2092%2060%22%20width%3D%2264%22%20height%3D%2264%22%3E%3Cg%20transform%3D%22translate%28-23%200%29%22%3E%3Cpath%20d%3D%22M0%20-26%20C-11%20-26%20-20%20-17%20-20%20-6%20C-20%208%200%2026%200%2026%20C0%2026%2020%208%2020%20-6%20C20%20-17%2011%20-26%200%20-26%20Z%22%20fill%3D%22%23f59e0b%22/%3E%3Ccircle%20cx%3D%220%22%20cy%3D%22-8%22%20r%3D%227.5%22%20fill%3D%22%23fff%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2823%200%29%20rotate%28180%29%22%3E%3Cpath%20d%3D%22M0%20-26%20C-11%20-26%20-20%20-17%20-20%20-6%20C-20%208%200%2026%200%2026%20C0%2026%2020%208%2020%20-6%20C20%20-17%2011%20-26%200%20-26%20Z%22%20fill%3D%22%23f59e0b%22/%3E%3Ccircle%20cx%3D%220%22%20cy%3D%22-8%22%20r%3D%227.5%22%20fill%3D%22%23fff%22/%3E%3C/g%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="icon-180.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication",
@@ -61,7 +70,7 @@ body{font-family:var(--sans);color:var(--text);background:var(--ink);font-size:1
 #app.droite #card{right:auto;left:12px}
 .head h1{margin:0 0 2px;font-size:21px;font-weight:400;letter-spacing:-.015em;
   display:flex;align-items:center;gap:9px}
-.head h1 .mark{width:28px;height:28px;flex:0 0 28px}
+.head h1 .mark{width:44px;height:29px;flex:0 0 44px}
 .head h1 .lg{font-weight:300;color:#cfd8e6}
 .head h1 .hv{font-weight:700;color:#fff}
 .head p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}
@@ -75,6 +84,21 @@ body{font-family:var(--sans);color:var(--text);background:var(--ink);font-size:1
 label{display:block;font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
   color:var(--muted);margin-bottom:6px}
 .field{position:relative}
+/* autocomplétion : liste de suggestions sous le champ */
+.acPanel{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:3000;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 12px 30px rgba(0,0,0,.5);overflow:hidden;max-height:320px;overflow-y:auto}
+.acPanel[hidden]{display:none}
+.acItem{display:flex;align-items:baseline;gap:8px;padding:10px 12px;cursor:pointer;
+  border-bottom:1px solid var(--line)}
+.acItem:last-child{border-bottom:0}
+.acItem:hover,.acItem.sel{background:var(--panel2)}
+.acItem .lab{font:600 13.5px var(--liste);color:var(--text)}
+.acItem .det{font:400 11.5px var(--liste);color:var(--muted);flex:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acItem .flag{font-size:12px;flex:0 0 auto}
+.acItem .flag.es{color:#e0a030}
+.acEmpty{padding:10px 12px;font:400 12.5px var(--liste);color:var(--muted)}
 input[type=text],input[type=password],select{width:100%;background:var(--panel2);border:1px solid var(--line);
   color:var(--text);border-radius:9px;padding:10px 11px;font:400 14px var(--sans);appearance:none}
 input::placeholder{color:#6b7482}
@@ -89,6 +113,27 @@ input::placeholder{color:#6b7482}
   font:600 13px var(--sans);cursor:pointer}
 .seg button[aria-pressed=true]{background:var(--accent);color:#fff}
 .rng{display:flex;align-items:center;gap:10px}
+.stepBtn{flex:0 0 auto;width:26px;height:26px;border-radius:7px;border:1px solid var(--line);
+  background:var(--panel2);color:var(--text);font:700 16px/1 var(--sans);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;padding:0}
+.stepBtn:hover{border-color:var(--accent);color:var(--accent)}
+.stepBtn:active{transform:scale(.94)}
+.consoRng input[type=range]{flex:1 1 auto;min-width:60px}
+.infoBtn{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
+  background:transparent;color:var(--accent);font-size:14px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;padding:0}
+.infoBtn:hover{border-color:var(--accent);background:rgba(96,165,250,.12)}
+.consoAide{margin:10px 0 2px;font:500 12.5px var(--liste);color:var(--muted);
+  line-height:1.45;background:rgba(96,165,250,.10);border-left:3px solid var(--accent);
+  padding:9px 11px;border-radius:6px}
+.consoAide b{color:var(--text)}
+.copyright{margin:8px 0 0;font:500 11px var(--liste);color:var(--muted);text-align:center;opacity:.8}
+.consoVal{flex:0 0 auto;display:inline-flex;align-items:baseline;gap:3px;
+  font:600 12px var(--liste);color:var(--muted)}
+#consoNum{width:42px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;
+  color:var(--text);font:700 13px var(--liste);text-align:right;padding:4px 5px;-moz-appearance:textfield}
+#consoNum::-webkit-outer-spin-button,#consoNum::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+#consoNum:focus{border-color:var(--accent);outline:none}
 .rng input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .rng output{font:600 13px var(--mono);min-width:56px;text-align:right}
 .src{font-size:11.5px;color:var(--muted);line-height:1.5;margin:6px 0 0}
@@ -139,11 +184,17 @@ button.clear:hover{color:var(--text)}
 .item.best .num{color:#22c55e}
 .item.best .num::before{content:"● ";font-size:8px;vertical-align:2px}
 .why{display:block;font:600 9.5px var(--mono);color:var(--warn);text-transform:uppercase;letter-spacing:.04em}
+.who>span.rent{display:block;font:600 12.5px var(--liste);margin-top:5px;line-height:1.3;
+  white-space:normal;overflow:visible;text-overflow:clip;padding-left:10px;position:relative}
+.who>span.rent::before{content:"›";position:absolute;left:0;opacity:.55}
+.who>span.rent:first-of-type{margin-top:3px}
+.rent.ok{color:#22c55e}
+.rent.ko{color:#98a2b1}
 .pill{font:650 13px var(--liste);color:#fff;border-radius:7px;padding:6px 8px;text-align:center;line-height:1.15}
 .pill small{display:block;font:500 9px var(--mono);opacity:.85}
 .who{min-width:0}
 .who b{display:block;font:600 13.5px var(--liste);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.who>span{display:block;font:400 12px var(--liste);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who>span{display:block;font:400 13px var(--liste);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tag.hw{border:0;padding:0;margin-left:5px;vertical-align:-2px;background:none}
 .tag.hw svg{display:block}
 .tag{display:inline-block;font:600 11.5px var(--liste);color:var(--accent);border:1px solid var(--line);
@@ -161,8 +212,12 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
 
 #map{flex:1;background:#e8eaed;position:relative}
 #map.marking{cursor:crosshair}
-.pin{background:#fff;border-radius:50%;border:2px solid #111;width:16px;height:16px;
-  font:700 10px/13px var(--sans);text-align:center;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+#map.marking::after{content:"Maintenez pour placer ici…";position:absolute;
+  left:50%;bottom:16px;transform:translateX(-50%);z-index:1000;
+  background:rgba(20,24,32,.9);color:#fff;font:600 12.5px system-ui,sans-serif;
+  padding:6px 12px;border-radius:16px;pointer-events:none;white-space:nowrap}
+.pin{background:#fff;border-radius:50%;border:2px solid #111;width:22px;height:22px;
+  font:700 12px/18px var(--sans);text-align:center;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.4)}
 .leaflet-popup-content{font-family:var(--sans);font-size:13px}
 .leaflet-popup-content b{font-family:var(--mono)}
 [hidden]{display:none !important}
@@ -202,6 +257,26 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   line-height:1;cursor:pointer;padding:0 2px}
 #advPanel #advClose:hover{color:var(--text)}
 #advPanel .advIn{display:flex;flex-direction:column;gap:12px}
+#svcBadge{position:absolute;right:12px;bottom:126px;z-index:1150;
+  width:42px;height:34px;border-radius:10px;
+  background:var(--panel);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3);user-select:none}
+#app.droite #svcBadge{right:auto;left:12px}
+#svcBadge:hover{border-color:var(--accent)}
+#svcBadgeDot{font-size:14px;line-height:1}
+#svcBadgePop{position:absolute;right:0;bottom:40px;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+  min-width:230px;box-shadow:0 6px 18px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;gap:5px}
+#app.droite #svcBadgePop{right:auto;left:0}
+#svcBadgePop .sbHead{display:flex;align-items:center;justify-content:space-between;
+  font:600 12px var(--liste);margin-bottom:2px}
+#svcBadgePop .sbRefresh{background:transparent;border:1px solid var(--line);border-radius:6px;
+  color:var(--muted);width:22px;height:22px;cursor:pointer;font-size:12px;line-height:1}
+#svcBadgePop .sbLine{font:500 11.5px var(--liste);color:var(--text);white-space:nowrap}
+#svcBadgePop .sbNote{font-size:10px;color:var(--muted);line-height:1.35;margin-top:3px;white-space:normal}
+#svcBadgePop .sbLine.ok{}
 
 /* ---- toast de progression au centre de la carte ---- */
 #mapStatus{
@@ -214,13 +289,13 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   font:600 14.5px var(--mono,ui-monospace,monospace);color:var(--text);line-height:1.4;
 }
 #mapStatus[hidden]{display:none}
-#mapStatus .spin{
-  flex:0 0 auto;width:20px;height:20px;border-radius:50%;
-  border:2.5px solid rgba(255,255,255,.22);border-top-color:var(--accent);
-  animation:mapspin .8s linear infinite;
-}
+#mapStatus .prog{flex:0 0 auto;width:22px;height:22px}
+#mapStatus .progBg{stroke:rgba(255,255,255,.18);stroke-width:3.5}
+#mapStatus .progArc{stroke:var(--accent);stroke-width:3.5;stroke-linecap:round;
+  stroke-dasharray:97.4;stroke-dashoffset:97.4;transition:stroke-dashoffset .25s ease}
+#mapStatus .prog.indet{animation:mapspin 1s linear infinite}
 @keyframes mapspin{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){#mapStatus .spin{animation:none}}
+@media (prefers-reduced-motion:reduce){#mapStatus .prog.indet{animation:none}}
 .advIn{display:flex;flex-direction:column;gap:12px;margin-top:12px}
 .filtres{padding:8px 20px;font:600 11px var(--mono);letter-spacing:.03em;
   color:var(--muted);border-bottom:1px solid var(--line);background:var(--panel2)}
@@ -230,6 +305,22 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   padding:2px 6px;box-shadow:0 2px 8px rgba(0,0,0,.45);white-space:nowrap}
 .prixTip::before{display:none}
 .legal{padding:14px 20px 22px;border-top:1px solid var(--line);margin-top:8px}
+.soutien{position:sticky;bottom:0;z-index:5;margin:0;padding:12px 14px;
+  border-top:1px solid var(--line);
+  background:var(--panel);
+  box-shadow:0 -6px 18px rgba(0,0,0,.28)}
+.soutienTxt{margin:0 0 10px;font:400 12.5px var(--liste);color:var(--muted);line-height:1.45}
+.soutienTxt b{color:var(--text)}
+.posBtn{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+  color:var(--text);font:600 13px var(--liste);padding:9px 12px;cursor:pointer;
+  transition:border-color .12s,background .12s}
+.posBtn:hover{border-color:var(--accent)}
+.posBtn.actif{background:var(--accent);color:#fff;border-color:var(--accent)}
+.kofi{display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+  background:#f59e0b;color:#1a1206;font:700 13.5px var(--liste);
+  padding:9px 15px;border-radius:9px;transition:transform .1s ease,filter .1s ease}
+.kofi:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.kofi:active{transform:translateY(0)}
 .legal button{background:none;border:0;color:var(--muted);font:500 11.5px var(--sans);
   text-decoration:underline;cursor:pointer;padding:0}
 .legal button:hover{color:var(--text)}
@@ -308,7 +399,9 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
 
   /* boutons flottants : config en haut-gauche, action en bas-droite */
   #mcToggle{top:8px;left:8px}
-  #advGear{top:8px;bottom:auto;right:auto}
+  #advGear{top:8px;bottom:auto;right:auto;left:8px}
+  #svcBadge{top:56px;bottom:auto;right:auto;left:8px}
+  #svcBadgePop{top:44px;bottom:auto;left:0;right:auto}
   #app.droite #advGear{right:auto}
   #recentrer{right:12px;bottom:calc(38dvh + 12px);width:46px;height:46px}
   #app.droite #recentrer{right:12px;left:auto}
@@ -354,6 +447,16 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   /* annuler les décalages « fiche ouverte » du desktop (fiche en bas sur mobile) */
   #map.ficheOuverte #advGear{right:auto}
   #map.ficheOuverte #advPanel{right:8px;left:8px}
+  /* cibles tactiles agrandies : boutons −/+ conso et champ */
+  .stepBtn{width:40px;height:40px;font-size:20px;border-radius:9px}
+  #consoNum{width:56px;font-size:16px;padding:8px 6px}
+  .consoVal small{font-size:12px}
+  /* pastille d'état : un peu plus compacte, ne masque pas la recherche */
+  #svcBadge{width:46px;height:38px}
+  #svcBadgeDot{font-size:16px}
+  #svcBadgePop{min-width:190px}
+  /* fiche station : boutons plus grands pour le tactile */
+  #cardX{width:34px;height:34px;font-size:22px}
 }
 
 /* ---- réglages rapides : colonne verticale à gauche de la carte ---- */
@@ -385,7 +488,8 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   border-radius:8px;padding:7px 26px 7px 9px;font-size:13px;flex:1 1 auto;min-width:0;
 }
 .mc-chip .seg{margin:0;flex:1 1 auto}
-.mc-chip .seg button{padding:6px 12px;font-size:12px;white-space:nowrap;flex:1 1 auto}
+.mc-chip .seg button{padding:6px 8px;font-size:11px;white-space:nowrap;flex:1 1 auto;
+  overflow:hidden;text-overflow:ellipsis;min-width:0}
 /* cases à cocher déplacées dans la barre : même habillage que les puces */
 label.chk.mc-check{
   display:flex;align-items:center;gap:7px;padding:8px 11px;margin:0;
@@ -414,13 +518,25 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
   /* barre repliée par défaut ; s'ouvre sous le bouton quand #map.mcOpen */
   #mapControls{
     top:56px;left:8px;right:auto;bottom:auto;
-    flex-direction:column;flex-wrap:nowrap;gap:8px;
+    flex-direction:column;flex-wrap:nowrap;gap:0;
     width:250px;max-width:calc(100% - 16px);max-height:calc(100dvh - 120px);
     display:none;
+    /* panneau unifié : un seul fond, au lieu d'un encadré par item */
+    background:rgba(18,22,30,.92);backdrop-filter:blur(11px);-webkit-backdrop-filter:blur(11px);
+    border:1px solid var(--line);border-radius:13px;overflow:hidden;
+    box-shadow:0 8px 26px rgba(0,0,0,.45);
   }
   #map.mcOpen #mapControls{display:flex}
   #map.mcOpen #mcToggle{border-color:var(--accent);color:var(--accent)}
-  .mc-chip{flex:0 0 auto}
+  /* les items ne sont plus des cartes isolées : pas de fond/bordure/ombre propres,
+     séparés par un simple filet, pour former un ensemble compact */
+  #mapControls .mc-chip,
+  #mapControls label.chk.mc-check{
+    flex:0 0 auto;background:none;border:0;border-radius:0;box-shadow:none;
+    backdrop-filter:none;-webkit-backdrop-filter:none;
+    padding:11px 13px;border-bottom:1px solid rgba(255,255,255,.07);width:100%;
+  }
+  #mapControls > *:last-child{border-bottom:0}
   .mc-chip .rng{min-width:0}
   .mc-chip .rng input[type=range]{min-width:0}
 }
@@ -449,20 +565,16 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
     <div id="sheetGrip" aria-hidden="true"><span class="gripBar"></span></div>
     <div class="head">
       <div class="eyebrow" style="justify-content:flex-end"><button type="button" id="cote" title="Basculer le panneau à gauche ou à droite">⇄</button></div>
-      <h1><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><defs>
-        <linearGradient id="oeDrop" x1="0" y1="0" x2=".35" y2="1">
-          <stop offset="0" stop-color="#5b95ff"/><stop offset="1" stop-color="#2456c8"/></linearGradient></defs>
-        <path d="M32 4C32 4 51.5 26.5 51.5 38.5A19.5 19.5 0 1 1 12.5 38.5C12.5 26.5 32 4 32 4Z" fill="url(#oeDrop)"/>
-        <path d="M32 24.5L32 42.5" fill="none" stroke="#fff" stroke-width="6.2" stroke-linecap="round"/>
-        <path d="M22.5 36L32 45.5L41.5 36" fill="none" stroke="#22c55e" stroke-width="6.4"
-              stroke-linecap="round" stroke-linejoin="round"/></svg><span
+      <h1><svg class="mark" viewBox="-46 -30 92 60" aria-hidden="true"><g transform="translate(-23 0)"><path d="M0 -26 C-11 -26 -20 -17 -20 -6 C-20 8 0 26 0 26 C0 26 20 8 20 -6 C20 -17 11 -26 0 -26 Z" fill="#f59e0b"/><circle cx="0" cy="-8" r="7.5" fill="#fff"/></g><g transform="translate(23 0) rotate(180)"><path d="M0 -26 C-11 -26 -20 -17 -20 -6 C-20 8 0 26 0 26 C0 26 20 8 20 -6 C20 -17 11 -26 0 -26 Z" fill="#f59e0b"/><circle cx="0" cy="-8" r="7.5" fill="#fff"/></g></svg><span
         ><span class="lg">Optim</span><span class="hv">Essence</span></span></h1>
       <p>Prix officiels mis à jour toutes les ~10&nbsp;min, classés par coût réel du plein.</p>
     </div>
 
-    <div class="modebar" id="modebar">
+    <div class="modebar" id="modebar" hidden>
       <button data-v="around" aria-pressed="true">Autour de moi</button>
-      <button data-v="route" aria-pressed="false">Sur un trajet</button>
+      <!-- Onglet « Sur un trajet » mis en veille : masqué, mais toute la logique
+           reste en place et continue d'être maintenue. Retirer les deux hidden pour réactiver. -->
+      <button data-v="route" aria-pressed="false" hidden>Sur un trajet</button>
     </div>
 
     <div class="form">
@@ -488,17 +600,17 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
         </div>
       </div>
 
-      <!-- mode « sur un trajet » -->
-      <div>
-        <label for="distMode">Distance des détours</label>
+      <!-- Distance des détours : toujours routière réelle (le sens même du site).
+           Le select est conservé, masqué et bloqué sur « road », pour que le code
+           qui lit sa valeur continue de fonctionner sans modification. -->
+      <div hidden>
         <select id="distMode">
-          <option value="road">Routière réelle — aller et retour mesurés</option>
-          <option value="crow">À vol d'oiseau — instantané, sous-estimé</option>
+          <option value="road" selected>Routière réelle</option>
         </select>
         <p class="src" id="distNote"></p>
       </div>
 
-      <div>
+      <div hidden>
         <label for="engine">Moteur d'itinéraire</label>
         <select id="engine">
           <option value="ign-osrm">BD TOPO (IGN) — graphe OSRM</option>
@@ -513,9 +625,13 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
       <div id="routeBox">
         <div class="row2" style="margin-top:12px">
           <div>
-            <label for="optim">Optimisation</label>
-            <select id="optim">
-              <option value="fastest">Le plus rapide</option>
+            <label>Optimisation</label>
+            <div class="seg" id="optimSeg">
+              <button type="button" data-v="fastest" aria-pressed="true" title="Itinéraire le plus rapide">Le plus rapide</button>
+              <button type="button" data-v="shortest" aria-pressed="false" title="Itinéraire le plus court">Le plus court</button>
+            </div>
+            <select id="optim" hidden>
+              <option value="fastest" selected>Le plus rapide</option>
               <option value="shortest">Le plus court</option>
             </select>
           </div>
@@ -533,12 +649,24 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
         <div>
           <label for="carb">Carburant</label>
           <select id="carb">
-            <option value="gazole_prix">Gazole</option>
-            <option value="sp95_prix">SP95</option>
-            <option value="sp98_prix" selected>SP98</option>
-            <option value="e10_prix">E10 (SP95-E10)</option>
-            <option value="e85_prix">E85 (superéthanol)</option>
-            <option value="gplc_prix">GPLc</option>
+            <optgroup label="Carburants courants">
+              <option value="gazole_prix">Gazole</option>
+              <option value="sp95_prix">SP95</option>
+              <option value="sp98_prix" selected>SP98</option>
+              <option value="e10_prix">E10 (SP95-E10)</option>
+              <option value="e85_prix">E85 (superéthanol / Bioetanol)</option>
+              <option value="gplc_prix">GPLc</option>
+            </optgroup>
+            <optgroup label="Espagne — autres carburants" hidden style="display:none">
+              <option value="es_gasoleo_premium">Gazole Premium (ES)</option>
+              <option value="es_gasoleo_b">Gazole B / agricole (ES)</option>
+              <option value="es_sp95_premium">SP95 E5 Premium (ES)</option>
+              <option value="es_sp98_e10">SP98 E10 (ES)</option>
+              <option value="es_gnc">Gaz naturel comprimé GNC (ES)</option>
+              <option value="es_gnl">Gaz naturel liquéfié GNL (ES)</option>
+              <option value="es_biodiesel">Biodiesel (ES)</option>
+              <option value="es_hidrogeno">Hydrogène (ES)</option>
+            </optgroup>
           </select>
         </div>
         <div>
@@ -558,21 +686,16 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
             <button data-v="prix" aria-pressed="false">Prix brut</button>
           </div>
         </div>
-        <div>
-          <label for="clickMode">Clic sur la carte</label>
-          <select id="clickMode">
-            <option value="">Ne rien placer</option>
-            <option value="dep">Définir le point de départ</option>
-            <option value="arr">Définir l'arrivée</option>
-          </select>
-        </div>
       </div>
 
       <label class="chk" style="padding:2px 0"><input id="noHw" type="checkbox">
         Exclure les stations d'autoroute</label>
       <label class="chk" style="padding:2px 0"><input id="major" type="checkbox">
         Compagnies pétrolières seulement <span id="majorNote" style="color:var(--muted)"></span></label>
-      <label class="chk" style="padding:2px 0"><input id="irve" type="checkbox">
+      <!-- Bornes de recharge électrique mises EN VEILLE (comme l'onglet « trajet ») :
+           la case est masquée et décochée, mais toute la logique est conservée
+           pour une réactivation future. -->
+      <label class="chk" style="padding:2px 0;display:none" hidden><input id="irve" type="checkbox">
         Afficher les bornes de recharge <span style="color:var(--muted)">(sans prix)</span></label>
 
       <div id="orsBox" hidden>
@@ -581,7 +704,7 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
           placeholder="Requise pour le moteur openrouteservice" autocomplete="off"></div>
       </div>
 
-      <details>
+      <details id="detCout">
         <summary>Paramètres du coût réel</summary>
         <div class="adv">
           <div>
@@ -589,8 +712,13 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
             <input id="res" type="text" inputmode="decimal" value="35">
           </div>
           <div>
-            <label for="conso">Conso L/100 km</label>
-            <input id="conso" type="text" inputmode="decimal" value="6.2">
+            <label for="conso">Consommation</label>
+            <div class="rng consoRng">
+              <button type="button" id="consoMoins" class="stepBtn" title="−0.1 L/100" aria-label="Diminuer">−</button>
+              <span class="consoVal"><input id="consoNum" type="number" min="3" max="20" step="0.1" value="6.2" inputmode="decimal" aria-label="Consommation en litres aux 100 km"><small>L/100</small></span>
+              <button type="button" id="consoPlus" class="stepBtn" title="+0.1 L/100" aria-label="Augmenter">+</button>
+              <input id="conso" type="hidden" value="6.2">
+            </div>
           </div>
 
 
@@ -599,6 +727,10 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
           Regarde aussi la colonne durée.</p>
         </div>
       </details>
+
+      <p class="consoAide" id="consoAide">💡 <b>Pensez à régler votre consommation</b> (bouton « Conso » sur la carte).
+      Elle détermine le carburant brûlé par le détour, donc le <b>coût réel</b> du plein et
+      la <b>rentabilité</b> d'une station plus éloignée : une valeur inexacte fausse le classement.</p>
 
       <button class="go" id="go">Rechercher</button>
     </div>
@@ -615,7 +747,13 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
     <ul id="results"></ul>
     <footer class="legal">
       <button type="button" id="legalBtn">Mentions légales, sources et données personnelles</button>
+      <p class="copyright">© 2026 OptimEssence · Tous droits réservés</p>
     </footer>
+    <div class="soutien" id="soutien">
+      <p class="soutienTxt">OptimEssence est <b>gratuit et sans publicité</b>.
+      S'il vous fait économiser au plein, vous pouvez m'offrir un café.</p>
+      <a id="kofiBtn" class="kofi" href="#" target="_blank" rel="noopener">☕ Offrir un café</a>
+    </div>
     </div>
   </aside>
   <div id="legalBox" hidden><div id="legalIn">
@@ -627,6 +765,16 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
     de contact et directeur de la publication ; nom et adresse de l'hébergeur.
     Ces mentions sont obligatoires pour tout site accessible au public en France
     (loi pour la confiance dans l'économie numérique, art. 6-III).</p>
+
+    <h3>Propriété intellectuelle</h3>
+    <p>© 2026 OptimEssence. <b>Tous droits réservés.</b> La conception de ce site,
+    son code source, sa présentation et son organisation sont protégés par le droit
+    d'auteur. Toute reproduction, représentation, adaptation ou réutilisation, totale
+    ou partielle, par quelque procédé que ce soit, sans autorisation écrite préalable,
+    est interdite et constituerait une contrefaçon sanctionnée par le code de la
+    propriété intellectuelle. Les données affichées (prix des carburants, cartographie,
+    itinéraires, bornes de recharge) demeurent la propriété de leurs producteurs
+    respectifs et restent soumises à leurs licences, rappelées ci-dessous.</p>
 
     <h3>Données personnelles</h3>
     <ul>
@@ -647,9 +795,18 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
       <li><b>Prix des carburants</b> — flux instantané, ministère de l'Économie
       (<a href="https://data.economie.gouv.fr" target="_blank" rel="noopener">data.economie.gouv.fr</a>),
       Licence Ouverte Etalab 2.0.</li>
+      <li><b>Prix des carburants (Espagne)</b> — Ministerio para la Transición Ecológica,
+      <a href="https://geoportalgasolineras.es" target="_blank" rel="noopener">Geoportal de Gasolineras</a>,
+      chargé uniquement en zone frontalière et pour les trajets transfrontaliers.</li>
       <li><b>Itinéraires, géocodage et fond Plan IGN</b> — Géoplateforme / IGN
       (<a href="https://geoservices.ign.fr" target="_blank" rel="noopener">geoservices.ign.fr</a>),
       BD TOPO®, Licence Ouverte Etalab 2.0.</li>
+      <li><b>Communes et localisation des mairies</b> — API Découpage administratif
+      (<a href="https://geo.api.gouv.fr" target="_blank" rel="noopener">geo.api.gouv.fr</a>),
+      d'après le Code officiel géographique (INSEE) et OpenStreetMap, Licence Ouverte Etalab 2.0.</li>
+      <li><b>Géocodage et itinéraires en Espagne</b> — CartoCiudad, Instituto Geográfico
+      Nacional / CNIG (<a href="https://www.cartociudad.es" target="_blank" rel="noopener">cartociudad.es</a>),
+      licence CC BY 4.0. Utilisé uniquement lorsque le volet Espagne est actif.</li>
       <li><b>Fond de carte et bornes de recharge OSM</b> — © les contributeurs
       <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>,
       licence ODbL. Interrogation via Overpass API.</li>
@@ -683,7 +840,7 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
     <button id="legalX" type="button">Fermer</button>
   </div></div>
 
-  <div id="map"><button id="mcToggle" type="button" aria-expanded="false" title="Réglages rapides"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="9" cy="7" r="2" fill="var(--panel)"/><circle cx="15" cy="12" r="2" fill="var(--panel)"/><circle cx="9" cy="17" r="2" fill="var(--panel)"/></svg><span>Réglages</span></button><div id="mapControls" aria-label="Réglages rapides"></div><div id="mapStatus" hidden><span class="spin" aria-hidden="true"></span><span id="mapStatusTxt"></span></div><button id="recentrer" type="button" title="Recentrer sur ma position"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.4"/><circle cx="12" cy="12" r="7.3"/><line x1="12" y1="1.4" x2="12" y2="4.6"/><line x1="12" y1="19.4" x2="12" y2="22.6"/><line x1="1.4" y1="12" x2="4.6" y2="12"/><line x1="19.4" y1="12" x2="22.6" y2="12"/></svg></button><div id="card" hidden><button id="cardX" type="button" title="Fermer">×</button><div id="cardBody"></div></div></div>
+  <div id="map"><button id="mcToggle" type="button" aria-expanded="false" title="Réglages rapides"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="9" cy="7" r="2" fill="var(--panel)"/><circle cx="15" cy="12" r="2" fill="var(--panel)"/><circle cx="9" cy="17" r="2" fill="var(--panel)"/></svg><span>Réglages</span></button><div id="mapControls" aria-label="Réglages rapides"></div><div id="mapStatus" hidden><svg class="prog" width="22" height="22" viewBox="0 0 36 36" aria-hidden="true"><circle class="progBg" cx="18" cy="18" r="15.5" fill="none"/><circle class="progArc" cx="18" cy="18" r="15.5" fill="none" transform="rotate(-90 18 18)"/></svg><span id="mapStatusTxt"></span></div><button id="recentrer" type="button" title="Recentrer sur ma position"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.4"/><circle cx="12" cy="12" r="7.3"/><line x1="12" y1="1.4" x2="12" y2="4.6"/><line x1="12" y1="19.4" x2="12" y2="22.6"/><line x1="1.4" y1="12" x2="4.6" y2="12"/><line x1="19.4" y1="12" x2="22.6" y2="12"/></svg></button><div id="card" hidden><button id="cardX" type="button" title="Fermer">×</button><div id="cardBody"></div></div><div id="svcBadge" title="État des services" role="button" tabindex="0"><span id="svcBadgeDot">⚪</span><span id="svcBadgePop" hidden></span></div></div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -696,6 +853,11 @@ const GEOCODE    = "https://data.geopf.fr/geocodage/search";
 const ITINERAIRE = "https://data.geopf.fr/navigation/itineraire";
 const ORS        = "https://api.openrouteservice.org/v2/directions/driving-car/geojson";
 const OSRM       = "https://router.project-osrm.org/route/v1/driving/";
+// Routage officiel espagnol (CartoCiudad / IGN España) — distance routière réelle,
+// libre et gratuit (CC BY 4.0). NB : distance « Manhattan » (suit le tracé viaire,
+// sans tenir compte du sens de circulation) ; le temps n'est pas fiable, on ne
+// prend donc que la distance. Format : ?orig=lat,lon&dest=lat,lon&vehicle=CAR
+const CARTOCIUDAD_ROUTE = "https://www.cartociudad.es/services/api/route";
 const OSRM_TABLE = "https://router.project-osrm.org/table/v1/driving/";
 const STATIONS   = "https://data.economie.gouv.fr/api/explore/v2.1/catalog/"
                  + "datasets/prix-des-carburants-en-france-flux-instantane-v2/exports/json";
@@ -740,7 +902,202 @@ const IRVE_JEUX = [
   "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve/records"
 ];
 const LS_KEY = "carb.orskey", LS_ENGINE = "carb.engine";
+// ════════════════════════════════════════════════════════════════
+// LIEN DE DON — remplacez par votre page Ko-fi (ex. "https://ko-fi.com/votrepseudo").
+// La valeur ci-dessous est un lien générique : mettez le vôtre pour recevoir les dons.
+const KOFI_URL = "https://ko-fi.com/";
+// ════════════════════════════════════════════════════════════════
 const MAX_MATRIX = 45;   // OSRM démo : garder la matrice petite
+const STATIONS_TTL = 10 * 60 * 1000;   // 10 min : au-delà, on rafraîchit les prix (FR et ES)
+
+// ============================================================ ESPAGNE
+// Données officielles : Ministerio para la Transición Ecológica (geoportalgasolineras).
+// API REST publique, sans clé. On peut charger tout le pays ou filtrer par
+// communauté autonome (CCAA). Pour l'usage frontalier, on ne charge que les
+// CCAA proches de la France : País Vasco (16), Navarra (15), Aragón (2),
+// Cataluña (9). Cela évite de télécharger les ~12 000 stations nationales.
+const ES_BASE = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres";
+const ES_CCAA_FRONTIERE = ["16", "15", "02", "09"];   // Pays basque, Navarre, Aragon, Catalogne
+
+// Communautés autonomes (codes API espagnole) : bbox approximative [latMin,latMax,lonMin,lonMax]
+// pour localiser le point, et liste des CCAA LIMITROPHES (adjacence terrestre).
+// Charger « la CCAA du point + ses limitrophes » couvre sans angle mort les stations
+// proches situées juste de l'autre côté d'une limite régionale.
+const ES_CCAA = {
+  "01": {nom: "Andalucía",           bbox: [36.0, 38.73, -7.52, -1.63], adj: ["11", "08", "14", "13"]},
+  "02": {nom: "Aragón",              bbox: [39.86, 42.93, -2.17, 0.77],  adj: ["15", "17", "07", "08", "10", "09"]},
+  "03": {nom: "Asturias",            bbox: [42.88, 43.67, -7.19, -4.51], adj: ["12", "07", "06"]},
+  "04": {nom: "Illes Balears",       bbox: [38.6, 40.1, 1.15, 4.34],     adj: []},
+  "05": {nom: "Canarias",            bbox: [27.6, 29.5, -18.2, -13.4],   adj: []},
+  "06": {nom: "Cantabria",           bbox: [42.7, 43.55, -4.85, -3.1],   adj: ["03", "07", "16"]},
+  "07": {nom: "Castilla y León",     bbox: [40.08, 43.24, -7.07, -1.77], adj: ["12", "03", "06", "16", "17", "02", "08", "11", "13"]},
+  "08": {nom: "Castilla-La Mancha",  bbox: [38.0, 41.35, -5.42, -0.92],  adj: ["11", "07", "13", "02", "10", "14", "01"]},
+  "09": {nom: "Cataluña",            bbox: [40.52, 42.86, 0.16, 3.33],   adj: ["02", "10"]},
+  "10": {nom: "C. Valenciana",       bbox: [37.85, 40.79, -1.53, 0.65],  adj: ["09", "02", "08", "14"]},
+  "11": {nom: "Extremadura",         bbox: [37.95, 40.49, -7.55, -4.65], adj: ["07", "08", "01"]},
+  "12": {nom: "Galicia",             bbox: [41.82, 43.79, -9.31, -6.73], adj: ["03", "07"]},
+  "13": {nom: "Madrid",              bbox: [39.88, 41.17, -4.58, -3.05], adj: ["07", "08"]},
+  "14": {nom: "Murcia",              bbox: [37.38, 38.77, -2.34, -0.65], adj: ["01", "08", "10"]},
+  "15": {nom: "Navarra",             bbox: [41.91, 43.32, -2.54, -0.73], adj: ["16", "17", "02"]},
+  "16": {nom: "País Vasco",          bbox: [42.47, 43.46, -3.45, -1.72], adj: ["06", "07", "17", "15"]},
+  "17": {nom: "La Rioja",            bbox: [41.91, 42.64, -3.15, -1.68], adj: ["16", "15", "02", "07"]},
+  "18": {nom: "Ceuta",               bbox: [35.83, 35.92, -5.42, -5.26], adj: []},
+  "19": {nom: "Melilla",             bbox: [35.25, 35.34, -2.99, -2.90], adj: []}
+};
+// CCAA d'un point : première dont la bbox contient (la,lo), sinon la plus proche par centre.
+function ccaaDuPoint(la, lo){
+  for(const [code, c] of Object.entries(ES_CCAA)){
+    if(la >= c.bbox[0] && la <= c.bbox[1] && lo >= c.bbox[2] && lo <= c.bbox[3]) return code;
+  }
+  let best = null, dmin = Infinity;
+  for(const [code, c] of Object.entries(ES_CCAA)){
+    const cla = (c.bbox[0] + c.bbox[1]) / 2, clo = (c.bbox[2] + c.bbox[3]) / 2;
+    const d = (la - cla) ** 2 + (lo - clo) ** 2;
+    if(d < dmin){ dmin = d; best = code; }
+  }
+  return best;
+}
+// Ensemble des CCAA à charger pour un point : la sienne + toutes ses limitrophes.
+function ccaaAvecVoisines(la, lo){
+  const c = ccaaDuPoint(la, lo);
+  if(!c) return ES_CCAA_FRONTIERE;
+  return Array.from(new Set([c, ...(ES_CCAA[c].adj || [])]));
+}
+// Correspondance carburant : clé interne (comme le select FR) -> champ ES.
+const ES_CARB = {
+  // Correspondances avec les carburants français
+  gazole_prix: "Precio Gasoleo A",
+  sp95_prix:   "Precio Gasolina 95 E5",
+  sp98_prix:   "Precio Gasolina 98 E5",
+  e10_prix:    "Precio Gasolina 95 E10",
+  e85_prix:    "Precio Bioetanol",              // E85 existe en Espagne sous « Bioetanol » (rare)
+  gplc_prix:   "Precio Gases licuados del petróleo",
+  // Carburants supplémentaires proposés en Espagne (pas d'équivalent FR distinct)
+  es_gasoleo_premium: "Precio Gasoleo Premium",
+  es_gasoleo_b:       "Precio Gasoleo B",
+  es_sp95_premium:    "Precio Gasolina 95 E5 Premium",
+  es_sp98_e10:        "Precio Gasolina 98 E10",
+  es_gnc:             "Precio Gas Natural Comprimido",
+  es_gnl:             "Precio Gas Natural Licuado",
+  es_biodiesel:       "Precio Biodiesel",
+  es_hidrogeno:       "Precio Hidrogeno"
+};
+const num = v => {                       // "1,359" -> 1.359 ; "" -> NaN
+  if(v == null) return NaN;
+  return parseFloat(String(v).replace(",", "."));
+};
+// Emprise de l'Espagne, latitude max volontairement abaissée à 43.45 pour ne pas
+// mordre sur le sud de la France (Toulouse, Montpellier restent « France »).
+const ES_BBOX = [35.0, 43.45, -9.4, 3.4];      // [latMin, latMax, lonMin, lonMax] — inclut Ceuta et Melilla
+// ════════════════════════════════════════════════════════════════
+// ESPAGNE EN VEILLE : mettre à true pour réactiver tout le volet espagnol
+// (stations, géocodage, routage, carburants ES). Tout le code est conservé.
+const ES_ACTIF = false;
+// ════════════════════════════════════════════════════════════════
+// Bande frontalière : au sud de cette latitude OU proche des Pyrénées, on charge l'ES.
+const FRONTIERE_LAT = 43.6;                    // ~ latitude de la crête pyrénéenne
+function dansEspagne(la, lo){
+  if(!ES_ACTIF) return false;
+  return la >= ES_BBOX[0] && la <= ES_BBOX[1] && lo >= ES_BBOX[2] && lo <= ES_BBOX[3];
+}
+// Faut-il charger l'Espagne pour ce(s) point(s) ? Vrai si un point est en Espagne,
+// ou proche de la frontière (dans la bande pyrénéenne), côté français.
+function besoinEspagne(points){
+  if(!ES_ACTIF) return false;
+  return points.some(([la, lo]) => dansEspagne(la, lo) || (la <= FRONTIERE_LAT + 0.35 && lo >= -1.9 && lo <= 3.4));
+}
+
+// Normalise une station ES vers le MÊME format qu'une station FR, pour que
+// lisible()/collect* fonctionnent sans distinction de pays.
+function normaliserES(e){
+  const la = num(e["Latitud"]), lo = num(e["Longitud (WGS84)"]);
+  if(!isFinite(la) || !isFinite(lo)) return null;
+  const st = {
+    // lisible() lit latitude/longitude en entiers ×1e5 : on reproduit ce format.
+    latitude:  Math.round(la * 1e5),
+    longitude: Math.round(lo * 1e5),
+    pop: "R",                       // routière (l'API ES ne distingue pas l'autoroute ici)
+    _pays: "ES",
+    _rotulo: (e["Rótulo"] || "").trim(),
+    ville: (e["Municipio"] || e["Localidad"] || "").trim(),
+    cp: (e["C.P."] || "").trim(),
+    adresse: (e["Dirección"] || "").trim(),
+    id: "ES-" + (e["IDEESS"] || `${la},${lo}`)
+  };
+  // Champs prix aux mêmes clés que la France (nombre en point décimal, chaîne).
+  for(const [cle, champES] of Object.entries(ES_CARB)){
+    const p = num(e[champES]);
+    st[cle] = isFinite(p) ? String(p) : "";
+  }
+  return st;
+}
+
+// Deux niveaux de chargement, avec caches séparés :
+//  - "national" : tout le pays (endpoint EstacionesTerrestres) — quand un point EST en Espagne.
+//  - "frontiere" : seulement les CCAA proches (léger) — quand on est côté français, près de la frontière.
+let esCacheNat = null, esCacheNatAt = 0;
+let esCacheFr = null, esCacheFrAt = 0;
+const frais = at => (Date.now() - at) < STATIONS_TTL;
+
+async function chargerES_national(){
+  if(esCacheNat && frais(esCacheNatAt)) return esCacheNat;
+  try{
+    const r = await fetch(`${ES_BASE}/`);
+    if(r.ok){
+      const j = await r.json();
+      const out = [];
+      for(const e of (j.ListaEESSPrecio || [])){ const s = normaliserES(e); if(s) out.push(s); }
+      if(out.length){ esCacheNat = out; esCacheNatAt = Date.now(); return out; }
+    }
+  }catch(_){ /* repli ci-dessous */ }
+  return esCacheNat || [];
+}
+
+// Chargement ciblé : la CCAA du point + ses limitrophes, EN PARALLÈLE (bien plus
+// rapide que tout le pays et que le chargement séquentiel), sans angle mort régional.
+const esCacheReg = new Map();   // code CCAA -> {at, data}
+async function chargerES_regional(la, lo, onNote){
+  const codes = ccaaAvecVoisines(la, lo);
+  if(onNote) onNote(`Chargement des prix en Espagne… (${codes.length} régions)`);
+  const lots = await Promise.all(codes.map(async ccaa => {
+    const cache = esCacheReg.get(ccaa);
+    if(cache && frais(cache.at)) return cache.data;
+    try{
+      const r = await fetch(`${ES_BASE}/FiltroCCAA/${ccaa}`);
+      if(!r.ok) return [];
+      const j = await r.json();
+      const lot = [];
+      for(const e of (j.ListaEESSPrecio || [])){ const s = normaliserES(e); if(s) lot.push(s); }
+      esCacheReg.set(ccaa, {at: Date.now(), data: lot});
+      return lot;
+    }catch(_){ return []; }
+  }));
+  const out = [];
+  for(const lot of lots) out.push(...lot);
+  return out;
+}
+
+async function chargerES_frontiere(){
+  if(esCacheFr && frais(esCacheFrAt)) return esCacheFr;
+  const out = [];
+  for(const ccaa of ES_CCAA_FRONTIERE){
+    try{
+      const r = await fetch(`${ES_BASE}/FiltroCCAA/${ccaa}`);
+      if(!r.ok) continue;
+      const j = await r.json();
+      for(const e of (j.ListaEESSPrecio || [])){ const s = normaliserES(e); if(s) out.push(s); }
+    }catch(_){ /* une CCAA qui échoue ne bloque pas les autres */ }
+  }
+  if(out.length){ esCacheFr = out; esCacheFrAt = Date.now(); }
+  return esCacheFr || [];
+}
+
+// national=true dès qu'un point est réellement en Espagne (Burgos, Madrid…) ;
+// sinon on se contente des CCAA frontalières (usage côté français).
+async function loadStationsES(national){
+  return national ? chargerES_national() : chargerES_frontiere();
+}
+// ============================================================ /ESPAGNE
 
 const IGN_RESOURCE = {
   "ign-osrm": "bdtopo-osrm", "ign-valhalla": "bdtopo-valhalla", "ign-pgr": "bdtopo-pgr"
@@ -874,15 +1231,319 @@ async function geocodeBrut(q, opts){
 const normVille = s => (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   .toLowerCase().replace(/[-'\s]+/g, " ").trim();
 
+// Repli hors de France : l'IGN ne couvre que la France, on utilise donc CartoCiudad
+// (IGN España) pour l'Espagne — libre, sans quota contraignant.
+// Résout un champ en coordonnées : priorité au lieu choisi dans l'autocomplétion,
+// sinon géocodage classique de ce qui a été tapé.
+const choixGeo = new Map();   // id du champ -> [la, lo] retenu par l'utilisateur
+async function resoudreChamp(id){
+  const choisi = choixGeo.get(id);
+  if(choisi) return choisi;
+  return geocode($(id).value.trim());
+}
+
+// Géocodage Espagne : CartoCiudad (IGN España), libre et sans quota contraignant.
+// Remplace Nominatim (dont la politique interdit l'autocomplétion et limite à 1 req/s).
+const CARTOCIUDAD_GEO = "https://www.cartociudad.es/geocoder/api/geocoder/candidates";
+// Vraie coordonnée espagnole ? (rejette 0,0 et tout ce qui tombe hors d'Espagne,
+// cause du bug « villes au milieu de l'Atlantique » quand CartoCiudad renvoie 0,0).
+function coordESValide(la, lo){
+  return isFinite(la) && isFinite(lo)
+      && la >= ES_BBOX[0] && la <= ES_BBOX[1]
+      && lo >= ES_BBOX[2] && lo <= ES_BBOX[3]
+      && !(Math.abs(la) < 0.01 && Math.abs(lo) < 0.01);   // (0,0) explicitement exclu
+}
+
+// L'endpoint « find » géolocalise précisément un libellé (candidates ne renvoie pas
+// toujours de coordonnées ponctuelles, notamment pour les municipes/poblaciones).
+const CARTOCIUDAD_FIND = "https://www.cartociudad.es/geocoder/api/geocoder/find";
+// Extrait un point [lat, lon] de la géométrie WKT renvoyée par CartoCiudad.
+// Les villes (municipios/poblaciones) sont des entités SURFACIQUES : lat/lng peuvent
+// être absents ou peu fiables ; on lit alors le POINT, ou le centre d'un POLYGON.
+function pointDeWKT(geom){
+  if(typeof geom !== "string") return null;
+  const nums = geom.match(/-?\d+\.?\d*/g);
+  if(!nums || nums.length < 2) return null;
+  if(/^POINT/i.test(geom)){
+    const lo = parseFloat(nums[0]), la = parseFloat(nums[1]);   // WKT = (lon lat)
+    return isFinite(la) && isFinite(lo) ? [la, lo] : null;
+  }
+  // POLYGON/MULTIPOLYGON : moyenne des sommets (centre approximatif, suffisant ici).
+  let sLo = 0, sLa = 0, k = 0;
+  for(let i = 0; i + 1 < nums.length; i += 2){
+    const lo = parseFloat(nums[i]), la = parseFloat(nums[i + 1]);
+    if(isFinite(lo) && isFinite(la)){ sLo += lo; sLa += la; k++; }
+  }
+  return k ? [sLa / k, sLo / k] : null;
+}
+async function findCartoCiudad(q){
+  if(!ES_ACTIF) return null;   // Espagne en veille
+  try{
+    const r = await fetch(`${CARTOCIUDAD_FIND}?${new URLSearchParams({q})}`, {headers: {"Accept": "application/json"}});
+    if(!r.ok) return null;
+    const j = await r.json().catch(() => null);
+    if(!j) return null;
+    // 1) point issu de la géométrie (fiable pour les villes surfaciques)
+    const parGeom = pointDeWKT(j.geom);
+    if(parGeom && coordESValide(parGeom[0], parGeom[1])) return parGeom;
+    // 2) sinon lat/lng directs (entités ponctuelles : portails, POI…)
+    const la = parseFloat(j.lat), lo = parseFloat(j.lng);
+    return coordESValide(la, lo) ? [la, lo] : null;
+  }catch(_){ return null; }
+}
+
+async function geocodeES(q){
+  if(!ES_ACTIF) return null;   // Espagne en veille
+  const p = new URLSearchParams({q, limit: "5", countrycodes: "es"});
+  let j = null;
+  try{
+    const r = await fetch(`${CARTOCIUDAD_GEO}?${p}`, {headers: {"Accept": "application/json"}});
+    if(r.ok) j = await r.json().catch(() => null);
+  }catch(_){ j = null; }
+  // 1) un candidat avec des coordonnées ES valides ?
+  if(Array.isArray(j)){
+    const bon = j.find(x => coordESValide(parseFloat(x.lat), parseFloat(x.lng)));
+    if(bon) return [parseFloat(bon.lat), parseFloat(bon.lng)];
+  }
+  // 2) sinon, géolocaliser précisément le premier candidat (ou la requête) via « find »
+  const cible = (Array.isArray(j) && j[0] && (j[0].address || j[0].muni)) || q;
+  return findCartoCiudad(cible);
+}
+
+// CartoCiudad, plusieurs résultats détaillés (autocomplétion Espagne — autorisée ici,
+// contrairement à Nominatim). Renvoie la même structure que l'ancienne liste OSM.
+async function cartociudadListe(q, n){
+  const p = new URLSearchParams({q, limit: String(n || 5), countrycodes: "es",
+    no_process: "callejero,carretera,portal,expendeduria,punto_recarga_electrica,ngbe,refcatastral"});
+  let j;
+  try{
+    const r = await fetch(`${CARTOCIUDAD_GEO}?${p}`, {headers: {"Accept": "application/json"}});
+    if(!r.ok) return [];
+    j = await r.json();
+  }catch(_){ return []; }
+  if(!Array.isArray(j)) return [];
+  return j.map(o => {
+    const estVille = o.type === "municipio" || o.type === "poblacion";
+    const ville = o.address || o.muni || "";
+    const region = o.comunidadAutonoma || o.province || "";
+    const la = parseFloat(o.lat), lo = parseFloat(o.lng);
+    return {
+      label: ville,
+      detail: [region, "España"].filter(Boolean).join(", "),
+      pays: "ES",
+      la, lo,
+      coordSure: coordESValide(la, lo),   // si faux, on géolocalisera à la sélection
+      requete: [ville, region].filter(Boolean).join(", ") || ville,
+      score: estVille ? 0.6 : 0.4,
+      kind: estVille ? "commune" : "adresse",
+      cle: `ES:${estVille ? "commune" : "adr"}:${normVille(ville)}`,
+      source: "cartociudad"
+    };
+  }).filter(o => o.label);   // on garde même sans coords : elles seront résolues via « find »
+}
+
+// IGN, plusieurs résultats détaillés (France).
+// Autocomplétion officielle IGN. type = "PositionOfInterest" (communes/lieux) ou
+// "StreetAddress" (adresses). Renvoie des suggestions normalisées.
+const COMPLETION = "https://data.geopf.fr/geocodage/completion/";
+async function ignCompletion(text, type){
+  const p = new URLSearchParams({text, type, maximumResponses: "10", terr: "METROPOLE"});
+  try{
+    const r = await fetch(`${COMPLETION}?${p}`);
+    if(!r.ok) return [];
+    const j = await r.json();
+    if(j.status !== "OK" || !Array.isArray(j.results)) return [];
+    return j.results.map(o => ({
+      nom: (Array.isArray(o.names) && o.names[0]) || (o.fulltext || "").split(",")[0],
+      fulltext: o.fulltext || "",
+      city: o.city || "",
+      zipcode: o.zipcode || "",
+      poi: (o.poiType || []).map(x => String(x).toLowerCase()),
+      kind: o.kind || "",
+      la: o.y, lo: o.x
+    })).filter(o => isFinite(o.la) && isFinite(o.lo));
+  }catch(_){ return []; }
+}
+
+// Choisit le point de « centre-ville » parmi les POI d'une commune.
+// Priorité : église/culte du bourg → mairie → quartier « Bourg/Centre » → point administratif.
+function pointCentre(nomCommune, pois){
+  const nc = normVille(nomCommune);
+  // POI situés DANS cette commune (city == commune) ou portant son nom.
+  const dans = pois.filter(o => normVille(o.city || o.nom) === nc || normVille(o.nom) === nc
+                || normVille(o.nom).startsWith(nc));
+  const a = o => o.poi.join(" ") + " " + (o.kind || "") + " " + normVille(o.nom);
+  const trouve = pred => dans.find(pred);
+  // 1) mairie / hôtel de ville (repère de centre-ville préféré)
+  let c = trouve(o => /mairie|hotel de ville/.test(a(o)));
+  // 2) église / lieu de culte (centre historique, à défaut de mairie)
+  if(!c) c = trouve(o => /culte|église|eglise/.test(a(o)));
+  // 3) quartier explicitement « bourg » ou « centre »
+  if(!c) c = trouve(o => /quartier/.test(o.poi.join(" ")) && /bourg|centre/.test(normVille(o.nom)));
+  // 4) le point administratif de la commune
+  if(!c) c = trouve(o => o.poi.includes("commune"));
+  return c || dans[0] || null;
+}
+
+// Cherche la mairie d'une commune via une requête dédiée « mairie <nom> ».
+// Renvoie [la, lo] si trouvée dans la bonne commune (code postal concordant), sinon null.
+// Position d'une commune française via l'API officielle Découpage administratif
+// (geo.api.gouv.fr) : renvoie la MAIRIE (mieux que le centre géométrique, qui peut
+// tomber en périphérie), avec le centre en repli. WGS-84, Open Data, 50 req/s par IP.
+const GEO_COMMUNES = "https://geo.api.gouv.fr/communes";
+async function mairieCommune(nom, cp){
+  try{
+    const p = new URLSearchParams({nom, fields: "centre,mairie,codesPostaux", format: "json", limit: "10"});
+    const r = await fetch(`${GEO_COMMUNES}?${p}`, {headers: {"Accept": "application/json"}});
+    if(!r.ok) return null;
+    const j = await r.json().catch(() => null);
+    if(!Array.isArray(j) || !j.length) return null;
+    // Choix de la bonne commune : priorité au code postal exact si fourni.
+    let com = null;
+    if(cp) com = j.find(c => Array.isArray(c.codesPostaux) && c.codesPostaux.includes(cp));
+    if(!com) com = j.find(c => normVille(c.nom) === normVille(nom)) || j[0];
+    // La mairie est le point le plus pertinent ; sinon le centre de la commune.
+    const pt = (com.mairie && com.mairie.coordinates) || (com.centre && com.centre.coordinates);
+    if(!pt || pt.length < 2) return null;
+    const lo = parseFloat(pt[0]), la = parseFloat(pt[1]);   // GeoJSON = [lon, lat]
+    return (isFinite(la) && isFinite(lo)) ? [la, lo] : null;
+  }catch(_){ return null; }
+}
+
+// Détecte une saisie qui comporte une adresse (numéro ou mot de voie).
+const MOT_VOIE = /\b(\d+\s+|rue|avenue|av\.?|bd|boulevard|impasse|all[ée]e|chemin|route|place|quai|cours|voie|lotissement|r[ée]sidence)\b/i;
+
+async function ignListe(q){
+  const adresse = MOT_VOIE.test(q);
+  const [pois, rues] = await Promise.all([
+    ignCompletion(q, "PositionOfInterest"),
+    adresse ? ignCompletion(q, "StreetAddress") : Promise.resolve([])
+  ]);
+
+  // Communes correspondant à la saisie (POI de type "commune").
+  const communesPOI = pois.filter(o => o.poi.includes("commune"));
+  const out = [];
+  const vues = new Set();
+  for(const com of communesPOI){
+    const nom = com.nom;
+    const cleC = normVille(nom) + ":" + com.zipcode;
+    if(vues.has(cleC)) continue;
+    vues.add(cleC);
+    // Meilleur point de centre-ville pour cette commune, pioché dans tous les POI.
+    const centre = pointCentre(nom, pois) || com;
+    out.push({
+      label: nom,
+      detail: [com.zipcode, "France"].filter(Boolean).join(" · "),
+      pays: "FR", la: centre.la, lo: centre.lo, score: 1,
+      kind: "commune", cp: com.zipcode, nomCommune: nom,
+      cle: `FR:commune:${cleC}`
+    });
+  }
+
+  // Adresses (seulement si la saisie ressemble à une adresse).
+  if(adresse){
+    for(const o of rues){
+      out.push({
+        label: o.fulltext || o.nom,
+        detail: [o.zipcode, o.city].filter(Boolean).join(" "),
+        pays: "FR", la: o.la, lo: o.lo, score: 1,
+        kind: "adresse",
+        cle: `FR:adr:${normVille(o.fulltext || o.nom)}`
+      });
+    }
+  }
+
+  // Filet de sécurité : si l'autocomplétion n'a rien donné, on tente l'ancien
+  // géocodeur (search) pour ne jamais afficher « aucun lieu » à tort.
+  if(!out.length){
+    try{
+      const feats = await geocodeBrut(q, {limit: "5", type: "municipality"});
+      for(const f of feats){
+        const pr = f.properties || {}, c = f.geometry.coordinates;
+        const nom = pr.city || pr.name || pr.municipality || (pr.label || "").split(",")[0];
+        if(!nom) continue;
+        out.push({
+          label: nom, detail: [pr.postcode, "France"].filter(Boolean).join(" · "),
+          pays: "FR", la: c[1], lo: c[0], score: (pr.score || 0),
+          kind: "commune", cle: `FR:commune:${normVille(nom)}:${pr.postcode || ""}`
+        });
+      }
+    }catch(_){ /* tant pis */ }
+  }
+  return out;
+}
+
+// Suggestions fusionnées des deux pays, dédoublonnées, triées par pertinence.
+async function suggerer(q){
+  const t = q.trim();
+  if(t.length < 2) return [];
+  // Coordonnées brutes : proposition directe.
+  const m = t.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+  if(m) return [{label: `${m[1]}, ${m[2]}`, detail: "coordonnées", pays: "",
+                 la: parseFloat(m[1]), lo: parseFloat(m[2]), score: 1, kind: "coord", source: "coord"}];
+  // France : autocomplétion IGN. Espagne : CartoCiudad, mais on ne garde QUE les
+  // résultats espagnols pour ne pas dupliquer les communes françaises.
+  const [ign, osm] = await Promise.all([ignListe(t), ES_ACTIF ? cartociudadListe(t, 5) : Promise.resolve([])]);
+  const es = osm.filter(s => s.pays === "ES");
+  const cible = normVille(t);
+  // Score de correspondance au texte tapé (prioritaire sur le pays) :
+  //  exact > préfixe > contient > rien. À correspondance égale : commune avant
+  //  adresse, et France avant Espagne (léger).
+  const rang = (s, ordre) => {
+    const nom = normVille(s.label);
+    let r;
+    if(nom === cible) r = 4000;
+    else if(nom.startsWith(cible)) r = 3000;
+    else if(nom.includes(cible)) r = 1500;
+    else r = 500;
+    if(s.kind === "commune") r += 200;
+    if(s.pays === "FR") r += 40;          // départage léger, pas prioritaire
+    return r - ordre * 0.1;               // conserve l'ordre interne d'une source
+  };
+  let ordre = 0;
+  const rangs = [];
+  ign.forEach(s => rangs.push([s, rang(s, ordre++)]));
+  es.forEach(s => rangs.push([s, rang(s, ordre++)]));
+  rangs.sort((a, b) => b[1] - a[1]);
+  const tous = rangs.map(r => r[0]).filter(s => isFinite(s.la) && isFinite(s.lo));
+  // Dédoublonnage : une même ville renvoyée à la fois comme « commune » et « adresse »
+  // (fréquent avec CartoCiudad, ex. « Madrid » ×2) ne doit apparaître qu'une fois.
+  // On déduplique par nom+pays (en ignorant le type) ; le tri ayant placé la commune
+  // avant l'adresse, c'est la commune qui est conservée.
+  const vus = new Set(), out = [];
+  for(const s of tous){
+    const cle = `${s.pays}:${normVille(s.label)}`;
+    if(vus.has(cle)) continue;
+    vus.add(cle); out.push(s);
+    if(out.length >= 8) break;
+  }
+  return out;
+}
+
+// Emprise France métropolitaine (grossière) pour valider un résultat IGN.
+function enFrance(la, lo){ return la >= 41.3 && la <= 51.1 && lo >= -5.2 && lo <= 9.6; }
+
+// Détecte une intention « Espagne » explicite dans la saisie.
+const VISE_ESPAGNE = /\b(espagne|espana|españa|spain)\b/i;
+
 async function geocode(q){
   const t = q.trim();
   const m = t.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
   if(m) return [parseFloat(m[1]), parseFloat(m[2])];
 
-  // Saisie « commune seule » (aucun chiffre) : on récupère plusieurs résultats et
-  // on choisit la bonne commune — nom exact d'abord, puis meilleur score, puis
-  // population (pour écarter un homonyme minuscule). L'API renvoie déjà le centre
-  // de la commune (proche du bourg) pour un résultat de type « municipality ».
+  // 1) Intention Espagne explicite → CartoCiudad (IGN España), sans passer par l'IGN français.
+  if(VISE_ESPAGNE.test(t)){
+    const nettoye = t.replace(VISE_ESPAGNE, "").replace(/[,\s]+$/,"").trim() || t;
+    const osm = await geocodeES(nettoye);
+    if(osm) return osm;
+    // si rien, on tente la requête telle quelle
+    const osm2 = await geocodeES(t);
+    if(osm2) return osm2;
+    throw new Error(`adresse introuvable : « ${q} »`);
+  }
+
+  // 2) Commune seule (aucun chiffre) : on privilégie la bonne commune française
+  //    via l'IGN (nom exact + score + population).
   const communeSeule = /^[^\d]+$/.test(t);
   if(communeSeule){
     try{
@@ -901,16 +1562,32 @@ async function geocode(q){
           return exact + (p.score || 0) * 1000 + Math.log10((p.population || 0) + 1);
         };
         pool.sort((a, b) => score(b) - score(a));
-        const c = pool[0].geometry.coordinates;
-        return [c[1], c[0]];
+        const meilleur = pool[0];
+        const sc = (meilleur.properties || {}).score || 0;
+        const c = meilleur.geometry.coordinates;
+        // On n'accepte le résultat IGN que s'il est bon ET en France ; sinon CartoCiudad.
+        if(sc >= 0.4 && enFrance(c[1], c[0])) return [c[1], c[0]];
       }
-    }catch(_){ /* on retombe sur le géocodage standard */ }
+    }catch(_){ /* on tentera CartoCiudad ci-dessous */ }
+    const osm = await geocodeES(t);
+    if(osm) return osm;
+    throw new Error(`adresse introuvable : « ${q} »`);
   }
 
-  const f = await geocodeBrut(t);
-  if(!f.length) throw new Error(`adresse introuvable : « ${q} »`);
-  const c = f[0].geometry.coordinates;
-  return [c[1], c[0]];
+  // 3) Adresse avec numéro/rue : IGN d'abord, mais on valide que c'est en France
+  //    et que le score est correct ; sinon CartoCiudad (couvre l'Espagne).
+  try{
+    const f = await geocodeBrut(t);
+    if(f.length){
+      const p = f[0].properties || {};
+      const c = f[0].geometry.coordinates;
+      if((p.score || 0) >= 0.4 && enFrance(c[1], c[0])) return [c[1], c[0]];
+    }
+  }catch(_){ /* IGN indisponible */ }
+
+  const osm = await geocodeES(t);
+  if(osm) return osm;
+  throw new Error(`adresse introuvable : « ${q} »`);
 }
 
 async function routeIGN(dep, arr, resource, optim){
@@ -925,6 +1602,23 @@ async function routeIGN(dep, arr, resource, optim){
   return {poly: j.geometry.coordinates.map(c => [c[1], c[0]]),
           dist: j.distance, dur: j.duration, url: url,
           engine: `IGN · ${resource} · ${optim} · graphe du ${j.resourceVersion || "?"}`};
+}
+
+// Routage espagnol officiel (CartoCiudad). Renvoie la distance routière réelle.
+// dep/arr au format [lat, lon]. On ne se fie qu'à la distance (le temps est peu fiable).
+async function routeCartoCiudad(dep, arr){
+  const url = `${CARTOCIUDAD_ROUTE}?orig=${dep[0].toFixed(6)},${dep[1].toFixed(6)}`
+            + `&dest=${arr[0].toFixed(6)},${arr[1].toFixed(6)}&locale=es&vehicle=CAR`;
+  const r = await fetch(url);
+  if(!r.ok) throw new Error(`CartoCiudad (${r.status})`);
+  const j = await r.json().catch(() => null);
+  if(!j || j.found !== "true" || j.distance == null){
+    throw new Error("CartoCiudad : aucun itinéraire");
+  }
+  const dist = parseFloat(j.distance);
+  if(!isFinite(dist)) throw new Error("CartoCiudad : distance invalide");
+  // durée non fiable → estimée grossièrement à 60 km/h pour l'affichage seulement
+  return {dist: dist / 1000, dur: (dist / 1000) / 60 * 60, url, engine: "CartoCiudad · IGN España"};
 }
 
 async function routeOSRM(dep, arr){
@@ -1201,15 +1895,64 @@ async function matriceDistances(origin, pts, eng, key, optim, onProgress){
     return {aller, retour, durAller, note: `${res} (BD TOPO), aller et retour mesurés séparément`};
   }
 
-  const out = await osrmTable(origin, pts, "out");
-  await sleep(400);
-  const back = await osrmTable(origin, pts, "back");
-  return {aller: out.dist, retour: back.dist, durAller: out.dur,
-          note: "OSRM (OSM), aller et retour mesurés séparément"};
+  // OSRM : d'abord la matrice groupée (rapide). Si elle échoue ou revient vide
+  // (le serveur démo route mal certaines zones, ex. quelques villes espagnoles),
+  // Hors de France (Espagne) : routage officiel CartoCiudad (IGN España), par paires
+  // — distance routière réelle. Bien plus fiable qu'OSRM démo sur le territoire espagnol.
+  if(!enFrance(origin[0], origin[1])){
+    const aller = [], retour = [], durAller = [];
+    let ok = 0;
+    for(let i = 0; i < pts.length; i++){
+      const dest = pts[i];
+      // Station en Espagne → CartoCiudad. Station française (cas frontalier, ex. depuis
+      // Irun vers Hendaye) → OSRM, car CartoCiudad ne route pas hors d'Espagne.
+      const memePays = dansEspagne(dest[0], dest[1]);
+      try {
+        if(memePays){
+          const x = await routeCartoCiudad(origin, dest);
+          const y = await routeCartoCiudad(dest, origin);
+          aller.push(x.dist); retour.push(y.dist); durAller.push(x.dur); ok++;
+        }else{
+          const x = await routeOSRM(origin, dest);
+          const y = await routeOSRM(dest, origin);
+          aller.push(x.dist); retour.push(y.dist); durAller.push(x.dur); ok++;
+        }
+      }catch(e){ aller.push(null); retour.push(null); durAller.push(null); }
+      if(onProgress) onProgress(i + 1, pts.length);
+      await sleep(70);
+    }
+    if(ok > 0) return {aller, retour, durAller, note: "CartoCiudad (Espagne) + OSRM (transfrontalier)"};
+    // CartoCiudad indisponible : on tente OSRM ci-dessous en dernier recours.
+  }
+
+  // OSRM : d'abord la matrice groupée (rapide). Si elle échoue ou revient vide
+  // on retombe sur des routes individuelles station par station, plus robustes.
+  try {
+    const out = await osrmTable(origin, pts, "out");
+    await sleep(400);
+    const back = await osrmTable(origin, pts, "back");
+    const utiles = out.dist.filter(v => v != null && v > 0).length;
+    if(utiles > 0){
+      return {aller: out.dist, retour: back.dist, durAller: out.dur,
+              note: "OSRM (OSM), aller et retour mesurés séparément"};
+    }
+    // sinon : table vide → on tente les routes individuelles ci-dessous
+  } catch(e){ /* table indisponible : bascule sur les routes individuelles */ }
+
+  const aller = [], retour = [], durAller = [];
+  for(let i = 0; i < pts.length; i++){
+    try {
+      const x = await routeOSRM(origin, pts[i]);
+      const y = await routeOSRM(pts[i], origin);
+      aller.push(x.dist); retour.push(y.dist); durAller.push(x.dur);
+    }catch(e){ aller.push(null); retour.push(null); durAller.push(null); }
+    if(onProgress) onProgress(i + 1, pts.length);
+    await sleep(90);
+  }
+  return {aller, retour, durAller, note: "OSRM (OSM), routes individuelles"};
 }
 
 let stationsCache = null, stationsCacheAt = 0;
-const STATIONS_TTL = 10 * 60 * 1000;   // 10 min : au-delà, on rafraîchit les prix
 function cacheValide(){ return stationsCache && (Date.now() - stationsCacheAt) < STATIONS_TTL; }
 async function loadStations(force){
   if(!force && cacheValide()) return stationsCache;
@@ -1222,6 +1965,29 @@ async function loadStations(force){
   stationsCacheAt = Date.now();
   detecterChampMarque(stationsCache);
   return stationsCache;
+}
+
+// Charge le pool de stations pertinent pour ces points : toujours la France,
+// et l'Espagne en plus si l'un des points est en Espagne ou proche de la frontière.
+// Renvoie un tableau fusionné, utilisable tel quel par collect*/lisible.
+let dernierPoolES = false;   // pour le message de statut
+async function chargerStations(points){
+  const fr = await loadStations();
+  const pts = points || [];
+  dernierPoolES = besoinEspagne(pts);
+  if(!dernierPoolES) return fr;
+  // Si un point est réellement EN Espagne : charger sa région + les régions
+  // limitrophes (rapide, sans angle mort). Sinon (près de la frontière côté
+  // français), les CCAA frontalières suffisent.
+  const enES = pts.find(([la, lo]) => dansEspagne(la, lo));
+  let es;
+  if(enES){
+    es = await chargerES_regional(enES[0], enES[1],
+      msg => { if(typeof setStatus === "function") setStatus(msg, "info", true); });
+  }else{
+    es = await chargerES_frontiere();
+  }
+  return es.length ? fr.concat(es) : fr;
 }
 
 // Enseignes : jamais bloquant. En cas d'échec, on affiche la ville comme avant.
@@ -1241,7 +2007,10 @@ const infoOf = s => {
   if(!brandMap || s.id == null) return null;
   return brandMap[String(s.id)] || null;
 };
-const brandOf = s => { const i = infoOf(s); return i && i.brand ? i.brand : null; };
+const brandOf = s => {
+  if(s && s._pays === "ES") return s._rotulo || null;   // enseigne fournie directement par l'API ES
+  const i = infoOf(s); return i && i.brand ? i.brand : null;
+};
 const nameOf  = s => { const i = infoOf(s); return i && i.name ? i.name : null; };
 
 /**
@@ -1420,7 +2189,7 @@ Object.assign(map.getPane("masque").style,
   {zIndex: 395, pointerEvents: "none"});   // sous le trajet et les marqueurs
 const FONDS = {
   osm: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {maxZoom: 19, keepBuffer: 4, updateWhenIdle: false, updateWhenZooming: false, attribution: "© OpenStreetMap"}),
+        {maxZoom: 19, keepBuffer: 4, updateWhenIdle: false, updateWhenZooming: false, attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}),
   ign: L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0"
         + "&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&FORMAT=image/png"
         + "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}",
@@ -1452,7 +2221,14 @@ function infoMarqueur(m, html){
 }
 const pin = (txt, color) => L.divIcon({className: "",
   html: `<div class="pin" style="background:${color}">${txt}</div>`,
-  iconSize: [16, 16], iconAnchor: [8, 8]});
+  iconSize: [22, 22], iconAnchor: [11, 11]});
+// Marqueur « Ma position » : pin de carte classique (goutte à pointe basse).
+const pinPosition = () => L.divIcon({className: "",
+  html: `<svg width="26" height="34" viewBox="0 0 26 34" xmlns="http://www.w3.org/2000/svg">`
+    + `<path d="M13 1 C6.4 1 1 6.3 1 12.9 C1 21.6 13 33 13 33 C13 33 25 21.6 25 12.9 C25 6.3 19.6 1 13 1 Z" `
+    + `fill="#e23b3b" stroke="#fff" stroke-width="2"/>`
+    + `<circle cx="13" cy="13" r="4.6" fill="#fff"/></svg>`,
+  iconSize: [26, 34], iconAnchor: [13, 33], popupAnchor: [0, -30]});
 // Pictogramme d'autoroute dessiné en SVG : l'emoji Unicode est rendu en couleur
 // par la police système, impossible à recolorer en bleu et blanc.
 const PICTO_AUTOROUTE = `<span class="tag hw" title="Station d'autoroute">`
@@ -1496,8 +2272,14 @@ const sansAccent = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLow
 // distribution (Leclerc, Intermarché, Carrefour…) et aux indépendants. Ce n'est
 // pas une question de taille de réseau.
 const PETROLIERES = ["totalenergies","total","esso","exxon","mobil","bp","shell","eni",
-  "agip","avia","elan","dyneff","gulf","texaco","oil!","q8","repsol","cepsa"];
+  "agip","avia","elan","dyneff","gulf","texaco","oil!","q8","repsol","cepsa",
+  "galp","petronor","moeve","ballenoil"];
 function estMajor(s){
+  if(s && s._pays === "ES"){        // pas de champ marque FR : on lit le Rótulo
+    const b = brandOf(s);
+    if(!b) return false;
+    return PETROLIERES.some(m => sansAccent(b).includes(m));
+  }
   if(champMarque){
     const v = s[champMarque];
     if(v === null || v === undefined || v === "") return false;
@@ -1513,7 +2295,7 @@ function estMajor(s){
 }
 
 const $ = id => document.getElementById(id);
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 /**
  * Bande du couloir. L'épaisseur d'une polyligne Leaflet est en pixels : on la
@@ -1521,6 +2303,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":
  * Les jointures et extrémités arrondies donnent un vrai tampon autour du tracé.
  */
 let corridorLine = null, corridorKm = 0;
+let masqueRayon = null;   // {origin:[la,lo], rayonM} pour le voile sombre en mode « autour »
 // Contour du couloir : deux traits bleus pointillés épais, pas de remplissage.
 let bordsLayer = null;
 /**
@@ -1536,6 +2319,7 @@ function initMasque(){
     + '<defs><mask id="mkm" maskUnits="userSpaceOnUse">'
     + '<rect id="mkbg" fill="#fff"/>'
     + '<path id="mkpath" stroke="#000" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+    + '<circle id="mkcircle" fill="#000" r="0"/>'
     + '</mask></defs>'
     + '<rect id="mkrect" fill="#080b10" fill-opacity="0.6" mask="url(#mkm)"/></svg>';
 }
@@ -1543,8 +2327,32 @@ function initMasque(){
 function majMasque(){
   const svg = document.getElementById("msvg");
   if(!svg) return;
-  if(!prepActuelle || !corridorKm){ svg.style.display = "none"; return; }
+  const path = document.getElementById("mkpath");
+  const circle = document.getElementById("mkcircle");
   const size = map.getSize();
+
+  // Cas « autour de moi » : disque percé centré sur la position.
+  if(masqueRayon){
+    const c = map.latLngToContainerPoint(L.latLng(masqueRayon.origin[0], masqueRayon.origin[1]));
+    const mpp = 156543.03392 * Math.cos(toRad(map.getCenter().lat)) / Math.pow(2, map.getZoom());
+    const rpx = masqueRayon.rayonM / mpp;
+    circle.setAttribute("cx", c.x.toFixed(1));
+    circle.setAttribute("cy", c.y.toFixed(1));
+    circle.setAttribute("r", Math.max(0, rpx).toFixed(1));
+    path.setAttribute("d", "");        // pas de couloir
+    for(const id of ["mkbg", "mkrect"]){
+      const e = document.getElementById(id);
+      e.setAttribute("x", 0); e.setAttribute("y", 0);
+      e.setAttribute("width", size.x); e.setAttribute("height", size.y);
+    }
+    svg.setAttribute("width", size.x); svg.setAttribute("height", size.y);
+    L.DomUtil.setPosition(svg, map.containerPointToLayerPoint([0, 0]));
+    svg.style.display = "";
+    return;
+  }
+
+  circle.setAttribute("r", "0");       // pas de disque hors mode autour
+  if(!prepActuelle || !corridorKm){ svg.style.display = "none"; return; }
   const mpp = 156543.03392 * Math.cos(toRad(map.getCenter().lat)) / Math.pow(2, map.getZoom());
   const larg = Math.max(2, (2 * corridorKm * 1000) / mpp);
   const poly = prepActuelle.poly;
@@ -1556,7 +2364,6 @@ function majMasque(){
   }
   const fin = map.latLngToContainerPoint(poly[poly.length - 1]);
   d += "L" + fin.x.toFixed(1) + " " + fin.y.toFixed(1);
-  const path = document.getElementById("mkpath");
   path.setAttribute("d", d);
   path.setAttribute("stroke-width", larg);
   for(const id of ["mkbg", "mkrect"]){
@@ -1568,6 +2375,19 @@ function majMasque(){
   svg.setAttribute("height", size.y);
   L.DomUtil.setPosition(svg, map.containerPointToLayerPoint([0, 0]));
   svg.style.display = "";
+}
+
+// Active le voile sombre percé d'un disque (mode « autour de moi »).
+function dessinerMasqueRayon(origin, rayonM){
+  initMasque();
+  masqueRayon = {origin, rayonM};
+  corridorKm = 0; corridorLine = null;
+  majMasque();
+}
+// Retire le voile du rayon (retour au trajet ou reset).
+function effacerMasqueRayon(){
+  masqueRayon = null;
+  majMasque();
 }
 
 function dessinerBordsCouloir(bufferKm){
@@ -1603,19 +2423,30 @@ function drawStations(cands, top){
   const conso = parseFloat($("conso").value) || 6.2;
   const resv = parseFloat($("res").value) || 35;
   const eurFr = v => v.toFixed(2).replace(".", ",") + " €";
+  const retenues = shown.filter(c => !c.relegue);   // seuil comparé aux seules stations utiles
   shown.forEach((c, i) => {
     const col = c.relegue ? "#6b7280" : priceColor(max > min ? (c.prix - min) / (max - min) : 0);
-    const s = seuilContreLesPlusProches(c, shown, conso);
+    const s = c.relegue ? null : seuilContreLesPlusProches(c, retenues, conso);
     const nomRef = r => `${esc(brandOf(r.s) || r.s.ville || "une station")} à ${parcours(r).toFixed(1)} km, ${r.prix.toFixed(3)} €/L`;
-    const seuil = s === null
-      ? `<br><span style="color:#22c55e">Aucune station plus proche : rien à arbitrer.</span>`
-      : s.impossible
-        ? `<br><span style="color:#98a2b1">Sans intérêt : ${nomRef(s.ref)} est plus proche <i>et</i> moins chère.</span>`
-        : s.volume === 0
-          ? `<br><span style="color:#22c55e">Rentable dès le premier litre face à toutes les stations plus proches.</span>`
-          : s.volume > 120
-            ? `<br><span style="color:#98a2b1">Il faudrait ${Math.round(s.volume)} L pour amortir le détour face à ${nomRef(s.ref)} : jamais en pratique.</span>`
-            : `<br><span style="color:#22c55e">Rentable à partir de <b>${s.volume.toFixed(1)} L</b>, seuil fixé par ${nomRef(s.ref)}.</span>`;
+    let seuil;
+    if(c.relegue){
+      seuil = "";   // station grisée : aucun seuil (sans intérêt)
+    }else if(s === null){
+      seuil = `<br><span style="color:#22c55e">Aucune station plus proche : rien à arbitrer.</span>`;
+    }else if(s.comps && s.comps.length){
+      // Détail par station plus proche (les plus proches d'abord).
+      const items = s.comps.map(cp => cp.volume === 0
+        ? `dès le 1ᵉʳ L par rapport à ${nomRef(cp.ref)}`
+        : cp.volume > 120
+          ? `au-delà de ${Math.round(cp.volume)} L par rapport à ${nomRef(cp.ref)}`
+          : `dès ${cp.volume.toFixed(1)} L par rapport à ${nomRef(cp.ref)}`);
+      if(s.impossible) items.push(`${nomRef(s.impossible.ref)} est plus proche et moins chère`);
+      seuil = `<br><span style="color:#22c55e">Rentable ${items.join("<br>")}</span>`;
+    }else if(s.impossible){
+      seuil = `<br><span style="color:#98a2b1">Sans intérêt : ${nomRef(s.impossible.ref)} est plus proche <i>et</i> moins chère.</span>`;
+    }else{
+      seuil = "";
+    }
     const ar = (c.aller != null && c.retour != null)
       ? `aller ${c.aller.toFixed(1)} km / retour ${c.retour.toFixed(1)} km` : "";
     const mk = L.marker([c.la, c.lo], {icon: pin(String(i + 1), col)}).addTo(markLayer);
@@ -1668,6 +2499,10 @@ function renderList(cands, top, cutIndex){
   const ul = $("results"); ul.innerHTML = "";
   const shown = cands.slice(0, top);
   if(!shown.length) return;
+  const conso = parseFloat($("conso").value) || 6.2;
+  // Le seuil de rentabilité ne se compare qu'aux stations RETENUES (non grisées) :
+  // se comparer à une station sans intérêt n'aurait pas de sens.
+  const retenues = shown.filter(c => !c.relegue);
   const min = Math.min(...shown.map(c => c.prix)), max = Math.max(...shown.map(c => c.prix));
   shown.forEach((c, i) => {
     // Séparateur explicite entre les stations mesurées et les estimées.
@@ -1681,9 +2516,29 @@ function renderList(cands, top, cutIndex){
     const hw = String(c.s.pop || "").toUpperCase() === "A" ? PICTO_AUTOROUTE : "";
     // Détour aller-retour affiché à droite (celui qui est facturé dans le coût réel).
     const ar  = (c.aller != null && c.retour != null) ? c.aller + c.retour : null;
-    const km  = ar != null ? (c.reel ? "" : "~") + "+" + ar.toFixed(1) + " km" : "—";
+    const km  = ar != null ? (c.reel ? "" : "~") + "+" + ar.toFixed(1) + " km A/R" : "—";
     const mins = (c.durAller != null ? c.durAller : 0) + (c.durRetour != null ? c.durRetour : 0);
     const mn  = mins > 0 ? `<i>${Math.round(mins)} min</i>` : "";
+    // Seuil de rentabilité — uniquement pour les stations retenues (non grisées).
+    // Une station grisée est sans intérêt : afficher un seuil y serait contradictoire.
+    let rentPhrase = "";
+    const nomR = r => r ? esc(brandOf(r.s) || r.s.ville || "une station") + " à " + parcours(r).toFixed(1) + " km" : "";
+    if(!c.relegue){
+      const sr = seuilContreLesPlusProches(c, retenues, conso);
+      if(sr && sr.comps && sr.comps.length){
+        const comps = sr.comps.slice(0, 3);   // les 3 plus proches (déjà triées par distance)
+        const lignes = comps.map(cp => {
+          if(cp.volume === 0) return `<span class="rent ok">Rentable dès le 1ᵉʳ litre par rapport à ${nomR(cp.ref)}</span>`;
+          if(cp.volume > 120)  return `<span class="rent ko">Rentable au-delà de ${Math.round(cp.volume)} L par rapport à ${nomR(cp.ref)}</span>`;
+          return `<span class="rent ok">Rentable dès ${cp.volume.toFixed(0)} L par rapport à ${nomR(cp.ref)}</span>`;
+        });
+        if(sr.comps.length > 3) lignes.push(`<span class="rent" style="color:var(--muted)">…et ${sr.comps.length - 3} autre(s)</span>`);
+        if(sr.impossible) lignes.push(`<span class="rent ko">${nomR(sr.impossible.ref)} est plus proche et moins chère</span>`);
+        rentPhrase = lignes.join("");
+      }else if(sr && sr.impossible){
+        rentPhrase = `<span class="rent ko">${nomR(sr.impossible.ref)} est plus proche et moins chère</span>`;
+      }
+    }
     const estBest = i === 0 && !c.relegue && c.distanceMode === "road";
     const li = document.createElement("li");
     li.className = "item" + (c.relegue ? " relegue" : "")
@@ -1701,9 +2556,10 @@ function renderList(cands, top, cutIndex){
       + `<span>${soust}</span>`
       + (c.horsRayon ? `<span class="why">hors rayon demandé</span>`
          : c.plusLoinPlusCher ? `<span class="why">plus loin, et plus cher au total</span>` : "")
+      + rentPhrase
       + `</div>`
-      + `<div class="meta" title="Détour aller-retour ajouté, et coût réel du plein">`
-      + `<b>${km}</b>${c.total.toFixed(2)} €${mn ? "<br>" + mn : ""}</div>`;
+      + `<div class="meta" title="Détour aller-retour ajouté">`
+      + `<b>${km}</b>${mn || ""}</div>`;
     li.dataset.rang = String(i + 1);
     const focus = () => selectionner(i + 1, true);
     li.onclick = focus;
@@ -1762,16 +2618,20 @@ function comparer(a, b){
  * qui l'impose. Renvoie null si aucune comparaison n'a de sens.
  */
 function seuilContreLesPlusProches(cible, lot, conso){
-  let pire = null, quiFixe = null;
+  const comps = [];   // une entrée par station plus proche et plus chère
+  let impossible = null;   // {ref} si une station plus proche est AUSSI moins chère
   for(const r of lot){
     if(r === cible) continue;
     if(parcours(r) >= parcours(cible)) continue;      // pas plus proche : hors sujet
-    if(r.prix <= cible.prix) return {impossible: true, ref: r};  // plus proche ET moins chère
+    if(r.prix <= cible.prix){ if(!impossible) impossible = {ref: r}; continue; }
     const v = volumeRentable(r, cible, conso);
     if(v === null) continue;
-    if(pire === null || v > pire){ pire = v; quiFixe = r; }
+    comps.push({volume: v, ref: r});
   }
-  return pire === null ? null : {volume: pire, ref: quiFixe};
+  if(!comps.length && !impossible) return null;        // rien de plus proche : rien à arbitrer
+  comps.sort((a, b) => parcours(a.ref) - parcours(b.ref));
+  const pire = comps.length ? comps.reduce((m, c) => c.volume > m.volume ? c : m, comps[0]) : null;
+  return {comps, impossible, volume: pire ? pire.volume : null, ref: pire ? pire.ref : null};
 }
 
 function volumeRentable(ref, cible, conso){
@@ -1799,18 +2659,18 @@ function comparerAvecRelegation(a, b){
  *  - sans intérêt : on roule PLUS pour payer PLUS CHER que la meilleure option
  */
 function marquerRelegations(cands, rayon, dominance){
+  const conso = parseFloat($("conso").value) || 6.2;
+  const VOL_MAX = 70;   // volume de plein réaliste (grande capacité) : au-delà, non pertinent
   // 1. hors rayon : l'aller-retour réel divisé par deux dépasse le rayon demandé
   for(const c of cands){
     const moyenne = ((c.aller || 0) + (c.retour || 0)) / 2;
     c.horsRayon = rayon != null && moyenne > rayon + 1e-9;
     c.plusLoinPlusCher = false;
   }
-  // 2. dominance : rouler plus pour payer plus cher n'a aucun intérêt s'il existe
-  //    une station à la fois plus proche ET moins chère. Ce qui survit forme le
-  //    front des compromis utiles : la plus proche, la moins chère, et l'entre-deux.
-  // On compare sur le COÛT TOTAL du plein, pas sur le prix au litre. Une station
-  // peut être moins chère d'un dixième de centime au litre tout en revenant plus
-  // cher une fois le détour payé : c'est le cas qui échappait au grisage.
+  // 2. dominance : une station plus loin ET plus chère au total est reléguée —
+  //    SAUF si son prix au litre plus bas la rend rentable à un volume atteignable
+  //    (≤ VOL_MAX) face au dominant. Une station « rentable dès 45 L » reste donc
+  //    affichée ; une station perdante quel que soit le volume est grisée.
   const cout = c => (c.total != null ? c.total : c.prix);
   const vivantes = dominance ? cands.filter(c => !c.horsRayon && isFinite(c.prix)) : [];
   for(const c of vivantes){
@@ -1819,7 +2679,17 @@ function marquerRelegations(cands, rayon, dominance){
       const pasPlusLoin = parcours(d) <= parcours(c);
       const pasPlusCher = cout(d) <= cout(c);
       const strictement = parcours(d) < parcours(c) || cout(d) < cout(c);
-      if(pasPlusLoin && pasPlusCher && strictement){ c.plusLoinPlusCher = true; break; }
+      if(pasPlusLoin && pasPlusCher && strictement){
+        // c est dominée par d au coût total. Peut-elle devenir rentable à gros volume ?
+        // Cela suppose que c est MOINS chère au litre que d (sinon jamais).
+        let rachetable = false;
+        if(c.prix < d.prix){
+          // volume à partir duquel c (plus loin, moins chère/L) bat d au coût total
+          const v = volumeRentable(d, c, conso);   // seuil de c face à d
+          if(v != null && v <= VOL_MAX) rachetable = true;
+        }
+        if(!rachetable){ c.plusLoinPlusCher = true; break; }
+      }
     }
   }
   let n = 0;
@@ -1845,12 +2715,12 @@ async function tracerDetour(c, marque){
     const pts = [];
     if(t.aller.length){
       L.polyline(t.aller, {color:"#22c55e", weight:5, opacity:.95, dashArray:"10 6"})
-        .addTo(tripLayer).bindTooltip("Départ → station", {sticky:true});
+        .addTo(tripLayer);
       pts.push(...t.aller);
     }
     if(t.retour.length){
       L.polyline(t.retour, {color:"#ef4444", weight:4, opacity:.95, dashArray:"3 7"})
-        .addTo(tripLayer).bindTooltip("Station → arrivée", {sticky:true});
+        .addTo(tripLayer);
       pts.push(...t.retour);
     }
     // Aucun recadrage : la station cliquée doit rester au centre de la carte.
@@ -2212,6 +3082,18 @@ function setStatus(html, kind){
     if(box){
       const t = document.getElementById("mapStatusTxt");
       if(t) t.textContent = txt;
+      const m = txt.match(/(\d+)\s*(?:sur|\/)\s*(\d+)/);
+      const arc = box.querySelector(".progArc");
+      const svg = box.querySelector(".prog");
+      const C = 97.4;   // circonférence (2π·15.5)
+      if(m && arc){
+        const ratio = Math.max(0, Math.min(1, parseInt(m[1], 10) / parseInt(m[2], 10)));
+        arc.style.strokeDashoffset = (C * (1 - ratio)).toFixed(1);
+        if(svg) svg.classList.remove("indet");
+      }else if(svg){
+        if(arc) arc.style.strokeDashoffset = (C * 0.75).toFixed(1);
+        svg.classList.add("indet");
+      }
       box.hidden = false;
     }
     return;
@@ -2239,13 +3121,11 @@ async function tracerAllerRetour(c, marque){
     tripLayer.clearLayers();
     const bounds = [];
     if(t.aller.length){
-      L.polyline(t.aller, {color: "#22c55e", weight: 5, opacity: .95, dashArray: "10 6"}).addTo(tripLayer)
-        .bindTooltip("Aller", {sticky: true});
+      L.polyline(t.aller, {color: "#22c55e", weight: 5, opacity: .95, dashArray: "10 6"}).addTo(tripLayer);
       bounds.push(...t.aller);
     }
     if(t.retour.length){
-      L.polyline(t.retour, {color: "#ef4444", weight: 4, opacity: .95, dashArray: "3 7"}).addTo(tripLayer)
-        .bindTooltip("Retour", {sticky: true});
+      L.polyline(t.retour, {color: "#ef4444", weight: 4, opacity: .95, dashArray: "3 7"}).addTo(tripLayer);
       bounds.push(...t.retour);
     }
     // En « autour de moi », on cadre l'aller-retour entier : c'est lui qu'on veut voir.
@@ -2353,15 +3233,23 @@ async function search(){
 async function searchRoute(){
   const depV = $("dep").value.trim(), arrV = $("arr").value.trim();
   if(!depV || !arrV){ setStatus("Renseigne le départ et l'arrivée.", "err"); return; }
-  const eng = $("engine").value, key = $("orsKey").value.trim();
+  let eng = $("engine").value, key = $("orsKey").value.trim();
   if(eng === "ors" && !key){
     setStatus("Le moteur openrouteservice demande une clé (Réglages avancés).", "err");
     return;
   }
   let warn = "";
   setStatus("Géocodage…");
-  const pts = await Promise.all([geocode(depV), geocode(arrV)]);
+  const pts = await Promise.all([resoudreChamp("dep"), resoudreChamp("arr")]);
   const dep = pts[0], arr = pts[1];
+
+  // Les moteurs IGN ne couvrent que la France : dès qu'un point est en Espagne
+  // (ou proche frontière ES), on bascule sur OSRM qui passe la frontière.
+  const transfrontalier = dansEspagne(dep[0], dep[1]) || dansEspagne(arr[0], arr[1]);
+  if(transfrontalier && eng.startsWith("ign-")){
+    eng = "osrm";
+    warn = " Trajet transfrontalier : moteur OSRM utilisé (l'IGN s'arrête à la frontière).";
+  }
 
   setStatus("Calcul de l'itinéraire…");
   let res;
@@ -2370,7 +3258,7 @@ async function searchRoute(){
   else                    res = await routeIGN(dep, arr, IGN_RESOURCE[eng] || "bdtopo-osrm", $("optim").value);
 
   setStatus(`Chargement des prix${cacheValide() ? " (cache)" : ""}…`);
-  const stations = await loadStations();
+  const stations = await chargerStations([dep, arr]);
   await loadBrands();
   origineActuelle = null;
   tripLayer.clearLayers();
@@ -2452,13 +3340,13 @@ async function searchAround(){
   const depV = $("dep").value.trim();
   if(!depV){ setStatus("Renseigne ta position (ou clique le bouton position).", "err"); return; }
   setStatus("Géocodage…");
-  const origin = await geocode(depV);
+  const origin = await resoudreChamp("dep");
   origineActuelle = origin;
   prepActuelle = null;
   tripLayer.clearLayers();
 
   setStatus(`Chargement des prix${cacheValide() ? " (cache)" : ""}…`);
-  const stations = await loadStations();
+  const stations = await chargerStations([origin]);
   await loadBrands();
 
   const rayon = parseFloat($("rad").value);
@@ -2468,9 +3356,9 @@ async function searchAround(){
 
   routeLayer.clearLayers();
   corridorLine = null;
-  L.marker(origin, {icon: pin("★", "#fff")}).addTo(routeLayer).bindPopup("Ma position");
-  const disque = L.circle(origin, {radius: rayon * 1000, color: "#3d7dff", weight: 3.5,
-    opacity: .85, dashArray: "12 9", fill: false, interactive: false}).addTo(routeLayer);
+  L.marker(origin, {icon: pinPosition()}).addTo(routeLayer).bindPopup("Ma position");
+  const disque = L.circle(origin, {radius: rayon * 1000, opacity: 0, fill: false, interactive: false}).addTo(routeLayer);
+  dessinerMasqueRayon(origin, rayon * 1000);
   map.fitBounds(disque.getBounds().pad(0.05), {animate: !reduced});
 
   if(!cands.length){
@@ -2488,8 +3376,14 @@ async function searchAround(){
   for(const c of cands){ c.aller = c.vol; c.retour = c.vol; c.durAller = null; }
 
   if(voulu === "road"){
-    const eng = $("engine").value, key = $("orsKey").value.trim();
-    const plafond = 40;   // toutes les stations affichées (TOP) sont mesurées en réel
+    let eng = $("engine").value, key = $("orsKey").value.trim();
+    // Hors de France (Espagne, Ceuta…), les moteurs IGN ne routent pas : bascule OSRM.
+    if(!enFrance(origin[0], origin[1]) && eng.startsWith("ign-")){
+      eng = "osrm";
+    }
+    // Hors de France, OSRM démo est fragile en volume : on mesure moins de stations
+    // (les plus pertinentes) pour éviter que le serveur ne bloque les requêtes.
+    const plafond = enFrance(origin[0], origin[1]) ? 40 : 22;
     const court = shortlist(cands, plafond);
     setStatus(`Distances routières pour ${court.length} stations…`);
     try{
@@ -2497,13 +3391,27 @@ async function searchAround(){
       const m = await matriceDistances(origin, pts, eng, key, $("optim").value,
         (i, n) => setStatus(`Distances routières : station ${i} sur ${n}…`));
       court.forEach((c, i) => {
-        if(m.aller[i] != null && m.retour[i] != null){
-          c.aller = m.aller[i]; c.retour = m.retour[i]; c.durAller = m.durAller[i];
+        let a = m.aller[i], r = m.retour[i];
+        // Une distance routière nulle (ou quasi) alors que la station est à plus de
+        // 100 m à vol d'oiseau est une mesure aberrante (OSRM a snappé au même nœud
+        // faute de route) : on la rejette au lieu d'afficher « +0.0 km ».
+        const aberrant = (a != null && r != null) && (a + r) < 0.1 && c.vol > 0.1;
+        // Asymétrie aller/retour : quand la position de départ est sur un parking ou
+        // une zone piétonne, le routeur la raccorde au réseau différemment selon le
+        // sens, ce qui gonfle artificiellement un seul côté. Un vrai détour aller-
+        // retour est quasi symétrique : si un côté dépasse l'autre de plus de 60 %,
+        // on aligne les deux sur le plus court (le raccordement fiable).
+        if(a != null && r != null){
+          const mn = Math.min(a, r), mx = Math.max(a, r);
+          if(mn > 0.05 && mx > mn * 1.6){ a = mn; r = mn; }
+        }
+        if(a != null && r != null && !aberrant){
+          c.aller = a; c.retour = r; c.durAller = m.durAller[i];
           c.durRetour = null; c.reel = true; c.distanceMode = "road";
         }
       });
       const mesurees = court.filter(c => c.reel).length;
-      if(!mesurees) throw new Error("aucune station routable depuis ce point");
+      if(!mesurees) throw new Error("aucune station routable depuis ce point (OSRM sans données ici ?)");
       note = `${mesurees} stations mesurées`;
     }catch(e){
       cands = cands.map(c => { c.aller = c.vol; c.retour = c.vol; c.durAller = null; return c; });
@@ -2523,20 +3431,27 @@ async function searchAround(){
   afficherBornes([origin], rayon);
   afficherResultats(cands, TOP);
   $("legend").hidden = false;
+  // Une fois le calcul fini : recadrer sur les stations retenues (non grisées) et
+  // le pin de position, au lieu de rester dézoomé sur tout le rayon.
+  const retenues = cands.filter(c => !c.relegue).slice(0, TOP);
+  if(retenues.length){
+    const pts = retenues.map(c => [c.la, c.lo]);
+    pts.push(origin);
+    map.fitBounds(L.latLngBounds(pts).pad(0.15), {animate: !reduced, maxZoom: 15});
+  }
   // Résumé fondé sur la meilleure station MESURÉE (jamais une estimation).
   const road = cands.filter(c => c.distanceMode === "road" && !c.relegue)
                     .sort(comparerAvecRelegation);
   const best = road[0] || cands[0];
   const nEst = cands.filter(c => c.distanceMode !== "road").length;
-  const eco = road.length > 1
-    ? ` · ${(road[road.length - 1].total - best.total).toFixed(2)} € d'écart dans le lot mesuré` : "";
-  setStatus(`<span class="trip">${totalTrouve} stations dans ${rayon} km</span> — `
-    + `meilleure : ${best.prix.toFixed(3)} €/L, aller ${(best.aller || 0).toFixed(1)} km, `
-    + `plein ${best.total.toFixed(2)} €${eco}<br>`
-    + `<span style="font-size:11.5px">Classement sur l'aller-retour, ${note}.`
-    + `${nEst ? ` ${nEst} station(s) estimée(s) listée(s) à part.` : ""}`
-    + `${nRel ? ` ${nRel} grisée(s) et reléguée(s) en fin de liste.` : ""}${degrade}</span>`,
-    degrade ? "warn" : null);
+  // (Label récapitulatif retiré à la demande : il encombrait sans apport clair.)
+  // On efface simplement le bandeau de statut ; un éventuel avertissement de repli
+  // (distances estimées) reste toutefois signalé car utile.
+  if(degrade){
+    setStatus(`<span style="font-size:11.5px">Distances estimées à vol d'oiseau pour certaines stations.${degrade}</span>`, "warn");
+  }else{
+    setStatus("");
+  }
 }
 
 // ---------------------------------------------- réglages sur la carte
@@ -2561,6 +3476,16 @@ async function searchAround(){
     const c = chip("Rayon", radRng);
     c.id = "chipRad";
     if(around) around.hidden = true;   // ne plus afficher le label orphelin dans le panneau
+  }
+
+  // Consommation (L/100 km) — même traitement que le rayon : slider sur la carte.
+  const consoEl = document.getElementById("conso");
+  const consoRng = consoEl && consoEl.closest(".rng");
+  const consoCell = consoEl && consoEl.closest(".adv > div, .row2 > div, .form > div");
+  if(consoRng){
+    const c = chip("Conso", consoRng);
+    c.id = "chipConso";
+    if(consoCell) consoCell.remove();   // retire le bloc désormais vide du panneau
   }
 
   // Couloir (mode « trajet ») — vit dans un <div> (label + .rng) au sein d'un .row2
@@ -2589,16 +3514,15 @@ async function searchAround(){
     const triCell = tri.closest(".row2 > div");
     chip("Tri", tri);
     if(triCell){
-      const clickCell = document.getElementById("clickMode") && document.getElementById("clickMode").closest(".row2 > div");
       triCell.remove();
-      if(clickCell) clickCell.style.gridColumn = "1 / -1";   // « Clic sur la carte » pleine largeur
     }
   }
 
-  // Optimisation (le plus rapide / le plus court) — sortie des « Réglages avancés »
-  const optim = document.getElementById("optim");
-  if(optim){
-    const c = chip("Optim.", optim);
+  // Optimisation (le plus rapide / le plus court) — boutons segmentés, sans label
+  // (les libellés des boutons sont explicites) pour éviter la troncature en overlay.
+  const optimSeg = document.getElementById("optimSeg");
+  if(optimSeg){
+    const c = chip("", optimSeg);
     c.id = "chipOptim";
   }
 
@@ -2692,6 +3616,26 @@ $("irve").addEventListener("change", () => {
 });
 ["res", "conso"].forEach(id => $(id).addEventListener("input", rejouerDiffere));
 $("rad").oninput  = e => { $("radOut").textContent  = e.target.value + " km"; };
+// Consommation : curseur (#conso), champ éditable (#consoNum) et boutons −/+
+// pilotent la même valeur, bornée à [3, 20] au dixième.
+function bornerConso(v){ return Math.min(20, Math.max(3, Math.round(v * 10) / 10)); }
+function majConso(v, relancer){
+  v = bornerConso(v);
+  const hid = $("conso"), num = document.getElementById("consoNum");
+  if(hid) hid.value = v;
+  if(num && document.activeElement !== num) num.value = v.toFixed(1);
+  if(relancer && typeof rejouer === "function") rejouer();
+}
+{
+  const num = document.getElementById("consoNum");
+  if(num){
+    num.oninput  = () => { const v = parseFloat(num.value); if(isFinite(v)){ const hid = $("conso"); if(hid) hid.value = bornerConso(v); } };
+    num.onchange = () => { const v = parseFloat(num.value); majConso(isFinite(v) ? v : 6.2, true); };
+  }
+  const mn = document.getElementById("consoMoins"), pl = document.getElementById("consoPlus");
+  if(mn) mn.onclick = () => majConso(parseFloat($("conso").value) - 0.1, true);
+  if(pl) pl.onclick = () => majConso(parseFloat($("conso").value) + 0.1, true);
+}
 
 $("engine").value = localStorage.getItem(LS_ENGINE) || "ign-osrm";
 if(!$("engine").value) $("engine").value = "ign-osrm";
@@ -2726,18 +3670,80 @@ document.querySelectorAll("#tri button").forEach(b => {
   };
 });
 
-let clickMode = "";
-$("clickMode").onchange = e => {
-  clickMode = e.target.value;
-  $("map").classList.toggle("marking", !!clickMode);
-};
-map.on("click", e => {
-  if(!clickMode) return;
-  const la = e.latlng.lat, lo = e.latlng.lng;
-  const txt = la.toFixed(5) + "," + lo.toFixed(5);
-  $(clickMode === "dep" ? "dep" : "arr").value = txt;
-  setStatus(`${clickMode === "dep" ? "Point de départ" : "Arrivée"} placé : ${txt}`);
+// Optimisation : boutons segmentés qui pilotent le <select id="optim"> caché.
+document.querySelectorAll("#optimSeg button").forEach(b => {
+  b.onclick = () => {
+    const sel = document.getElementById("optim");
+    if(sel) sel.value = b.dataset.v;
+    document.querySelectorAll("#optimSeg button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    if(typeof rejouer === "function") rejouer();
+  };
 });
+
+// Définir sa position par un APPUI LONG directement sur la carte (~550 ms), sans
+// bouton : plus simple et intuitif. Un déplacement de la carte annule l'appui.
+function definirPosition(la, lo){
+  $("dep").value = la.toFixed(5) + "," + lo.toFixed(5);
+  choixGeo.set("dep", [la, lo]);
+  setStatus(`Position définie : ${la.toFixed(5)}, ${lo.toFixed(5)}`);
+  if(typeof rejouer === "function") rejouer();
+}
+(function appuiLong(){
+  let timer = null, startPt = null, latlng = null;
+  const DELAI = 550, TOL = 14;   // ms d'appui, tolérance de mouvement en pixels
+  const annuler = () => { if(timer){ clearTimeout(timer); timer = null; } $("map").classList.remove("marking"); };
+  const demarrer = (ll, pt) => {
+    latlng = ll; startPt = pt;
+    $("map").classList.add("marking");
+    if(timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      timer = null;
+      $("map").classList.remove("marking");
+      if(latlng){
+        definirPosition(latlng.lat, latlng.lng);
+        if(navigator.vibrate){ try { navigator.vibrate(30); } catch(_){} }   // retour haptique mobile
+      }
+    }, DELAI);
+  };
+  // Souris (desktop)
+  map.on("mousedown", e => {
+    if(e.originalEvent && e.originalEvent.button !== 0) return;
+    demarrer(e.latlng, e.containerPoint);
+  });
+  map.on("mousemove", e => {
+    if(timer && startPt && e.containerPoint.distanceTo(startPt) > TOL) annuler();
+  });
+  map.on("mouseup", annuler);
+  map.on("dragstart zoomstart movestart", annuler);
+
+  // Tactile (mobile) : on gère explicitement pour un appui long fiable.
+  const cont = map.getContainer();
+  cont.addEventListener("touchstart", ev => {
+    if(ev.touches.length !== 1) { annuler(); return; }   // un seul doigt (pas de pinch)
+    const t = ev.touches[0];
+    const pt = map.mouseEventToContainerPoint(t);
+    const ll = map.containerPointToLatLng(pt);
+    demarrer(ll, pt);
+  }, {passive: true});
+  cont.addEventListener("touchmove", ev => {
+    if(!timer) return;
+    const t = ev.touches[0];
+    const pt = map.mouseEventToContainerPoint(t);
+    if(startPt && pt.distanceTo(startPt) > TOL) annuler();
+  }, {passive: true});
+  cont.addEventListener("touchend", annuler, {passive: true});
+  cont.addEventListener("touchcancel", annuler, {passive: true});
+  // Empêche le menu contextuel natif (appui long navigateur) sur la carte.
+  cont.addEventListener("contextmenu", ev => ev.preventDefault());
+})();
+
+// Indice de découverte (une seule fois) : explique l'appui long pour définir sa position.
+try{
+  if(!localStorage.getItem("oe.hintAppui")){
+    setTimeout(() => setStatus("Astuce : appui long sur la carte pour définir votre position de recherche."), 2200);
+    localStorage.setItem("oe.hintAppui", "1");
+  }
+}catch(_){}
 
 $("orsKey").value = localStorage.getItem(LS_KEY) || "";
 $("orsKey").onchange = e => { try { localStorage.setItem(LS_KEY, e.target.value.trim()); } catch(err){} };
@@ -2772,12 +3778,131 @@ appliquerCote();
                   + '<div class="advIn"></div>';
   mapEl.appendChild(panel);
   const dedans = panel.querySelector(".advIn");
-  for(const id of ["distMode", "engine", "fond", "orsKey"]){
+  // Le « Plein (litres) » rejoint les réglages avancés accessibles via l'engrenage.
+  for(const id of ["res", "fond"]){
     const el = $(id);
     if(!el) continue;
     const bloc = (id === "orsKey") ? $("orsBox") : el.parentElement;
     if(bloc) dedans.appendChild(bloc);
   }
+  // Le <details> « Paramètres du coût réel » est désormais vide (plein → engrenage,
+  // consommation → carte) : on le masque pour ne pas laisser un titre orphelin.
+  const det = document.getElementById("detCout");
+  if(det && !det.querySelector("input, select")) det.hidden = true;
+
+  // ---- Diagnostic des services externes ----
+  // Le site dépend de plusieurs services tiers ; le voyant sous l'engrenage montre
+  // d'un coup d'œil lesquels répondent, pour distinguer une panne externe d'un bug.
+  // (Le détail s'affiche dans la bulle du voyant, plus dans ce popover.)
+
+  // Chaque service : un libellé, une URL de test légère, et une méthode.
+  // On teste par une requête minimale ; en cas de CORS, un service joignable peut
+  // apparaître indisponible ici tout en fonctionnant : on le mentionne dans l'aide.
+  const SERVICES = [
+    {cle: "carbFR", nom: "Prix carburants (France)",
+     url: STATIONS + "?limit=1"},
+    {cle: "itiFR", nom: "Itinéraire France (IGN)",
+     url: "https://data.geopf.fr/navigation/itineraire?resource=bdtopo-osrm&start=2.35,48.85&end=2.36,48.86&profile=car&optimization=fastest&geometryFormat=geojson&distanceUnit=kilometer"},
+    {cle: "geoFR", nom: "Recherche de lieux (IGN)",
+     url: COMPLETION + "?text=Paris&type=PositionOfInterest&maximumResponses=1&terr=METROPOLE"},
+    {cle: "commFR", nom: "Communes / mairies (geo.api.gouv)",
+     url: GEO_COMMUNES + "?nom=Limoges&fields=centre&format=json&limit=1"},
+    {cle: "fond", nom: "Fond de carte (OpenStreetMap)",
+     url: "https://tile.openstreetmap.org/6/32/22.png"},
+    // Services espagnols — surveillés seulement si le volet Espagne est actif.
+    ...(ES_ACTIF ? [
+      {cle: "carbES", nom: "Prix carburants (Espagne)", url: ES_BASE + "/"},
+      {cle: "itiES", nom: "Itinéraire Espagne (CartoCiudad)",
+       url: CARTOCIUDAD_ROUTE + "?orig=40.4,-3.7&dest=40.41,-3.69&locale=es&vehicle=CAR"},
+      {cle: "geoES", nom: "Recherche de lieux (CartoCiudad)",
+       url: CARTOCIUDAD_GEO + "?q=Madrid&limit=1"}
+    ] : [])
+  ];
+
+  // (Le rendu détaillé se fait désormais directement dans majBadge, via la bulle du voyant.)
+
+  async function testerUn(s){
+    // Les tuiles de carte se testent par chargement d'image (pas de contrainte CORS
+    // pour l'affichage) : plus représentatif que fetch pour ce type de ressource.
+    if(s.cle === "fond"){
+      return new Promise(resolve => {
+        const img = new Image();
+        const to = setTimeout(() => { img.src = ""; resolve("ko"); }, 6000);
+        img.onload  = () => { clearTimeout(to); resolve("ok"); };
+        img.onerror = () => { clearTimeout(to); resolve("ko"); };
+        img.src = s.url + "?_=" + Date.now();
+      });
+    }
+    // Requête courte avec délai maximal ; on ne lit pas le corps, juste la réponse.
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 6000);
+    try{
+      const r = await fetch(s.url, {method: "GET", signal: ctrl.signal, mode: "cors"});
+      clearTimeout(to);
+      return r.ok ? "ok" : "ko";
+    }catch(e){
+      clearTimeout(to);
+      // Un échec peut être réseau (ko) ou CORS (indéterminé). On ne peut pas les
+      // distinguer de façon fiable côté client → on marque « non concluant ».
+      return "cors";
+    }
+  }
+
+  let testEnCours = false;
+  // Résumé pour la pastille carte : rouge si un service est franchement injoignable,
+  // vert si au moins les services essentiels répondent, gris tant qu'on ne sait pas.
+  function majBadge(res){
+    const dot = document.getElementById("svcBadgeDot");
+    const pop = document.getElementById("svcBadgePop");
+    if(!dot) return;
+    const vals = SERVICES.map(s => res[s.cle]);
+    const unKo = vals.some(v => v === "ko");
+    const enCours = vals.some(v => v === "test");
+    dot.textContent = enCours ? "⏳" : unKo ? "🔴" : "🟢";
+    if(pop){
+      const lignes = SERVICES.map(s => {
+        const st = res[s.cle];
+        const p = st === "ok" ? "🟢" : st === "ko" ? "🔴" : st === "test" ? "⏳" : "⚪";
+        return `<span class="sbLine">${p} ${s.nom}</span>`;
+      }).join("");
+      pop.innerHTML = '<div class="sbHead"><b>État des services</b>'
+                    + '<button type="button" class="sbRefresh" title="Retester">↻</button></div>'
+                    + lignes
+                    + '<span class="sbNote">⚪ = non concluant (souvent un blocage CORS côté '
+                    + 'navigateur ; le service peut fonctionner malgré tout).</span>';
+      const rf = pop.querySelector(".sbRefresh");
+      if(rf) rf.onclick = ev => { ev.stopPropagation(); testerServices(); };
+    }
+  }
+
+  async function testerServices(){
+    if(testEnCours) return;
+    testEnCours = true;
+    const res = {};
+    SERVICES.forEach(s => res[s.cle] = "test");
+    majBadge(res);
+    await Promise.all(SERVICES.map(async s => {
+      const st = await testerUn(s);
+      res[s.cle] = (st === "cors") ? "cors" : st;   // "cors" affiché comme ⚪
+      majBadge(res);
+    }));
+    testEnCours = false;
+  }
+  panel._testerServices = testerServices;
+
+  // Voyant d'état (sous l'engrenage) : clic = affiche le détail + relance le test.
+  const badge = document.getElementById("svcBadge");
+  if(badge){
+    const pop = document.getElementById("svcBadgePop");
+    const basculer = () => {
+      if(pop) pop.hidden = !pop.hidden;
+      if(!testEnCours) testerServices();
+    };
+    badge.onclick = basculer;
+    badge.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); basculer(); } };
+  }
+  // Premier diagnostic automatique peu après le chargement (voyant informé d'emblée).
+  setTimeout(() => { if(!testEnCours) testerServices(); }, 1500);
 
   // Bouton engrenage flottant
   const gear = document.createElement("button");
@@ -2796,11 +3921,14 @@ appliquerCote();
                  + '</svg>';
   mapEl.appendChild(gear);
 
+  let svcTeste = false;
   const toggle = (ouvrir) => {
     const open = ouvrir === undefined ? panel.hidden : ouvrir;
     panel.hidden = !open;
     gear.setAttribute("aria-expanded", String(open));
     gear.classList.toggle("on", open);
+    // Au premier affichage du panneau, on lance le diagnostic des services.
+    if(open && !svcTeste && panel._testerServices){ svcTeste = true; panel._testerServices(); }
   };
   gear.onclick = () => toggle();
   panel.querySelector("#advClose").onclick = () => toggle(false);
@@ -2860,6 +3988,15 @@ $("recentrer").onclick = () => {
 };
 
 $("legalBtn").onclick = () => { $("legalBox").hidden = false; };
+// Bouton de don : actif seulement si un lien Ko-fi est renseigné, sinon on masque le bloc.
+(function initKofi(){
+  const btn = document.getElementById("kofiBtn");
+  const bloc = document.querySelector(".soutien");
+  if(!btn || !bloc) return;
+  // Le bloc reste toujours visible ; le bouton pointe vers le lien Ko-fi configuré
+  // (ou la page générique tant que le lien personnel n'a pas été renseigné).
+  btn.href = (KOFI_URL && /^https?:\/\//.test(KOFI_URL)) ? KOFI_URL : "https://ko-fi.com/";
+})();
 $("legalX").onclick = () => { $("legalBox").hidden = true; };
 $("legalBox").onclick = e => { if(e.target === $("legalBox")) $("legalBox").hidden = true; };
 $("go").onclick = search;
@@ -2889,6 +4026,7 @@ $("geoBtn").onclick = () => {
   setStatus("Localisation en cours…");
   const ok = p => {
     $("dep").value = p.coords.latitude.toFixed(5) + "," + p.coords.longitude.toFixed(5);
+    choixGeo.set("dep", [p.coords.latitude, p.coords.longitude]);
     const prec = p.coords.accuracy != null ? ` (précision ~${Math.round(p.coords.accuracy)} m)` : "";
     setStatus(`Position récupérée${prec}.`);
   };
@@ -2930,7 +4068,7 @@ $("geoBtn").onclick = () => {
 
   const poser = (y, anim=true) => {
     side.style.setProperty("--sheet-y", y + "px");
-    if(anim) setTimeout(() => { if(window.map) map.invalidateSize(); }, 300);
+    if(anim) setTimeout(() => map.invalidateSize(), 300);
   };
   const allerA = (nom) => { etat = nom; poser(crans()[nom]); };
   const appliquer = () => {
@@ -2978,8 +4116,83 @@ $("geoBtn").onclick = () => {
   mq.addEventListener ? mq.addEventListener("change", appliquer) : mq.addListener(appliquer);
   window.addEventListener("resize", () => { if(mq.matches && !dragging) allerA(etat); });
   appliquer();
-  setTimeout(() => { if(window.map) map.invalidateSize(); }, 400);
+  setTimeout(() => map.invalidateSize(), 400);
 })();
+
+// ---------------------------------------------------- autocomplétion villes
+function attacherAutocomplete(input){
+  if(!input) return;
+  const field = input.closest(".field") || input.parentElement;
+  const panel = document.createElement("div");
+  panel.className = "acPanel"; panel.hidden = true;
+  field.appendChild(panel);
+
+  let items = [], sel = -1, timer = null, seq = 0;
+
+  const fermer = () => { panel.hidden = true; sel = -1; };
+  const rendre = (liste) => {
+    items = liste;
+    if(!liste.length){ panel.innerHTML = `<div class="acEmpty">Aucun lieu trouvé</div>`; panel.hidden = false; return; }
+    panel.innerHTML = liste.map((s, i) => {
+      const dr = s.pays === "ES" ? "🇪🇸" : (s.pays === "FR" ? "🇫🇷" : "📍");
+      const kind = s.kind === "commune" ? "ville" : (s.kind === "adresse" ? "adresse" : "");
+      const det = [kind, s.detail].filter(Boolean).join(" · ");
+      return `<div class="acItem" data-i="${i}">`
+        + `<span class="flag ${s.pays === "ES" ? "es" : ""}">${dr}</span>`
+        + `<span class="lab">${esc(s.label || "?")}</span>`
+        + `<span class="det">${esc(det)}</span></div>`;
+    }).join("");
+    panel.hidden = false;
+    [...panel.querySelectorAll(".acItem")].forEach(el => {
+      el.onmousedown = e => { e.preventDefault(); choisir(parseInt(el.dataset.i, 10)); };
+    });
+  };
+  const choisir = (i) => {
+    const s = items[i]; if(!s) return;
+    input.value = s.label;
+    // On ne pose un point provisoire que si les coordonnées sont plausibles
+    // (évite le pin « au milieu de l'Atlantique » quand CartoCiudad renvoie 0,0).
+    const coordsOK = isFinite(s.la) && isFinite(s.lo)
+                  && !(Math.abs(s.la) < 0.01 && Math.abs(s.lo) < 0.01);
+    if(coordsOK) choixGeo.set(input.id, [s.la, s.lo]);
+    fermer();
+    if(s.kind === "commune" && s.pays === "FR"){
+      // Commune française : on affine sur la mairie via l'IGN.
+      mairieCommune(s.nomCommune || s.label, s.cp).then(co => {
+        if(co) choixGeo.set(input.id, co);
+      }).catch(() => {});
+    }else if(s.pays === "ES" && (!s.coordSure)){
+      // Ville/adresse espagnole sans coordonnées ponctuelles fiables : on géolocalise
+      // précisément via l'endpoint « find » de CartoCiudad.
+      findCartoCiudad(s.requete || s.label).then(co => {
+        if(co) choixGeo.set(input.id, co);
+      }).catch(() => {});
+    }
+  };
+  const chercher = () => {
+    const q = input.value;
+    choixGeo.delete(input.id);          // toute frappe invalide le choix précédent
+    if(q.trim().length < 2){ fermer(); return; }
+    const mien = ++seq;
+    suggerer(q).then(liste => { if(mien === seq) rendre(liste); })
+               .catch(() => { if(mien === seq) fermer(); });
+  };
+
+  input.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(chercher, 280); });
+  input.addEventListener("focus", () => { if(items.length && input.value.trim().length >= 2) panel.hidden = false; });
+  input.addEventListener("blur", () => setTimeout(fermer, 120));
+  input.addEventListener("keydown", e => {
+    if(panel.hidden) return;
+    if(e.key === "ArrowDown"){ e.preventDefault(); sel = Math.min(items.length - 1, sel + 1); }
+    else if(e.key === "ArrowUp"){ e.preventDefault(); sel = Math.max(0, sel - 1); }
+    else if(e.key === "Enter"){ if(sel >= 0){ e.preventDefault(); choisir(sel); } return; }
+    else if(e.key === "Escape"){ fermer(); return; }
+    else return;
+    [...panel.querySelectorAll(".acItem")].forEach((el, i) => el.classList.toggle("sel", i === sel));
+  });
+}
+attacherAutocomplete($("dep"));
+attacherAutocomplete($("arr"));
 
 applyMode();
 majResume();
