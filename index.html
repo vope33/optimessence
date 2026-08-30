@@ -55,8 +55,59 @@ body{font-family:var(--sans);color:var(--text);background:var(--ink);font-size:1
 #app{display:flex;height:100dvh;overflow:hidden}
 
 #sheetGrip{display:none}
+#mHead{display:none}
+#welcome{display:none}
+/* Modale d'accueil (mobile) : par-dessus la carte au premier lancement */
+#welcome:not([hidden]){display:flex;position:fixed;inset:0;z-index:2000;
+  align-items:center;justify-content:center;padding:18px;
+  background:rgba(8,11,16,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.wCard{position:relative;width:100%;max-width:420px;max-height:88dvh;overflow-y:auto;
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:22px 20px calc(20px + env(safe-area-inset-bottom));box-shadow:0 20px 60px rgba(0,0,0,.6)}
+#wClose{position:absolute;top:10px;right:12px;background:transparent;border:0;color:var(--muted);
+  font-size:26px;line-height:1;cursor:pointer;width:36px;height:36px}
+#wClose:hover{color:var(--text)}
+.wLogo{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.wLogo .mark{width:46px;height:30px;flex:0 0 46px}
+.wLogo .lg{font-weight:300;color:#cfd8e6;font-size:23px}
+.wLogo .hv{font-weight:700;color:#fff;font-size:23px}
+.wIntro{margin:0 0 18px;font:400 15px var(--liste);color:var(--muted);line-height:1.5}
+.wLab{display:block;margin:12px 0 5px;font:600 14px var(--liste);color:var(--text)}
+.wLab b{color:var(--accent)}
+.wField{display:flex;gap:8px;position:relative}
+.wField input{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+  color:var(--text);font-size:16px;padding:12px 12px}
+#wGeo{flex:0 0 auto;width:48px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+  color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center}
+#wClear{flex:0 0 auto;width:34px;background:transparent;border:1px solid var(--line);border-radius:9px;
+  color:var(--muted);font-size:20px;line-height:1;cursor:pointer}
+#wClear:hover{color:var(--text);border-color:var(--accent)}
+#wGeo:hover{border-color:var(--accent);color:var(--accent)}
+.wCarbBtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.wCarbBtns button{background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+  color:var(--text);font:600 15px var(--liste);padding:12px 8px;cursor:pointer;
+  text-align:center;transition:background .12s,border-color .12s}
+.wCarbBtns button:hover{border-color:var(--accent)}
+.wCarbBtns button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+#wRayon,#wConso{width:100%;margin-top:6px}
+.wGo{width:100%;margin-top:18px;background:var(--accent);color:#fff;border:0;border-radius:10px;
+  font:700 17px var(--liste);padding:15px;cursor:pointer;
+  position:sticky;bottom:0;z-index:2;box-shadow:0 -8px 16px 6px var(--panel)}
+.wGo:hover{background:var(--accent-2)}
+.wMap{width:100%;margin-top:10px;background:transparent;border:1px solid var(--line);border-radius:10px;
+  color:var(--text);font:500 14px var(--liste);padding:12px;cursor:pointer}
+.wMap:hover{border-color:var(--accent)}
+#wScrollHint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+  background:var(--accent);color:#fff;font:600 13px var(--liste);padding:7px 14px;border-radius:16px;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);pointer-events:none;z-index:5;
+  animation:hintPulse 1.4s ease-in-out infinite}
+@keyframes hintPulse{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(4px)}}
+.wNote{margin:6px 0 0;font:400 14px var(--liste);color:var(--muted);line-height:1.4}
+.wCheck{display:flex;align-items:center;gap:10px;margin-top:14px;font:500 15px var(--liste);
+  color:var(--text);cursor:pointer}
+.wCheck input{width:20px;height:20px;flex:0 0 auto}
 #side{width:378px;flex:0 0 378px;background:var(--panel);border-right:1px solid var(--line);
-  display:flex;flex-direction:column;overflow-y:auto}
+  display:flex;flex-direction:column;overflow-y:auto;padding-bottom:104px}
 .head{padding:10px 20px 14px;border-bottom:1px solid var(--line);position:relative}
 .eyebrow{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
   color:var(--accent);display:flex;align-items:center;justify-content:space-between;gap:8px;
@@ -218,6 +269,9 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   padding:6px 12px;border-radius:16px;pointer-events:none;white-space:nowrap}
 .pin{background:#fff;border-radius:50%;border:2px solid #111;width:22px;height:22px;
   font:700 12px/18px var(--sans);text-align:center;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+@media (max-width:900px){
+  .pin{width:32px;height:32px;font-size:16px;line-height:28px;border-width:2.5px}
+}
 .leaflet-popup-content{font-family:var(--sans);font-size:13px}
 .leaflet-popup-content b{font-family:var(--mono)}
 [hidden]{display:none !important}
@@ -305,12 +359,20 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   padding:2px 6px;box-shadow:0 2px 8px rgba(0,0,0,.45);white-space:nowrap}
 .prixTip::before{display:none}
 .legal{padding:14px 20px 22px;border-top:1px solid var(--line);margin-top:8px}
-.soutien{position:sticky;bottom:0;z-index:5;margin:0;padding:12px 14px;
+/* Bloc « Offrir un café » : hors du panneau (qui a un transform sur mobile,
+   ce qui empêcherait position:fixed de se référer au viewport). Fixé en bas
+   de la colonne panneau sur desktop, pleine largeur en bas d'écran sur mobile. */
+.soutien{position:fixed;bottom:0;left:0;width:378px;z-index:1500;margin:0;padding:12px 14px;
   border-top:1px solid var(--line);
   background:var(--panel);
   box-shadow:0 -6px 18px rgba(0,0,0,.28)}
+#app.droite .soutien{left:auto;right:0}
 .soutienTxt{margin:0 0 10px;font:400 12.5px var(--liste);color:var(--muted);line-height:1.45}
 .soutienTxt b{color:var(--text)}
+.soutienLegal{display:none}
+.soutienLegal button{background:none;border:0;color:var(--accent);cursor:pointer;
+  font:500 12px var(--liste);padding:0;text-decoration:underline}
+.soutienLegal span{color:var(--muted);font:500 12px var(--liste)}
 .posBtn{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:9px;
   color:var(--text);font:600 13px var(--liste);padding:9px 12px;cursor:pointer;
   transition:border-color .12s,background .12s}
@@ -356,8 +418,8 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   #map{order:0;position:fixed;inset:0;height:100dvh;width:100%;min-height:0;z-index:0}
 
   #side{
-    order:1;position:fixed;left:0;right:0;bottom:0;width:100%;
-    height:90dvh;max-height:90dvh;z-index:1400;
+    order:1;position:fixed;left:0;right:0;bottom:var(--cafe-h, 104px);width:100%;
+    height:calc(90dvh - var(--cafe-h, 104px));max-height:calc(90dvh - var(--cafe-h, 104px));z-index:1400;
     border-right:0;border-top:0;border-radius:18px 18px 0 0;
     background:var(--panel);box-shadow:0 -8px 30px rgba(0,0,0,.5);
     display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;
@@ -373,7 +435,21 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
     border-radius:18px 18px 0 0}
   #sheetGrip .gripBar{width:42px;height:5px;border-radius:3px;background:var(--line)}
   #side.dragging #sheetGrip{cursor:grabbing}
-  .head{padding:4px 16px 8px}
+  /* Barre logo fixe en haut de l'écran (toujours visible sur mobile). */
+  #mHead{display:flex;position:fixed;top:0;left:0;right:0;z-index:1450;
+    align-items:center;gap:9px;
+    padding:0 16px;padding-top:env(safe-area-inset-top);
+    height:calc(52px + env(safe-area-inset-top));
+    background:var(--panel);border-bottom:1px solid var(--line);box-shadow:0 2px 12px rgba(0,0,0,.35)}
+  #mHead .mark{width:40px;height:26px;flex:0 0 40px}
+  #mHead .lg{font-weight:300;color:#cfd8e6;font-size:19px}
+  #mHead .hv{font-weight:700;color:#fff;font-size:19px}
+  #mReglages{margin-left:auto;flex:0 0 auto;background:var(--accent);color:#fff;border:0;
+    border-radius:9px;font:600 14px var(--liste);padding:9px 16px;cursor:pointer}
+  /* le header interne du panneau redevient normal (le logo fixe est #mHead) */
+  /* Le logo est déjà dans la barre fixe #mHead : on masque le header interne du
+     volet pour laisser toute la place aux résultats. */
+  .head{display:none}
   .head p{display:none}
   .head .eyebrow{display:none}
   .form{padding:12px 16px}
@@ -384,7 +460,7 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   /* cibles tactiles : 44 px minimum */
   input[type=text],input[type=password],select{padding:13px 12px;font-size:16px}
   .seg button{padding:11px 4px;font-size:14px}
-  button.go{padding:15px;font-size:15.5px;position:sticky;bottom:0;z-index:5}
+  button.go{padding:15px;font-size:15.5px;position:sticky;bottom:92px;z-index:5}
   .chk{padding:6px 0;font-size:14.5px}
   .chk input{width:20px;height:20px}
   .modebar button{padding:13px 4px;font-size:15.5px}
@@ -393,8 +469,10 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   #legalIn{padding:18px;font-size:13.5px}
 
   /* fiche station : au-dessus de la carte, sous la feuille */
-  #card{top:auto;bottom:calc(38dvh + 12px);left:8px;right:8px;width:auto;max-height:44dvh;
-    font-size:14.5px;overflow-wrap:anywhere;line-height:1.55;z-index:1300}
+  /* Fiche station : compacte, en haut de la carte (sous la barre logo), pour
+     laisser la station et son tracé bien visibles sur la carte en dessous. */
+  #card{top:calc(56px + env(safe-area-inset-top) + 8px);bottom:auto;left:8px;right:8px;width:auto;
+    max-height:38dvh;font-size:14.5px;overflow-wrap:anywhere;line-height:1.5;z-index:1300}
   #card b{font-size:15px}
 
   /* boutons flottants : config en haut-gauche, action en bas-droite */
@@ -413,37 +491,88 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   /* .item */
   .item{padding:12px 16px}
 
-  /* --- polices agrandies sur smartphone --- */
-  label{font-size:13.5px}
-  .head h1{font-size:22px}
+  /* La modale est l'unique interface de saisie sur mobile : on masque le formulaire
+     du volet, la barre de réglages rapides et l'engrenage. Les vrais champs restent
+     dans le DOM (pilotés par la modale), mais ne sont plus visibles ni utilisés ici.
+     Le volet ne sert plus qu'à afficher la liste des résultats. */
+  .form{display:none}
+  #mcToggle, #mapControls{display:none}
+  #advGear, #advPanel{display:none}
+  .modebar{display:none}
+
+  /* Bloc « Offrir un café » : fixé en bas de l'écran, pleine largeur (mobile). */
+  .soutien{position:fixed;left:0;right:0;width:auto;bottom:0;z-index:1600;
+    border-radius:14px 14px 0 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    box-shadow:0 -6px 20px rgba(0,0,0,.4)}
+  #app.droite .soutien{left:0;right:0}
+  .soutienTxt{font-size:14px;margin:0 0 8px}
+  .kofi{font-size:15px}
+  /* accès aux mentions légales + copyright, toujours visible dans le bloc café fixe */
+  .soutienLegal{display:block;margin:8px 0 0;text-align:center}
+  .soutienLegal button,.soutienLegal span{font-size:14px}
+
+  /* --- polices agrandies sur smartphone (minimum 14 px partout) --- */
+  label{font-size:14px}
+  .head h1{font-size:23px}
   .head p{font-size:15px}
   .src,.hint{font-size:14px}
   .status{font-size:16px;padding:14px 18px;line-height:1.5}
-  .legend{font-size:13px}
+  .legend{font-size:14px}
   .item{font-size:16px}
-  .item .who b{font-size:15px}
-  .pill{font-size:14px}
-  .meta{font-size:13px}
-  .meta b{font-size:14px}
+  .item .who b{font-size:17px}
+  .item .who>span{font-size:15px}
+  .item .who>span.rent{font-size:14.5px}
+  .item .who .why{font-size:14px}
+  .pill{font-size:16px}
+  .meta{font-size:14px}
+  .meta b{font-size:16px}
+  .num{font-size:14px}
+  .consoAide{font-size:14px}
+  .copyright{font-size:14px}
   #legalIn{font-size:15.5px;line-height:1.6}
   #legalIn h2{font-size:20px}
   #legalIn h3{font-size:16px}
   input[type=text],input[type=password],select{font-size:16.5px}
   .modebar button{font-size:16.5px}
-  button.go{font-size:17px}
+  button.go{font-size:17.5px}
   /* barre de puces overlay */
-  .mc-chip > label{font-size:12.5px}
+  .mc-chip > label{font-size:14px}
   .mc-chip select{font-size:16px;padding:10px 30px 10px 12px}
   .mc-chip .seg button{font-size:15px;padding:10px 15px}
   .mc-chip output{font-size:15px}
+  #consoNum{font-size:17px}
+  .consoVal small{font-size:14px}
   label.chk.mc-check{font-size:15.5px;padding:11px 14px}
   label.chk.mc-check input{width:20px;height:20px}
   #mcToggle{font-size:15px}
   #mapStatus{font-size:16.5px;padding:16px 22px}
   #advPanel{font-size:16px}
-  #advPanel .advHead{font-size:14px}
+  #advPanel .advHead{font-size:15px}
+  #svcBadgePop .sbLine{font-size:14px}
+  #svcBadgePop .sbHead{font-size:14px}
+  #svcBadgePop .sbNote{font-size:14px}
+  /* éléments qui restaient sous 14 px sur mobile */
+  .acItem .lab{font-size:15px}
+  .acItem .det{font-size:14px}
+  .acItem .flag{font-size:14px}
+  .acEmpty{font-size:14px}
+  .tag{font-size:14px}
+  summary{font-size:14px}
+  .rng output{font-size:14px}
+  .filtres{font-size:14px}
+  #legalIn code{font-size:14px}
+  #legalIn h3{font-size:16px}
+  .legal button{font-size:14px}
+  .leaflet-popup-content{font-size:14px}
+  .item.est .num::after{font-size:14px}
+  .pill small{font-size:14px}
+  .prixTip{font-size:14px}
+  li.sep span{font-size:14px}
+  button.clear{font-size:14px}
+  .posBtn{font-size:14px}
   /* la fiche station couvre le bouton recentrer : on le masque tant qu'elle est ouverte */
   #map.ficheOuverte #recentrer{display:none}
+  #map.ficheOuverte #svcBadge{display:none}
   /* annuler les décalages « fiche ouverte » du desktop (fiche en bas sur mobile) */
   #map.ficheOuverte #advGear{right:auto}
   #map.ficheOuverte #advPanel{right:8px;left:8px}
@@ -561,6 +690,38 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
 </noscript>
 
 <div id="app">
+  <div id="welcome" hidden>
+    <div class="wCard">
+      <button type="button" id="wClose" aria-label="Fermer">×</button>
+      <div class="wLogo"><svg class="mark" viewBox="-46 -30 92 60" aria-hidden="true"><g transform="translate(-23 0)"><path d="M0 -26 C-11 -26 -20 -17 -20 -6 C-20 8 0 26 0 26 C0 26 20 8 20 -6 C20 -17 11 -26 0 -26 Z" fill="#f59e0b"/><circle cx="0" cy="-8" r="7.5" fill="#fff"/></g><g transform="translate(23 0) rotate(180)"><path d="M0 -26 C-11 -26 -20 -17 -20 -6 C-20 8 0 26 0 26 C0 26 20 8 20 -6 C20 -17 11 -26 0 -26 Z" fill="#f59e0b"/><circle cx="0" cy="-8" r="7.5" fill="#fff"/></g></svg><span><span class="lg">Optim</span><span class="hv">Essence</span></span></div>
+      <p class="wIntro">Trouvez la station la moins chère autour de vous, coût du détour compris.</p>
+
+      <label class="wLab" for="wDep">Votre position</label>
+      <div class="wField">
+        <input id="wDep" type="text" placeholder="Ville, adresse, ou 44.80,-0.60" autocomplete="off">
+        <button type="button" id="wClear" title="Effacer" hidden>×</button>
+        <button type="button" id="wGeo" title="Ma position actuelle"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.4"/><circle cx="12" cy="12" r="7.3"/><line x1="12" y1="1.4" x2="12" y2="4.6"/><line x1="12" y1="19.4" x2="12" y2="22.6"/><line x1="1.4" y1="12" x2="4.6" y2="12"/><line x1="19.4" y1="12" x2="22.6" y2="12"/></svg></button>
+      </div>
+
+      <label class="wLab" for="wCarb">Carburant</label>
+      <div id="wCarb" class="wCarbBtns" role="group" aria-label="Carburant"></div>
+
+      <label class="wLab" for="wRayon">Rayon de recherche : <b id="wRayonVal">8 km</b></label>
+      <input id="wRayon" type="range" min="1" max="30" step="1" value="8">
+
+      <label class="wLab" for="wConso">Consommation : <b id="wConsoVal">6.2 L/100</b></label>
+      <input id="wConso" type="range" min="3" max="20" step="0.1" value="6.2">
+      <p class="wNote">Elle détermine le carburant brûlé par le détour, donc le coût réel
+      du plein et la rentabilité d'une station plus éloignée.</p>
+
+      <label class="wCheck"><input type="checkbox" id="wNoHw"> Exclure les stations d'autoroute</label>
+      <label class="wCheck"><input type="checkbox" id="wMajor"> Compagnies pétrolières seulement</label>
+
+      <button type="button" id="wGo" class="wGo">Rechercher</button>
+    </div>
+    <div id="wScrollHint" hidden>▾ Faites défiler pour tout voir</div>
+  </div>
+  <div id="mHead" aria-hidden="true"><svg class="mark" viewBox="-46 -30 92 60"><g transform="translate(-23 0)"><path d="M0 -26 C-11 -26 -20 -17 -20 -6 C-20 8 0 26 0 26 C0 26 20 8 20 -6 C20 -17 11 -26 0 -26 Z" fill="#f59e0b"/><circle cx="0" cy="-8" r="7.5" fill="#fff"/></g><g transform="translate(23 0) rotate(180)"><path d="M0 -26 C-11 -26 -20 -17 -20 -6 C-20 8 0 26 0 26 C0 26 20 8 20 -6 C20 -17 11 -26 0 -26 Z" fill="#f59e0b"/><circle cx="0" cy="-8" r="7.5" fill="#fff"/></g></svg><span><span class="lg">Optim</span><span class="hv">Essence</span></span><button type="button" id="mReglages">Rechercher</button></div>
   <aside id="side">
     <div id="sheetGrip" aria-hidden="true"><span class="gripBar"></span></div>
     <div class="head">
@@ -749,13 +910,15 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
       <button type="button" id="legalBtn">Mentions légales, sources et données personnelles</button>
       <p class="copyright">© 2026 OptimEssence · Tous droits réservés</p>
     </footer>
-    <div class="soutien" id="soutien">
-      <p class="soutienTxt">OptimEssence est <b>gratuit et sans publicité</b>.
-      S'il vous fait économiser au plein, vous pouvez m'offrir un café.</p>
-      <a id="kofiBtn" class="kofi" href="#" target="_blank" rel="noopener">☕ Offrir un café</a>
-    </div>
     </div>
   </aside>
+  <div class="soutien" id="soutien">
+    <p class="soutienTxt">OptimEssence est <b>gratuit et sans publicité</b>.
+    S'il vous fait économiser au plein, vous pouvez m'offrir un café.</p>
+    <a id="kofiBtn" class="kofi" href="#" target="_blank" rel="noopener">☕ Offrir un café</a>
+    <p class="soutienLegal"><button type="button" id="legalBtn2">Mentions légales &amp; sources</button>
+    <span>· © 2026 OptimEssence</span></p>
+  </div>
   <div id="legalBox" hidden><div id="legalIn">
     <h2>Mentions légales et sources</h2>
     <p style="color:var(--muted);margin:2px 0 0">Comparateur de prix des carburants à partir de données publiques.</p>
@@ -2219,9 +2382,13 @@ function infoMarqueur(m, html){
   m._info = html;
   return m;
 }
-const pin = (txt, color) => L.divIcon({className: "",
-  html: `<div class="pin" style="background:${color}">${txt}</div>`,
-  iconSize: [22, 22], iconAnchor: [11, 11]});
+const estMobile = () => window.matchMedia("(max-width:900px)").matches;
+const pin = (txt, color) => {
+  const d = estMobile() ? 32 : 22;   // bulles plus grandes sur smartphone
+  return L.divIcon({className: "",
+    html: `<div class="pin" style="background:${color}">${txt}</div>`,
+    iconSize: [d, d], iconAnchor: [d/2, d/2]});
+};
 // Marqueur « Ma position » : pin de carte classique (goutte à pointe basse).
 const pinPosition = () => L.divIcon({className: "",
   html: `<svg width="26" height="34" viewBox="0 0 26 34" xmlns="http://www.w3.org/2000/svg">`
@@ -2456,7 +2623,7 @@ function drawStations(cands, top){
     if(!c.relegue){
       majEtiquettes();
       mk.bindTooltip(`${c.prix.toFixed(3)} €/L`, {permanent: true, direction: "top",
-        offset: [0, -9], className: "prixTip", opacity: 1});
+        offset: [0, estMobile() ? -14 : -9], className: "prixTip", opacity: 1});
     }
     const plein = c.prix * resv;
     const detour = c.surcout != null ? c.surcout : 0;
@@ -2561,7 +2728,7 @@ function renderList(cands, top, cutIndex){
       + `<div class="meta" title="Détour aller-retour ajouté">`
       + `<b>${km}</b>${mn || ""}</div>`;
     li.dataset.rang = String(i + 1);
-    const focus = () => selectionner(i + 1, true);
+    const focus = () => { selectionner(i + 1, true); if(typeof window.__voirCarte === "function") window.__voirCarte(); };
     li.onclick = focus;
     li.onkeydown = e => { if(e.key === "Enter") focus(); };
     ul.appendChild(li);
@@ -2585,6 +2752,9 @@ function renderList(cands, top, cutIndex){
     if(mode === "around") tracerAllerRetour(c, brandOf(c.s));
     else if(c.snap)       tracerDetour(c, brandOf(c.s));
   };
+  // Après une recherche, on remonte le volet pour montrer les résultats d'emblée
+  // (sur mobile), au lieu de laisser l'utilisateur le tirer manuellement.
+  if(shown.length && typeof window.__ouvrirResultats === "function") window.__ouvrirResultats();
 }
 
 /**
@@ -3988,6 +4158,7 @@ $("recentrer").onclick = () => {
 };
 
 $("legalBtn").onclick = () => { $("legalBox").hidden = false; };
+{ const lb2 = document.getElementById("legalBtn2"); if(lb2) lb2.onclick = () => { $("legalBox").hidden = false; }; }
 // Bouton de don : actif seulement si un lien Ko-fi est renseigné, sinon on masque le bloc.
 (function initKofi(){
   const btn = document.getElementById("kofiBtn");
@@ -4060,11 +4231,23 @@ $("geoBtn").onclick = () => {
   if(!side || !grip) return;
   const mq = window.matchMedia("(max-width:900px)");
 
-  const crans = () => {
-    const h = window.innerHeight;
-    return { plein: Math.round(h*0.00), moyen: Math.round(h*0.52), reduit: Math.round(h*0.84) };
+  // Le volet est ancré juste au-dessus du bloc « Offrir un café » (fixé en bas) :
+  // on mesure sa hauteur réelle et on la publie en variable CSS. Ainsi le volet et
+  // le café ne se superposent jamais, et la poignée reste toujours accessible.
+  const majCafe = () => {
+    const c = document.getElementById("soutien");
+    const hc = (c && mq.matches) ? c.offsetHeight : 0;
+    document.documentElement.style.setProperty("--cafe-h", (hc || 0) + "px");
   };
-  let etat = "moyen";
+  majCafe();
+
+  const crans = () => {
+    // Hauteur utile du volet (déjà amputée de la bande café via le CSS).
+    const hv = side.offsetHeight || Math.round(window.innerHeight * 0.9);
+    // plein : tout en haut (sous la barre logo). réduit : ne laisse que la poignée.
+    return { plein: 0, moyen: Math.round(hv*0.55), reduit: Math.max(0, hv - 34) };
+  };
+  let etat = "reduit";   // discret au départ (la modale couvre l'écran) ; remonte après recherche
 
   const poser = (y, anim=true) => {
     side.style.setProperty("--sheet-y", y + "px");
@@ -4088,7 +4271,7 @@ $("geoBtn").onclick = () => {
     if(!dragging) return;
     const y = (e.touches ? e.touches[0].clientY : e.clientY);
     const c = crans();
-    let ny = Math.max(c.plein - 20, Math.min(c.reduit + 40, base + (y - y0)));
+    let ny = Math.max(c.plein - 20, Math.min(c.reduit, base + (y - y0)));
     side.style.setProperty("--sheet-y", ny + "px");
   };
   const onUp = () => {
@@ -4113,16 +4296,136 @@ $("geoBtn").onclick = () => {
   const go = document.getElementById("go");
   if(go) go.addEventListener("click", () => { if(mq.matches) setTimeout(() => allerA("moyen"), 50); });
 
+  // Exposé : après une recherche, on déplie le volet (cran « plein ») pour montrer
+  // un maximum de résultats. Effet réel car l'état de départ est « réduit ».
+  window.__ouvrirResultats = () => { if(mq.matches) allerA("plein"); };
+  // Exposé : cliquer une station dans la liste réduit le volet pour révéler la carte.
+  window.__voirCarte = () => { if(mq.matches) allerA("reduit"); };
+
   mq.addEventListener ? mq.addEventListener("change", appliquer) : mq.addListener(appliquer);
-  window.addEventListener("resize", () => { if(mq.matches && !dragging) allerA(etat); });
+  window.addEventListener("resize", () => { majCafe(); if(mq.matches && !dragging) allerA(etat); });
   appliquer();
   setTimeout(() => map.invalidateSize(), 400);
 })();
 
+// ---------------------------------------------------- modale d'accueil (mobile)
+(function accueil(){
+  const w = document.getElementById("welcome");
+  if(!w) return;
+  const mq = window.matchMedia("(max-width:900px)");
+  const wDep = document.getElementById("wDep");
+  const wClear = document.getElementById("wClear");
+  if(wDep && wClear){
+    const majCroix = () => { wClear.hidden = !wDep.value; };
+    wDep.addEventListener("input", majCroix);
+    wClear.onclick = () => { wDep.value = ""; majCroix(); wDep.focus(); };
+    window.__majCroixDep = majCroix;   // appelée après sélection d'une suggestion
+    majCroix();
+  }
+  const wCarb = document.getElementById("wCarb");
+  const wRayon = document.getElementById("wRayon");
+  const wRayonVal = document.getElementById("wRayonVal");
+  const wConso = document.getElementById("wConso");
+  const wConsoVal = document.getElementById("wConsoVal");
+  const wNoHw = document.getElementById("wNoHw");
+  const wMajor = document.getElementById("wMajor");
+
+  const vraiCarb = document.getElementById("carb");
+  const vraiRayon = document.getElementById("rad");
+  const vraiConso = document.getElementById("conso");
+  const vraiNoHw = document.getElementById("noHw");
+  const vraiMajor = document.getElementById("major");
+  const vraiDep = document.getElementById("dep");
+
+  // Crée un bouton par carburant (hors groupe espagnol masqué). La sélection est
+  // mémorisée dans wCarb.dataset.value et reportée vers le vrai <select>.
+  const majBoutonsCarb = () => {
+    [...wCarb.querySelectorAll("button")].forEach(b => {
+      b.setAttribute("aria-pressed", b.dataset.value === wCarb.dataset.value ? "true" : "false");
+    });
+  };
+  if(vraiCarb && wCarb){
+    const grp = vraiCarb.querySelector("optgroup:not([hidden])") || vraiCarb;
+    [...grp.querySelectorAll("option")].forEach(o => {
+      const b = document.createElement("button");
+      b.type = "button"; b.dataset.value = o.value; b.textContent = o.textContent;
+      b.onclick = () => { wCarb.dataset.value = o.value; majBoutonsCarb(); };
+      wCarb.appendChild(b);
+    });
+    wCarb.dataset.value = vraiCarb.value;
+    majBoutonsCarb();
+  }
+  if(wRayon) wRayon.oninput = () => { wRayonVal.textContent = wRayon.value + " km"; };
+  if(wConso) wConso.oninput = () => { wConsoVal.textContent = parseFloat(wConso.value).toFixed(1) + " L/100"; };
+
+  // Pré-remplit la modale à partir de l'état courant des vrais réglages.
+  const synchroniser = () => {
+    if(wDep && vraiDep) wDep.value = vraiDep.value;
+    if(wCarb && vraiCarb){ wCarb.dataset.value = vraiCarb.value; majBoutonsCarb(); }
+    if(wRayon && vraiRayon){ wRayon.value = vraiRayon.value || 15; wRayonVal.textContent = wRayon.value + " km"; }
+    if(wConso && vraiConso){ wConso.value = vraiConso.value || 6.2; wConsoVal.textContent = parseFloat(wConso.value).toFixed(1) + " L/100"; }
+    if(wNoHw && vraiNoHw) wNoHw.checked = vraiNoHw.checked;
+    if(wMajor && vraiMajor) wMajor.checked = vraiMajor.checked;
+  };
+
+  // Indicateur « faites défiler » : visible tant que la modale a du contenu masqué
+  // sous la zone visible ; disparaît une fois le bas atteint.
+  const card = w.querySelector(".wCard");
+  const hint = document.getElementById("wScrollHint");
+  const majHint = () => {
+    if(!card || !hint) return;
+    const reste = card.scrollHeight - card.scrollTop - card.clientHeight;
+    hint.hidden = reste < 24;   // caché quand on est (presque) en bas
+  };
+  if(card) card.addEventListener("scroll", majHint);
+
+  const ouvrir = () => { synchroniser(); w.hidden = false; setTimeout(majHint, 60); };
+  const fermer = () => { w.hidden = true; };
+
+  // Reporte TOUS les choix de la modale vers les vrais réglages.
+  const reporter = () => {
+    if(wCarb && vraiCarb && wCarb.dataset.value){ vraiCarb.value = wCarb.dataset.value; vraiCarb.dispatchEvent(new Event("change")); }
+    if(wRayon && vraiRayon){ vraiRayon.value = wRayon.value; vraiRayon.dispatchEvent(new Event("input")); }
+    if(wConso && vraiConso){ vraiConso.value = wConso.value; vraiConso.dispatchEvent(new Event("input")); }
+    if(wNoHw && vraiNoHw && vraiNoHw.checked !== wNoHw.checked){ vraiNoHw.checked = wNoHw.checked; vraiNoHw.dispatchEvent(new Event("change")); }
+    if(wMajor && vraiMajor && vraiMajor.checked !== wMajor.checked){ vraiMajor.checked = wMajor.checked; vraiMajor.dispatchEvent(new Event("change")); }
+  };
+
+  const appliquerEtChercher = () => {
+    if(wDep && wDep.value.trim() && vraiDep) vraiDep.value = wDep.value.trim();
+    reporter();
+    fermer();
+    if(typeof search === "function") search();
+  };
+
+  const wGo = document.getElementById("wGo");
+  if(wGo) wGo.onclick = appliquerEtChercher;
+
+  const wGeo = document.getElementById("wGeo");
+  if(wGeo) wGeo.onclick = () => {
+    reporter();
+    fermer();
+    const g = document.getElementById("geoBtn");
+    if(g) g.click();   // géolocalisation existante, qui lance la recherche
+  };
+
+  const wClose = document.getElementById("wClose");
+  if(wClose) wClose.onclick = fermer;
+  w.addEventListener("click", e => { if(e.target === w) fermer(); });
+
+  // Bouton « Réglages » de la barre d'en-tête : rouvre la modale (unique IHM de saisie).
+  const mReglages = document.getElementById("mReglages");
+  if(mReglages) mReglages.onclick = ouvrir;
+
+  // À l'ouverture, sur mobile : la modale s'affiche d'emblée.
+  if(mq.matches) setTimeout(ouvrir, 350);
+})();
+
 // ---------------------------------------------------- autocomplétion villes
-function attacherAutocomplete(input){
+function attacherAutocomplete(input, cibleId){
   if(!input) return;
-  const field = input.closest(".field") || input.parentElement;
+  const cle = cibleId || input.id;   // clé choixGeo (permet au champ modale d'alimenter « dep »)
+  const field = input.closest(".field") || input.closest(".wField") || input.parentElement;
   const panel = document.createElement("div");
   panel.className = "acPanel"; panel.hidden = true;
   field.appendChild(panel);
@@ -4150,22 +4453,28 @@ function attacherAutocomplete(input){
   const choisir = (i) => {
     const s = items[i]; if(!s) return;
     input.value = s.label;
+    if(typeof window.__majCroixDep === "function") window.__majCroixDep();   // met à jour la croix
+    // Retire le focus pour refermer le clavier virtuel sur mobile.
+    if(input.blur) input.blur();
+    setTimeout(() => { if(document.activeElement === input) input.blur(); }, 50);
+    // Si le champ est celui de la modale, on reporte aussi vers le vrai champ « dep ».
+    if(cle !== input.id){ const vrai = document.getElementById(cle); if(vrai) vrai.value = s.label; }
     // On ne pose un point provisoire que si les coordonnées sont plausibles
     // (évite le pin « au milieu de l'Atlantique » quand CartoCiudad renvoie 0,0).
     const coordsOK = isFinite(s.la) && isFinite(s.lo)
                   && !(Math.abs(s.la) < 0.01 && Math.abs(s.lo) < 0.01);
-    if(coordsOK) choixGeo.set(input.id, [s.la, s.lo]);
+    if(coordsOK) choixGeo.set(cle, [s.la, s.lo]);
     fermer();
     if(s.kind === "commune" && s.pays === "FR"){
       // Commune française : on affine sur la mairie via l'IGN.
       mairieCommune(s.nomCommune || s.label, s.cp).then(co => {
-        if(co) choixGeo.set(input.id, co);
+        if(co) choixGeo.set(cle, co);
       }).catch(() => {});
     }else if(s.pays === "ES" && (!s.coordSure)){
       // Ville/adresse espagnole sans coordonnées ponctuelles fiables : on géolocalise
       // précisément via l'endpoint « find » de CartoCiudad.
       findCartoCiudad(s.requete || s.label).then(co => {
-        if(co) choixGeo.set(input.id, co);
+        if(co) choixGeo.set(cle, co);
       }).catch(() => {});
     }
   };
@@ -4193,6 +4502,7 @@ function attacherAutocomplete(input){
 }
 attacherAutocomplete($("dep"));
 attacherAutocomplete($("arr"));
+attacherAutocomplete(document.getElementById("wDep"), "dep");   // champ de la modale mobile
 
 applyMode();
 majResume();
