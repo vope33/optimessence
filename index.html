@@ -64,8 +64,11 @@ body{font-family:var(--sans);color:var(--text);background:var(--ink);font-size:1
 .wCard{position:relative;width:100%;max-width:420px;max-height:88dvh;overflow-y:auto;
   background:var(--panel);border:1px solid var(--line);border-radius:16px;
   padding:22px 20px calc(20px + env(safe-area-inset-bottom));box-shadow:0 20px 60px rgba(0,0,0,.6)}
-#wClose{position:absolute;top:10px;right:12px;background:transparent;border:0;color:var(--muted);
-  font-size:26px;line-height:1;cursor:pointer;width:36px;height:36px}
+#wClose{position:sticky;top:0;float:right;margin:-8px -6px 0 0;background:var(--panel);
+  border:1px solid var(--line);border-radius:50%;color:var(--muted);
+  font-size:24px;line-height:1;cursor:pointer;width:38px;height:38px;z-index:6;
+  box-shadow:0 2px 8px rgba(0,0,0,.4)}
+#wClose:hover{color:var(--text);border-color:var(--accent)}
 #wClose:hover{color:var(--text)}
 .wLogo{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .wLogo .mark{width:46px;height:30px;flex:0 0 46px}
@@ -90,6 +93,22 @@ body{font-family:var(--sans);color:var(--text);background:var(--ink);font-size:1
 .wCarbBtns button:hover{border-color:var(--accent)}
 .wCarbBtns button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
 #wRayon,#wConso{width:100%;margin-top:6px}
+.wRayonBtns{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:6px}
+.wRayonBtns button{background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+  color:var(--text);font:700 16px var(--liste);padding:13px 0;cursor:pointer;
+  min-width:0;transition:background .12s,border-color .12s}
+.wRayonBtns button:hover{border-color:var(--accent)}
+.wRayonBtns button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.wStep{display:flex;align-items:stretch;gap:8px;margin-top:6px;width:100%}
+.wStepBtn{flex:0 0 auto;width:48px;background:var(--panel2);border:1px solid var(--line);
+  border-radius:9px;color:var(--text);font-size:24px;line-height:1;cursor:pointer;padding:0}
+.wStepBtn:hover{border-color:var(--accent);color:var(--accent)}
+.wStepVal{flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:0 8px}
+.wStepVal input{flex:1 1 auto;width:100%;min-width:0;background:transparent;border:0;color:var(--text);
+  font:700 20px var(--liste);text-align:center;padding:12px 0}
+.wStepVal input:focus{outline:none}
+.wStepVal small{flex:0 0 auto;color:var(--muted);font-size:14px}
 .wGo{width:100%;margin-top:18px;background:var(--accent);color:#fff;border:0;border-radius:10px;
   font:700 17px var(--liste);padding:15px;cursor:pointer;
   position:sticky;bottom:0;z-index:2;box-shadow:0 -8px 16px 6px var(--panel)}
@@ -335,13 +354,14 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
 /* ---- toast de progression au centre de la carte ---- */
 #mapStatus{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  z-index:1180;pointer-events:none;max-width:min(84%,420px);
-  display:flex;align-items:center;gap:11px;
-  background:rgba(14,18,26,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid var(--line);border-radius:13px;padding:14px 18px;
+  z-index:1180;pointer-events:none;max-width:min(90%,460px);
+  display:flex;align-items:center;gap:12px;
+  background:rgba(14,18,26,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:14px;padding:16px 20px;
   box-shadow:0 10px 34px rgba(0,0,0,.55);
-  font:600 14.5px var(--mono,ui-monospace,monospace);color:var(--text);line-height:1.4;
+  font:600 15px var(--sans);color:var(--text);line-height:1.45;text-align:left;
 }
+#mapStatus .prog{flex:0 0 auto}
 #mapStatus[hidden]{display:none}
 #mapStatus .prog{flex:0 0 auto;width:22px;height:22px}
 #mapStatus .progBg{stroke:rgba(255,255,255,.18);stroke-width:3.5}
@@ -519,6 +539,21 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   .status{font-size:16px;padding:14px 18px;line-height:1.5}
   .legend{font-size:14px}
   .item{font-size:16px}
+  /* Sur smartphone, la grille à 4 colonnes écrase le texte central (rentabilité).
+     On repasse en 2 lignes : prix + distance en haut, nom + rentabilité en dessous
+     sur TOUTE la largeur, pour que le texte respire. */
+  .item{
+    grid-template-columns:auto auto 1fr;
+    grid-template-areas:
+      "num pill meta"
+      "who who who";
+    gap:6px 12px;align-items:center;
+  }
+  .item .num{grid-area:num}
+  .item .pill{grid-area:pill}
+  .item .meta{grid-area:meta;text-align:right;margin-left:auto}
+  .item .who{grid-area:who;min-width:0}
+  .item .who>span.rent{white-space:normal}
   .item .who b{font-size:17px}
   .item .who>span{font-size:15px}
   .item .who>span.rent{font-size:14.5px}
@@ -706,11 +741,21 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
       <label class="wLab" for="wCarb">Carburant</label>
       <div id="wCarb" class="wCarbBtns" role="group" aria-label="Carburant"></div>
 
-      <label class="wLab" for="wRayon">Rayon de recherche : <b id="wRayonVal">8 km</b></label>
-      <input id="wRayon" type="range" min="1" max="30" step="1" value="8">
+      <label class="wLab">Rayon de recherche</label>
+      <div id="wRayonBtns" class="wRayonBtns" role="group" aria-label="Rayon de recherche">
+        <button type="button" data-km="5">5</button>
+        <button type="button" data-km="10">10</button>
+        <button type="button" data-km="15">15</button>
+        <button type="button" data-km="20">20</button>
+        <button type="button" data-km="30">30</button>
+      </div>
 
-      <label class="wLab" for="wConso">Consommation : <b id="wConsoVal">6.2 L/100</b></label>
-      <input id="wConso" type="range" min="3" max="20" step="0.1" value="6.2">
+      <label class="wLab" for="wConsoNum">Consommation</label>
+      <div class="wStep">
+        <button type="button" id="wConsoMoins" class="wStepBtn" aria-label="Diminuer la consommation">−</button>
+        <span class="wStepVal"><input id="wConsoNum" type="number" min="3" max="20" step="0.1" value="6.2" inputmode="decimal" aria-label="Consommation en L/100 km"><small>L/100</small></span>
+        <button type="button" id="wConsoPlus" class="wStepBtn" aria-label="Augmenter la consommation">+</button>
+      </div>
       <p class="wNote">Elle détermine le carburant brûlé par le détour, donc le coût réel
       du plein et la rentabilité d'une station plus éloignée.</p>
 
@@ -1509,6 +1554,22 @@ async function cartociudadListe(q, n){
 // Autocomplétion officielle IGN. type = "PositionOfInterest" (communes/lieux) ou
 // "StreetAddress" (adresses). Renvoie des suggestions normalisées.
 const COMPLETION = "https://data.geopf.fr/geocodage/completion/";
+// Géocodage inverse IGN (coordonnées → adresse). Même fournisseur, même quota
+// (50 req/s par IP), pas de clé. Renvoie l'adresse la plus proche ou null.
+const REVERSE = "https://data.geopf.fr/geocodage/reverse";
+async function adresseDeCoord(la, lo){
+  try{
+    const p = new URLSearchParams({lon: lo.toFixed(6), lat: la.toFixed(6), index: "address", limit: "1"});
+    const r = await fetch(`${REVERSE}?${p}`, {headers: {"Accept": "application/json"}});
+    if(!r.ok) return null;
+    const j = await r.json().catch(() => null);
+    const f = j && j.features && j.features[0];
+    if(!f) return null;
+    const pr = f.properties || {};
+    // « label » contient l'adresse complète (numéro, rue, code postal, commune).
+    return pr.label || [pr.name, pr.postcode, pr.city].filter(Boolean).join(" ") || null;
+  }catch(_){ return null; }
+}
 async function ignCompletion(text, type){
   const p = new URLSearchParams({text, type, maximumResponses: "10", terr: "METROPOLE"});
   try{
@@ -2383,6 +2444,15 @@ function infoMarqueur(m, html){
   return m;
 }
 const estMobile = () => window.matchMedia("(max-width:900px)").matches;
+// Padding de cadrage : sur mobile, on réserve le bas de l'écran (bloc « café » fixe
+// + volet des résultats) pour que les bulles de station n'y soient jamais masquées.
+function fitPad(){
+  if(!estMobile()) return {};
+  const cafe = (document.getElementById("soutien")?.offsetHeight) || 100;
+  // Marge basse = juste la hauteur du café (pour ne pas masquer les bulles),
+  // sans excès pour ne pas trop dézoomer. Marge haute = barre logo.
+  return { paddingTopLeft: [12, 58], paddingBottomRight: [12, Math.round(cafe * 0.7)] };
+}
 const pin = (txt, color) => {
   const d = estMobile() ? 32 : 22;   // bulles plus grandes sur smartphone
   return L.divIcon({className: "",
@@ -3299,7 +3369,7 @@ async function tracerAllerRetour(c, marque){
       bounds.push(...t.retour);
     }
     // En « autour de moi », on cadre l'aller-retour entier : c'est lui qu'on veut voir.
-    if(bounds.length > 1) map.fitBounds(L.latLngBounds(bounds).pad(0.18), {animate: !reduced});
+    if(bounds.length > 1) map.fitBounds(L.latLngBounds(bounds).pad(estMobile() ? 0.05 : 0.18), {animate: !reduced, ...fitPad()});
     const conso = parseFloat($("conso").value) || 6.2;
     const a = t.distAller, r = t.distRetour;
     if(a != null && r != null){
@@ -3448,7 +3518,7 @@ async function searchRoute(){
   const line = L.polyline(res.poly, {color: "#3d7dff", weight: 4, opacity: .9}).addTo(routeLayer);
   L.marker(res.poly[0], {icon: pin("D", "#fff")}).addTo(routeLayer).bindPopup("Départ");
   L.marker(res.poly[res.poly.length - 1], {icon: pin("A", "#fff")}).addTo(routeLayer).bindPopup("Arrivée");
-  map.fitBounds(line.getBounds().pad(0.15), {animate: !reduced});
+  map.fitBounds(line.getBounds().pad(0.15), {animate: !reduced, ...fitPad()});
 
   if(!cands.length){
     markLayer.clearLayers();
@@ -3529,7 +3599,7 @@ async function searchAround(){
   L.marker(origin, {icon: pinPosition()}).addTo(routeLayer).bindPopup("Ma position");
   const disque = L.circle(origin, {radius: rayon * 1000, opacity: 0, fill: false, interactive: false}).addTo(routeLayer);
   dessinerMasqueRayon(origin, rayon * 1000);
-  map.fitBounds(disque.getBounds().pad(0.05), {animate: !reduced});
+  map.fitBounds(disque.getBounds().pad(0.05), {animate: !reduced, ...fitPad()});
 
   if(!cands.length){
     markLayer.clearLayers();
@@ -3607,7 +3677,7 @@ async function searchAround(){
   if(retenues.length){
     const pts = retenues.map(c => [c.la, c.lo]);
     pts.push(origin);
-    map.fitBounds(L.latLngBounds(pts).pad(0.15), {animate: !reduced, maxZoom: 15});
+    map.fitBounds(L.latLngBounds(pts).pad(0.15), {animate: !reduced, maxZoom: 15, ...fitPad()});
   }
   // Résumé fondé sur la meilleure station MESURÉE (jamais une estimation).
   const road = cands.filter(c => c.distanceMode === "road" && !c.relegue)
@@ -4318,15 +4388,47 @@ $("geoBtn").onclick = () => {
   if(wDep && wClear){
     const majCroix = () => { wClear.hidden = !wDep.value; };
     wDep.addEventListener("input", majCroix);
-    wClear.onclick = () => { wDep.value = ""; majCroix(); wDep.focus(); };
+    // Saisie manuelle : on oublie le point GPS mémorisé (il sera re-géocodé au lancement).
+    wDep.addEventListener("input", () => { if(document.activeElement === wDep) choixGeo.delete("dep"); });
+    wClear.onclick = () => { wDep.value = ""; choixGeo.delete("dep"); majCroix(); wDep.focus(); };
     window.__majCroixDep = majCroix;   // appelée après sélection d'une suggestion
     majCroix();
   }
   const wCarb = document.getElementById("wCarb");
-  const wRayon = document.getElementById("wRayon");
-  const wRayonVal = document.getElementById("wRayonVal");
-  const wConso = document.getElementById("wConso");
-  const wConsoVal = document.getElementById("wConsoVal");
+  const wRayonBtns = document.getElementById("wRayonBtns");
+  const wConso = document.getElementById("wConsoNum");
+  // Rayon : boutons-valeurs. La valeur retenue est dans wRayonBtns.dataset.km.
+  const majRayonBtns = () => {
+    if(!wRayonBtns) return;
+    [...wRayonBtns.querySelectorAll("button")].forEach(b => {
+      b.setAttribute("aria-pressed", b.dataset.km === wRayonBtns.dataset.km ? "true" : "false");
+    });
+  };
+  if(wRayonBtns){
+    wRayonBtns.dataset.km = "10";   // défaut ; ajusté à l'ouverture par synchroniser()
+    [...wRayonBtns.querySelectorAll("button")].forEach(b => {
+      b.onclick = () => { wRayonBtns.dataset.km = b.dataset.km; majRayonBtns(); };
+    });
+    majRayonBtns();
+  }
+  // Bornage + boutons −/+ pour rayon et consommation (remplacent les sliders).
+  const bornerNum = (inp, pas) => {
+    let v = parseFloat(inp.value);
+    const min = parseFloat(inp.min), max = parseFloat(inp.max);
+    if(!isFinite(v)) v = parseFloat(inp.defaultValue) || min;
+    v = Math.min(max, Math.max(min, Math.round(v / pas) * pas));
+    // arrondi propre (évite 6.199999)
+    inp.value = (pas < 1) ? v.toFixed(1) : String(Math.round(v));
+    return v;
+  };
+  const cablerStep = (inp, moinsId, plusId, pas) => {
+    if(!inp) return;
+    const mn = document.getElementById(moinsId), pl = document.getElementById(plusId);
+    if(mn) mn.onclick = () => { inp.value = (parseFloat(inp.value) || 0) - pas; bornerNum(inp, pas); };
+    if(pl) pl.onclick = () => { inp.value = (parseFloat(inp.value) || 0) + pas; bornerNum(inp, pas); };
+    inp.onchange = () => bornerNum(inp, pas);
+  };
+  cablerStep(wConso, "wConsoMoins", "wConsoPlus", 0.1);
   const wNoHw = document.getElementById("wNoHw");
   const wMajor = document.getElementById("wMajor");
 
@@ -4355,15 +4457,20 @@ $("geoBtn").onclick = () => {
     wCarb.dataset.value = vraiCarb.value;
     majBoutonsCarb();
   }
-  if(wRayon) wRayon.oninput = () => { wRayonVal.textContent = wRayon.value + " km"; };
-  if(wConso) wConso.oninput = () => { wConsoVal.textContent = parseFloat(wConso.value).toFixed(1) + " L/100"; };
+  // (le rayon et la consommation sont désormais des champs numériques avec −/+)
 
   // Pré-remplit la modale à partir de l'état courant des vrais réglages.
   const synchroniser = () => {
     if(wDep && vraiDep) wDep.value = vraiDep.value;
     if(wCarb && vraiCarb){ wCarb.dataset.value = vraiCarb.value; majBoutonsCarb(); }
-    if(wRayon && vraiRayon){ wRayon.value = vraiRayon.value || 15; wRayonVal.textContent = wRayon.value + " km"; }
-    if(wConso && vraiConso){ wConso.value = vraiConso.value || 6.2; wConsoVal.textContent = parseFloat(wConso.value).toFixed(1) + " L/100"; }
+    if(wRayonBtns && vraiRayon){
+      // On sélectionne le bouton dont la valeur est la plus proche du rayon courant.
+      const cur = parseFloat(vraiRayon.value) || 8;
+      const vals = [...wRayonBtns.querySelectorAll("button")].map(b => parseFloat(b.dataset.km));
+      const proche = vals.reduce((a, b) => Math.abs(b - cur) < Math.abs(a - cur) ? b : a, vals[0]);
+      wRayonBtns.dataset.km = String(proche); majRayonBtns();
+    }
+    if(wConso && vraiConso){ wConso.value = vraiConso.value || 6.2; bornerNum(wConso, 0.1); }
     if(wNoHw && vraiNoHw) wNoHw.checked = vraiNoHw.checked;
     if(wMajor && vraiMajor) wMajor.checked = vraiMajor.checked;
   };
@@ -4385,7 +4492,7 @@ $("geoBtn").onclick = () => {
   // Reporte TOUS les choix de la modale vers les vrais réglages.
   const reporter = () => {
     if(wCarb && vraiCarb && wCarb.dataset.value){ vraiCarb.value = wCarb.dataset.value; vraiCarb.dispatchEvent(new Event("change")); }
-    if(wRayon && vraiRayon){ vraiRayon.value = wRayon.value; vraiRayon.dispatchEvent(new Event("input")); }
+    if(wRayonBtns && vraiRayon && wRayonBtns.dataset.km){ vraiRayon.value = wRayonBtns.dataset.km; vraiRayon.dispatchEvent(new Event("input")); }
     if(wConso && vraiConso){ vraiConso.value = wConso.value; vraiConso.dispatchEvent(new Event("input")); }
     if(wNoHw && vraiNoHw && vraiNoHw.checked !== wNoHw.checked){ vraiNoHw.checked = wNoHw.checked; vraiNoHw.dispatchEvent(new Event("change")); }
     if(wMajor && vraiMajor && vraiMajor.checked !== wMajor.checked){ vraiMajor.checked = wMajor.checked; vraiMajor.dispatchEvent(new Event("change")); }
@@ -4403,10 +4510,27 @@ $("geoBtn").onclick = () => {
 
   const wGeo = document.getElementById("wGeo");
   if(wGeo) wGeo.onclick = () => {
-    reporter();
-    fermer();
-    const g = document.getElementById("geoBtn");
-    if(g) g.click();   // géolocalisation existante, qui lance la recherche
+    // Récupère la position GPS, la convertit en adresse lisible et remplit le champ.
+    // La modale RESTE ouverte : l'utilisateur voit son adresse et peut la corriger.
+    if(!navigator.geolocation){ if(wDep) wDep.placeholder = "Géolocalisation indisponible"; return; }
+    wGeo.disabled = true;
+    const avant = wDep ? wDep.value : "";
+    if(wDep){ wDep.value = ""; wDep.placeholder = "Localisation en cours…"; }
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const la = pos.coords.latitude, lo = pos.coords.longitude;
+      // On mémorise d'emblée le point exact (au cas où le géocodage échoue).
+      choixGeo.set("dep", [la, lo]);
+      const adr = await adresseDeCoord(la, lo);
+      if(wDep){
+        wDep.value = adr || `${la.toFixed(5)},${lo.toFixed(5)}`;
+        wDep.placeholder = "Ville, adresse, ou 44.80,-0.60";
+      }
+      if(typeof window.__majCroixDep === "function") window.__majCroixDep();
+      wGeo.disabled = false;
+    }, (err) => {
+      if(wDep){ wDep.value = avant; wDep.placeholder = "Localisation refusée ou indisponible"; }
+      wGeo.disabled = false;
+    }, {enableHighAccuracy: true, timeout: 10000, maximumAge: 60000});
   };
 
   const wClose = document.getElementById("wClose");
