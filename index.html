@@ -258,7 +258,7 @@ button.clear:hover{color:var(--text)}
   white-space:normal;overflow:visible;text-overflow:clip;padding-left:10px;position:relative}
 .who>span.rent::before{content:"›";position:absolute;left:0;opacity:.55}
 .who>span.rent:first-of-type{margin-top:3px}
-.rent.ok{color:#22c55e}
+.rent.ok{color:#7fca9b}   /* vert adouci (moins de fatigue oculaire que le vert vif) */
 .rent.ko{color:#98a2b1}
 .pill{font:650 13px var(--liste);color:#fff;border-radius:7px;padding:6px 8px;text-align:center;line-height:1.15}
 .pill small{display:block;font:500 9px var(--mono);opacity:.85}
@@ -520,16 +520,20 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   #advGear, #advPanel{display:none}
   .modebar{display:none}
 
-  /* Bloc « Offrir un café » : fixé en bas de l'écran, pleine largeur (mobile). */
+  /* Bloc « Offrir un café » : fixé en bas, compact. Texte à gauche, bouton à droite ;
+     mentions + copyright sur une seule ligne en dessous. */
   .soutien{position:fixed;left:0;right:0;width:auto;bottom:0;z-index:1600;
-    border-radius:14px 14px 0 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
-    box-shadow:0 -6px 20px rgba(0,0,0,.4)}
+    display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px;
+    padding:8px 14px calc(6px + env(safe-area-inset-bottom));
+    border-radius:14px 14px 0 0;box-shadow:0 -6px 20px rgba(0,0,0,.4)}
   #app.droite .soutien{left:0;right:0}
-  .soutienTxt{font-size:14px;margin:0 0 8px}
-  .kofi{font-size:15px}
-  /* accès aux mentions légales + copyright, toujours visible dans le bloc café fixe */
-  .soutienLegal{display:block;margin:8px 0 0;text-align:center}
-  .soutienLegal button,.soutienLegal span{font-size:14px}
+  .soutienTxt{grid-column:1;grid-row:1;font-size:13px;margin:0;line-height:1.35}
+  .soutienTxt2{display:none}   /* 2e phrase masquée sur mobile pour un pied compact */
+  .kofi{grid-column:2;grid-row:1;font-size:15px;white-space:nowrap;margin:0}
+  /* mentions + copyright : une seule ligne, sur toute la largeur */
+  .soutienLegal{display:flex;grid-column:1 / -1;grid-row:2;justify-content:center;
+    align-items:center;gap:6px;margin:2px 0 0;flex-wrap:nowrap;white-space:nowrap}
+  .soutienLegal button,.soutienLegal span{font-size:12.5px}
 
   /* --- polices agrandies sur smartphone (minimum 14 px partout) --- */
   label{font-size:14px}
@@ -958,8 +962,8 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
     </div>
   </aside>
   <div class="soutien" id="soutien">
-    <p class="soutienTxt">OptimEssence est <b>gratuit et sans publicité</b>.
-    S'il vous fait économiser au plein, vous pouvez m'offrir un café.</p>
+    <p class="soutienTxt">OptimEssence est <b>gratuit et sans publicité</b>.<span class="soutienTxt2">
+    S'il vous fait économiser au plein, vous pouvez m'offrir un café.</span></p>
     <a id="kofiBtn" class="kofi" href="#" target="_blank" rel="noopener">☕ Offrir un café</a>
     <p class="soutienLegal"><button type="button" id="legalBtn2">Mentions légales &amp; sources</button>
     <span>· © 2026 OptimEssence</span></p>
@@ -4502,6 +4506,8 @@ $("geoBtn").onclick = () => {
     if(wDep && wDep.value.trim() && vraiDep) vraiDep.value = wDep.value.trim();
     reporter();
     fermer();
+    // Réduit le volet pour que la roue de progression (au centre de la carte) soit visible.
+    if(typeof window.__voirCarte === "function") window.__voirCarte();
     if(typeof search === "function") search();
   };
 
