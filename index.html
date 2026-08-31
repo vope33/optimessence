@@ -258,7 +258,7 @@ button.clear:hover{color:var(--text)}
   white-space:normal;overflow:visible;text-overflow:clip;padding-left:10px;position:relative}
 .who>span.rent::before{content:"›";position:absolute;left:0;opacity:.55}
 .who>span.rent:first-of-type{margin-top:3px}
-.rent.ok{color:#7fca9b}   /* vert adouci (moins de fatigue oculaire que le vert vif) */
+.rent.ok{color:#8fbf9f}   /* vert désaturé, doux pour les yeux */
 .rent.ko{color:#98a2b1}
 .pill{font:650 13px var(--liste);color:#fff;border-radius:7px;padding:6px 8px;text-align:center;line-height:1.15}
 .pill small{display:block;font:500 9px var(--mono);opacity:.85}
@@ -4506,9 +4506,13 @@ $("geoBtn").onclick = () => {
     if(wDep && wDep.value.trim() && vraiDep) vraiDep.value = wDep.value.trim();
     reporter();
     fermer();
-    // Réduit le volet pour que la roue de progression (au centre de la carte) soit visible.
-    if(typeof window.__voirCarte === "function") window.__voirCarte();
-    if(typeof search === "function") search();
+    // Réduit le volet AVANT de lancer, pour que la roue de progression soit visible.
+    // Léger délai pour s'appliquer après la fermeture de la modale.
+    if(typeof window.__voirCarte === "function"){
+      window.__voirCarte();
+      setTimeout(() => { if(typeof window.__voirCarte === "function") window.__voirCarte(); }, 60);
+    }
+    if(typeof search === "function") setTimeout(search, 80);
   };
 
   const wGo = document.getElementById("wGo");
