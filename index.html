@@ -244,32 +244,26 @@ button.clear:hover{color:var(--text)}
 /* ---- liste compacte des résultats ---- */
 #results{list-style:none;margin:0;padding:6px 0}
 .item{display:block;padding:12px 20px;cursor:pointer;border-left:3px solid transparent}
-/* Ligne 1 : titre (n° + marque + cp) à gauche, prix au litre à droite */
-.r-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.r-title{min-width:0;display:flex;align-items:baseline;gap:0;flex:1 1 auto;
+/* Ligne 1 : n° + badge prix coloré + marque + code postal */
+.r-head{display:flex;align-items:center;gap:10px}
+.r-num{font:700 13px var(--mono);color:var(--muted);flex:0 0 auto;min-width:16px;text-align:right}
+.r-pill{flex:0 0 auto;font:700 15px var(--liste);color:#fff;border-radius:8px;
+  padding:6px 9px;text-align:center;line-height:1.1;font-variant-numeric:tabular-nums}
+.r-pill small{display:block;font:600 9px var(--mono);opacity:.9}
+.r-title{min-width:0;display:flex;align-items:baseline;flex:1 1 auto;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.r-num{font:700 12px var(--mono);color:var(--muted);margin-right:8px;flex:0 0 auto}
 .r-title b{font:700 16px var(--liste);color:var(--text);overflow:hidden;text-overflow:ellipsis}
-.r-prix{flex:0 0 auto;font:800 19px var(--liste);font-variant-numeric:tabular-nums;line-height:1}
-.r-prix small{font-size:11px;font-weight:600;margin-left:2px;opacity:.85}
 /* Ligne 2 : ville — adresse */
-.r-adr{font:400 13px var(--liste);color:var(--muted);margin-top:2px;
+.r-adr{font:400 13px var(--liste);color:var(--muted);margin-top:4px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-/* Bloc deux colonnes : distance | prix du plein */
-.r-stats{display:flex;gap:18px;margin-top:9px}
-.r-stat{display:flex;flex-direction:column;gap:1px}
-.r-lab{font:600 10.5px var(--liste);color:var(--muted);text-transform:uppercase;letter-spacing:.02em}
-.r-val{font:600 14px var(--liste);color:var(--text);font-variant-numeric:tabular-nums}
-.r-val.r-euro{color:var(--accent);font-weight:700}
-.r-num{font:700 12px var(--mono);color:var(--muted)}
 .item.on .r-num,.item:hover .r-num{color:var(--accent)}
 .item:hover,.item.on{background:var(--panel2);border-left-color:var(--accent)}
 .item.relegue{opacity:.42}
+.item.relegue .r-pill{filter:grayscale(1)}
 /* meilleur choix : liseré vert + fond très léger + point */
 .item.best{border-left-color:#22c55e;background:rgba(34,197,94,.05)}
 .item.best .r-num{color:#22c55e}
-.item.best .r-num::before{content:"● ";font-size:8px;vertical-align:2px}
-.why{display:block;font:600 9.5px var(--mono);color:var(--warn);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.why{display:block;font:600 9.5px var(--mono);color:var(--warn);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
 .rent.ok{color:#8fbf9f}   /* vert désaturé, doux pour les yeux */
 .rent.ko{color:#98a2b1}
 /* Tableau de rentabilité (remplace les phrases répétées) */
@@ -286,6 +280,12 @@ button.clear:hover{color:var(--text)}
 .rentT tr.rent-ok .rt-seuil{color:#8fbf9f}
 .rentT tr.rent-ko td{color:#98a2b1}
 .rentT tr.rt-plus td{color:var(--muted);font-size:12px;padding-top:2px}
+/* ligne « cette station » : distance + prix du plein, mise en avant au-dessus des comparaisons */
+.rentT tr.rt-self td{padding-top:5px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.rentT tr.rt-self .rt-seuil{color:var(--text);font-weight:700}
+.rentT tr.rt-self .rt-ref{color:var(--accent);font-size:12px}
+.rentT tr.rt-self .rt-km{color:var(--text);font-weight:600}
+.rentT tr.rt-self .rt-self-euro{color:var(--accent);font-weight:700}
 .tag.hw{border:0;padding:0;margin-left:5px;vertical-align:-2px;background:none}
 .tag.hw svg{display:block}
 .tag{display:inline-block;font:600 11.5px var(--liste);color:var(--accent);border:1px solid var(--line);
@@ -295,7 +295,7 @@ li.sep{list-style:none;padding:10px 20px 4px;margin-top:6px;border-top:1px dashe
 li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--warn)}
 /* lignes estimées : légèrement atténuées, prix en gris pour rappeler l'incertitude */
 .item.est{opacity:.86}
-.item.est .r-prix{color:var(--warn)!important}
+.item.est .r-pill{filter:grayscale(1)}
 .item.est .r-num::after{content:" ~";color:var(--warn);font-size:10px}
 
 #map{flex:1;background:#e8eaed;position:relative}
@@ -543,7 +543,7 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   .soutien{position:fixed;left:0;right:0;width:auto;bottom:0;z-index:1600;
     display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px;
     padding:8px 14px calc(6px + env(safe-area-inset-bottom));
-    border-radius:14px 14px 0 0;box-shadow:0 -6px 20px rgba(0,0,0,.4)}
+    border-radius:0;box-shadow:0 -6px 20px rgba(0,0,0,.4)}
   #app.droite .soutien{left:0;right:0}
   .soutienTxt{grid-column:1;grid-row:1;font-size:13px;margin:0;line-height:1.35}
   .soutienTxt2{display:none}   /* 2e phrase masquée sur mobile pour un pied compact */
@@ -560,13 +560,13 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   .src,.hint{font-size:14px}
   .status{font-size:16px;padding:14px 18px;line-height:1.5}
   .legend{font-size:14px}
-  /* Nouvelle structure d'un résultat (disposition maquette) — tailles mobiles. */
+  /* Nouvelle structure d'un résultat — tailles mobiles. */
   .r-title b{font-size:17px}
-  .r-prix{font-size:21px}
+  .r-pill{font-size:16px}
   .r-adr{font-size:14px}
-  .r-lab{font-size:11.5px}
-  .r-val{font-size:15px}
   .why{font-size:12px}
+  .rentT{font-size:14px}
+  .rentT th{font-size:12px}
   .consoAide{font-size:14px}
   .copyright{font-size:14px}
   #legalIn{font-size:15.5px;line-height:1.6}
@@ -2753,6 +2753,8 @@ function renderList(cands, top, cutIndex){
   // Le seuil de rentabilité ne se compare qu'aux stations RETENUES (non grisées) :
   // se comparer à une station sans intérêt n'aurait pas de sens.
   const retenues = shown.filter(c => !c.relegue);
+  // Mémorise les stations retenues (non grisées) avec coordonnées, pour le bouton recentrer.
+  dernieresRetenues = retenues.filter(c => isFinite(c.la) && isFinite(c.lo)).map(c => [c.la, c.lo]);
   const min = Math.min(...shown.map(c => c.prix)), max = Math.max(...shown.map(c => c.prix));
   shown.forEach((c, i) => {
     // Séparateur explicite entre les stations mesurées et les estimées.
@@ -2797,13 +2799,33 @@ function renderList(cands, top, cutIndex){
         let extra = "";
         if(sr.comps.length > 3) extra += `<tr class="rt-plus"><td colspan="4">…et ${sr.comps.length - 3} autre(s)</td></tr>`;
         if(sr.impossible) extra += `<tr class="rent-ko"><td colspan="4">${refNom(sr.impossible.ref)} (${refKm(sr.impossible.ref)}) est plus proche et moins chère</td></tr>`;
+        // Ligne « cette station » : sa distance A/R et le prix de son plein, dans les
+        // MÊMES colonnes (dist. / plein) que les lignes de rentabilité en dessous.
+        const ligneStation = `<tr class="rt-self"><td class="rt-seuil">Cette station</td>`
+               + `<td class="rt-ref">${mn ? mn.replace(/[()]/g, "") : ""}</td>`
+               + `<td class="rt-km">${km}</td>`
+               + `<td class="rt-prix rt-self-euro">${eurFr(c.prix * resv)}</td></tr>`;
         rentPhrase = `<table class="rentT"><thead><tr><th>Rentable</th><th>face à</th><th>dist.</th><th>plein</th></tr></thead>`
-                   + `<tbody>${rangs.join("")}${extra}</tbody></table>`;
+                   + `<tbody>${ligneStation}${rangs.join("")}${extra}</tbody></table>`;
       }else if(sr && sr.impossible){
-        rentPhrase = `<table class="rentT"><tbody><tr class="rent-ko"><td colspan="4">`
+        const ligneStation = `<tr class="rt-self"><td class="rt-seuil">Cette station</td>`
+               + `<td class="rt-ref">${mn ? mn.replace(/[()]/g, "") : ""}</td>`
+               + `<td class="rt-km">${km}</td>`
+               + `<td class="rt-prix rt-self-euro">${eurFr(c.prix * resv)}</td></tr>`;
+        rentPhrase = `<table class="rentT"><thead><tr><th>Rentable</th><th>face à</th><th>dist.</th><th>plein</th></tr></thead>`
+                   + `<tbody>${ligneStation}<tr class="rent-ko"><td colspan="4">`
                    + `${refNom(sr.impossible.ref)} (${refKm(sr.impossible.ref)}) est plus proche et moins chère`
                    + `</td></tr></tbody></table>`;
       }
+    }
+    // Si aucune ligne de rentabilité (station reléguée ou sans comparaison), on affiche
+    // quand même sa distance et le prix de son plein, dans le même format de tableau.
+    if(!rentPhrase){
+      rentPhrase = `<table class="rentT"><thead><tr><th></th><th></th><th>dist.</th><th>plein</th></tr></thead>`
+                 + `<tbody><tr class="rt-self"><td class="rt-seuil">Cette station</td>`
+                 + `<td class="rt-ref">${mn ? mn.replace(/[()]/g, "") : ""}</td>`
+                 + `<td class="rt-km">${km}</td>`
+                 + `<td class="rt-prix rt-self-euro">${eurFr(c.prix * resv)}</td></tr></tbody></table>`;
     }
     const estBest = i === 0 && !c.relegue && c.distanceMode === "road";
     const li = document.createElement("li");
@@ -2817,24 +2839,17 @@ function renderList(cands, top, cutIndex){
     const soust  = marque ? `${esc(c.s.ville || "")} — ${esc(c.s.adresse || "")}`
                           : esc(c.s.adresse || "");
     li.innerHTML =
-      // Ligne 1 : n° + marque + code postal à gauche, prix au litre à droite.
+      // Ligne 1 : n° + badge prix coloré + marque + code postal.
         `<div class="r-head">`
-      +   `<div class="r-title"><span class="r-num">${i + 1}</span>`
-      +     `<b>${titre}</b><span class="tag">${esc(c.s.cp || "")}</span>${hw}</div>`
-      +   `<div class="r-prix" style="color:${col}">${c.prix.toFixed(3)}<small>€/L</small></div>`
+      +   `<span class="r-num">${i + 1}</span>`
+      +   `<span class="r-pill" style="background:${col}">${c.prix.toFixed(3)}<small>€/L</small></span>`
+      +   `<div class="r-title"><b>${titre}</b><span class="tag">${esc(c.s.cp || "")}</span>${hw}</div>`
       + `</div>`
       // Ligne 2 : ville — adresse.
       + `<div class="r-adr">${soust}</div>`
       + (c.horsRayon ? `<div class="why">hors rayon demandé</div>`
          : c.plusLoinPlusCher ? `<div class="why">plus loin, et plus cher au total</div>` : "")
-      // Bloc deux colonnes : Distance (A/R) | Prix du plein de N L.
-      + `<div class="r-stats">`
-      +   `<div class="r-stat"><span class="r-lab">Distance (A/R)</span>`
-      +     `<span class="r-val">${km} ${mn}</span></div>`
-      +   `<div class="r-stat"><span class="r-lab">Prix du plein de ${resv} L</span>`
-      +     `<span class="r-val r-euro">${eurFr(c.prix * resv)}</span></div>`
-      + `</div>`
-      // Tableau de rentabilité.
+      // Tableau unifié : distance, prix du plein, puis rentabilité — colonnes alignées.
       + rentPhrase;
     li.dataset.rang = String(i + 1);
     const focus = () => { selectionner(i + 1, true); if(typeof window.__voirCarte === "function") window.__voirCarte(); };
@@ -3385,6 +3400,7 @@ function setStatus(html, kind){
 
 // Trace l'aller (plein) et le retour (pointillés) entre l'origine et la station cliquée.
 let origineActuelle = null, prepActuelle = null, tripSeq = 0;
+let dernieresRetenues = [];   // stations retenues (non grisées) du dernier affichage, pour recentrer
 async function tracerAllerRetour(c, marque){
   if(!origineActuelle) return;
   const seq = ++tripSeq;
@@ -4263,9 +4279,19 @@ function majResume(){
 
 // Recentre sur la position déjà saisie, sinon la demande au navigateur.
 $("recentrer").onclick = () => {
+  // S'il y a des stations retenues affichées, on cadre sur elles (+ la position),
+  // pour toutes les voir d'un coup — pas seulement recentrer sur le point de départ.
   const m = $("dep").value.trim().match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
-  if(m){ map.setView([parseFloat(m[1]), parseFloat(m[2])], Math.max(map.getZoom(), 14), {animate: !reduced}); return; }
-  if(origineActuelle){ map.setView(origineActuelle, Math.max(map.getZoom(), 14), {animate: !reduced}); return; }
+  const origine = m ? [parseFloat(m[1]), parseFloat(m[2])] : origineActuelle;
+  if(dernieresRetenues && dernieresRetenues.length){
+    const pts = dernieresRetenues.slice();
+    if(origine) pts.push(origine);
+    try{
+      map.fitBounds(L.latLngBounds(pts).pad(0.12), {animate: !reduced, ...fitPad()});
+      return;
+    }catch(_){ /* repli sur le recentrage simple ci-dessous */ }
+  }
+  if(origine){ map.setView(origine, Math.max(map.getZoom(), 14), {animate: !reduced}); return; }
   $("geoBtn").onclick();
 };
 
