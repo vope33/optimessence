@@ -289,15 +289,16 @@ button.clear:hover{color:var(--text)}
 .rent.ok{color:#8fbf9f}   /* vert désaturé, doux pour les yeux */
 .rent.ko{color:#98a2b1}
 /* Tableau de rentabilité (remplace les phrases répétées) */
-.rentT{border-collapse:collapse;margin-top:6px;font:500 13.5px var(--liste);width:100%;table-layout:auto}
-.rentT th{font-weight:600;color:var(--muted);text-align:left;padding:2px 12px 4px 0;
-  font-size:11.5px;text-transform:uppercase;letter-spacing:.02em;border-bottom:1px solid var(--line);white-space:nowrap}
+.rentT{border-collapse:collapse;margin-top:6px;font:500 13px var(--liste);width:100%;table-layout:fixed}
+.rentT th{font-weight:600;color:var(--muted);text-align:left;padding:2px 8px 4px 0;
+  font-size:11px;text-transform:uppercase;letter-spacing:.01em;border-bottom:1px solid var(--line);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rentT th:last-child,.rentT td:last-child{padding-right:0}
-.rentT td{padding:3px 12px 3px 0;vertical-align:top;line-height:1.3}
-.rentT .rt-seuil{white-space:nowrap;font-weight:600;width:1%}
-.rentT .rt-ref{color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:0;width:99%}
-.rentT .rt-km{white-space:nowrap;color:var(--muted);text-align:right;width:1%}
-.rentT .rt-prix{white-space:nowrap;text-align:right;width:1%;font-weight:600}
+.rentT td{padding:3px 8px 3px 0;vertical-align:top;line-height:1.25}
+.rentT .rt-seuil{white-space:nowrap;font-weight:600;width:5.8em;overflow:hidden;text-overflow:ellipsis}
+.rentT .rt-ref{color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:auto}
+.rentT .rt-km{white-space:normal;color:var(--muted);text-align:right;width:4.4em}
+.rentT .rt-prix{white-space:nowrap;text-align:right;width:3.8em;font-weight:600}
 .rentT tr.rent-ok .rt-prix{color:var(--text)}
 .rentT tr.rent-ok .rt-seuil{color:#8fbf9f}
 .rentT tr.rent-ko td{color:#98a2b1}
@@ -2791,8 +2792,10 @@ function renderList(cands, top, cutIndex){
     // Détour aller-retour (celui qui est facturé dans le coût réel).
     const ar  = (c.aller != null && c.retour != null) ? c.aller + c.retour : null;
     const kmTxt = ar != null ? (c.reel ? "" : "~") + ar.toFixed(1) + " km A/R" : "—";
+    const kmSeul = ar != null ? (c.reel ? "" : "~") + ar.toFixed(1) + " km" : "—";   // sans « A/R » (déjà dans l'en-tête du tableau)
     const mins = (c.durAller != null ? c.durAller : 0) + (c.durRetour != null ? c.durRetour : 0);
     const minTxt = mins > 0 ? `(${Math.round(mins)} min)` : "";
+    const minSeul = mins > 0 ? `${Math.round(mins)} min` : "";   // sans parenthèses (pour la ligne station)
     // valeurs conservées pour compat avec le reste du code
     const km = kmTxt, mn = minTxt;
     // Seuil de rentabilité — uniquement pour les stations retenues (non grisées).
@@ -2825,14 +2828,14 @@ function renderList(cands, top, cutIndex){
         // MÊMES colonnes (dist. / plein) que les lignes de rentabilité en dessous.
         const ligneStation = `<tr class="rt-self"><td class="rt-seuil">Cette station</td>`
                + `<td class="rt-ref"></td>`
-               + `<td class="rt-km">${km}${mn ? " " + mn : ""}</td>`
+               + `<td class="rt-km">${kmSeul}${minSeul ? "<br>" + minSeul : ""}</td>`
                + `<td class="rt-prix rt-self-euro">${eurFr(c.prix * resv)}</td></tr>`;
         rentPhrase = `<table class="rentT"><thead><tr><th>Rentable</th><th>face à</th><th>Dist. A/R</th><th>plein</th></tr></thead>`
                    + `<tbody>${ligneStation}${rangs.join("")}${extra}</tbody></table>`;
       }else if(sr && sr.impossible){
         const ligneStation = `<tr class="rt-self"><td class="rt-seuil">Cette station</td>`
                + `<td class="rt-ref"></td>`
-               + `<td class="rt-km">${km}${mn ? " " + mn : ""}</td>`
+               + `<td class="rt-km">${kmSeul}${minSeul ? "<br>" + minSeul : ""}</td>`
                + `<td class="rt-prix rt-self-euro">${eurFr(c.prix * resv)}</td></tr>`;
         rentPhrase = `<table class="rentT"><thead><tr><th>Rentable</th><th>face à</th><th>Dist. A/R</th><th>plein</th></tr></thead>`
                    + `<tbody>${ligneStation}<tr class="rent-ko"><td colspan="4">`
@@ -2846,7 +2849,7 @@ function renderList(cands, top, cutIndex){
       rentPhrase = `<table class="rentT"><thead><tr><th></th><th></th><th>Dist. A/R</th><th>plein</th></tr></thead>`
                  + `<tbody><tr class="rt-self"><td class="rt-seuil">Cette station</td>`
                  + `<td class="rt-ref"></td>`
-                 + `<td class="rt-km">${km}${mn ? " " + mn : ""}</td>`
+                 + `<td class="rt-km">${kmSeul}${minSeul ? "<br>" + minSeul : ""}</td>`
                  + `<td class="rt-prix rt-self-euro">${eurFr(c.prix * resv)}</td></tr></tbody></table>`;
     }
     const estBest = i === 0 && !c.relegue && c.distanceMode === "road";
