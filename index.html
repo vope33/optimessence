@@ -2748,6 +2748,8 @@ function renderList(cands, top, cutIndex){
   const shown = cands.slice(0, top);
   if(!shown.length) return;
   const conso = parseFloat($("conso").value) || 6.2;
+  const resv = parseFloat($("res").value) || 35;
+  const eurFr = v => v.toFixed(2).replace(".", ",") + " €";
   // Le seuil de rentabilité ne se compare qu'aux stations RETENUES (non grisées) :
   // se comparer à une station sans intérêt n'aurait pas de sens.
   const retenues = shown.filter(c => !c.relegue);
