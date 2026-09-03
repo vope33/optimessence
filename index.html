@@ -320,10 +320,13 @@ button.clear:hover{color:var(--text)}
 .rentT1{margin-top:8px}
 .rentT1 tr.rt-self .rt-km{color:var(--text);font-weight:600}
 .rentT1 .rt-self-euro{color:var(--accent);font-weight:700}
-/* tableau 2 (comparaisons) : 2 colonnes — Rentable | Face à */
+/* tableau 2 (comparaisons) : Rentable | Face à | dist | plein */
 .rentT2{margin-top:6px}
-.rentT2 .rt-seuil{white-space:nowrap;font-weight:600;width:6em}
+.rentT2 .rt-seuil{white-space:nowrap;font-weight:600;width:5.4em}
 .rentT2 .rt-ref{color:var(--text);white-space:normal;overflow-wrap:anywhere;width:auto}
+.rentT2 .rt-km{width:4em}
+.rentT2 .rt-prix{width:4.6em}
+.rentT2 tr.rent-ok .rt-prix{color:var(--text)}
 .rentT tr.rent-ok .rt-seuil{color:#8fbf9f}
 .rentT tr.rent-ko td{color:#98a2b1}
 .rentT tr.rt-plus td{color:var(--muted);font-size:12px;padding-top:2px}
@@ -2846,13 +2849,15 @@ function renderList(cands, top, cutIndex){
           else if(cp.volume > 120){ seuil = "> " + Math.round(cp.volume) + " L"; cls = "ko"; }
           else { seuil = "dès " + cp.volume.toFixed(0) + " L"; cls = "ok"; }
           return `<tr class="rent-${cls}"><td class="rt-seuil">${seuil}</td>`
-               + `<td class="rt-ref">${refNom(cp.ref)}</td></tr>`;
+               + `<td class="rt-ref">${refNom(cp.ref)}</td>`
+               + `<td class="rt-km">${refKm(cp.ref)}</td>`
+               + `<td class="rt-prix">${refPlein(cp.ref)}</td></tr>`;
         });
         let extra = "";
-        if(sr.comps.length > 3) extra += `<tr class="rt-plus"><td colspan="2">…et ${sr.comps.length - 3} autre(s)</td></tr>`;
-        if(sr.impossible) extra += `<tr class="rent-ko"><td colspan="2">${refNom(sr.impossible.ref)} (${refKm(sr.impossible.ref)}) est plus proche et moins chère</td></tr>`;
+        if(sr.comps.length > 3) extra += `<tr class="rt-plus"><td colspan="4">…et ${sr.comps.length - 3} autre(s)</td></tr>`;
+        if(sr.impossible) extra += `<tr class="rent-ko"><td colspan="4">${refNom(sr.impossible.ref)} (${refKm(sr.impossible.ref)}) est plus proche et moins chère</td></tr>`;
         rentPhrase = tableauResultat(c, kmSeul, minSeul, eurFr(c.prix * resv), resv)
-                   + `<table class="rentT rentT2"><thead><tr><th class="rt-seuil">Rentable</th><th class="rt-ref">Face à</th></tr></thead>`
+                   + `<table class="rentT rentT2"><thead><tr><th class="rt-seuil">Rentable</th><th class="rt-ref">Face à</th><th class="rt-km"></th><th class="rt-prix"></th></tr></thead>`
                    + `<tbody>${rangs.join("")}${extra}</tbody></table>`;
       }else if(sr && sr.impossible){
         rentPhrase = tableauResultat(c, kmSeul, minSeul, eurFr(c.prix * resv), resv)
