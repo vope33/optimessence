@@ -2730,7 +2730,13 @@ function drawStations(cands, top){
     }
     const ar = (c.aller != null && c.retour != null)
       ? `aller ${c.aller.toFixed(1)} km / retour ${c.retour.toFixed(1)} km` : "";
-    const mk = L.marker([c.la, c.lo], {icon: pin(String(i + 1), col)}).addTo(markLayer);
+    // Ordre d'empilement : les stations retenues passent au-dessus des grisées, et
+    // la meilleure (rang 1) tout en haut. Sinon les badges verts sont noyés sous les gris.
+    let zoff;
+    if(i === 0 && !c.relegue)      zoff = 3000;   // meilleure station : premier plan absolu
+    else if(!c.relegue)            zoff = 2000 - i; // retenues : au-dessus des grisées
+    else                           zoff = 0;        // grisées : arrière-plan
+    const mk = L.marker([c.la, c.lo], {icon: pin(String(i + 1), col), zIndexOffset: zoff}).addTo(markLayer);
     mk.on("click", () => selectionner(i + 1, false));
     // Prix affiché en permanence, seulement pour les stations retenues : sur les
     // grisées, ce serait du bruit puisqu'elles sont écartées du classement.
@@ -3686,7 +3692,9 @@ async function searchAround(){
 
   routeLayer.clearLayers();
   corridorLine = null;
-  L.marker(origin, {icon: pinPosition()}).addTo(routeLayer).bindPopup("Ma position");
+  // Pin « Ma position » : z-index intermédiaire — visible au-dessus des stations
+  // grisées, mais SOUS les badges retenus (verts) pour ne pas les masquer.
+  L.marker(origin, {icon: pinPosition(), zIndexOffset: 500}).addTo(routeLayer).bindPopup("Ma position");
   const disque = L.circle(origin, {radius: rayon * 1000, opacity: 0, fill: false, interactive: false}).addTo(routeLayer);
   dessinerMasqueRayon(origin, rayon * 1000);
   map.fitBounds(disque.getBounds().pad(0.05), {animate: !reduced, ...fitPad()});
