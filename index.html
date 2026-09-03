@@ -274,7 +274,7 @@ button.clear:hover{color:var(--text)}
 .r-num{font:700 12px var(--liste);color:var(--muted);flex:0 0 auto;
   width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);
   display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
-.r-pill{flex:0 0 auto;font:700 15px var(--liste);color:#fff;border-radius:8px;
+.r-pill{flex:0 0 auto;font:700 15px var(--liste);color:#fff;border-radius:8px;background:var(--accent);
   padding:6px 9px;text-align:center;line-height:1.1;font-variant-numeric:tabular-nums}
 .r-pill small{display:block;font:600 9px var(--mono);opacity:.9}
 .r-title{min-width:0;display:flex;align-items:baseline;flex:1 1 auto;
@@ -307,24 +307,23 @@ button.clear:hover{color:var(--text)}
 /* Tableau de rentabilité (remplace les phrases répétées) */
 .rentT{border-collapse:collapse;width:100%;table-layout:fixed;font:500 13px var(--liste);margin-top:3px}
 .rentT th{font-weight:600;color:var(--muted);text-align:left;padding:2px 8px 4px 0;
-  font-size:11px;border-bottom:1px solid var(--line);white-space:nowrap;
-  overflow:hidden;text-overflow:ellipsis}
+  font-size:11px;border-bottom:1px solid var(--line);white-space:normal;line-height:1.2;vertical-align:bottom}
 .rentT th:last-child,.rentT td:last-child{padding-right:0}
 .rentT td{padding:3px 8px 3px 0;vertical-align:top;line-height:1.3}
 .rentT th.rt-km,.rentT td.rt-km,.rentT th.rt-prix,.rentT td.rt-prix{text-align:right}
-/* colonnes distance et plein : largeur fixe suffisante pour « Distance A/R » / « Plein estimé » */
-.rentT .rt-km{white-space:nowrap;color:var(--muted);width:4.6em}
-.rentT .rt-prix{white-space:nowrap;width:4.8em;font-weight:600}
-/* tableau 1 (cette station) : nom large à gauche */
+.rentT .rt-km{white-space:nowrap;color:var(--muted)}
+.rentT .rt-prix{white-space:nowrap;font-weight:600}
+/* tableau 1 (cette station) : nom large + colonnes distance/plein assez larges pour les en-têtes */
 .rentT1 .rt-self-nom{white-space:nowrap;font-weight:700;color:var(--text);width:auto}
+.rentT1 .rt-km{width:5.6em}
+.rentT1 .rt-prix{width:5.4em}
 .rentT1{margin-top:8px}
 .rentT1 tr.rt-self .rt-km{color:var(--text);font-weight:600}
 .rentT1 .rt-self-euro{color:var(--accent);font-weight:700}
-/* tableau 2 (comparaisons) : « Rentable » en entier, « Face à » large */
-.rentT2{margin-top:4px}
+/* tableau 2 (comparaisons) : 2 colonnes — Rentable | Face à */
+.rentT2{margin-top:6px}
 .rentT2 .rt-seuil{white-space:nowrap;font-weight:600;width:6em}
 .rentT2 .rt-ref{color:var(--text);white-space:normal;overflow-wrap:anywhere;width:auto}
-.rentT tr.rent-ok .rt-prix{color:var(--text)}
 .rentT tr.rent-ok .rt-seuil{color:#8fbf9f}
 .rentT tr.rent-ko td{color:#98a2b1}
 .rentT tr.rt-plus td{color:var(--muted);font-size:12px;padding-top:2px}
@@ -2484,9 +2483,9 @@ function montrerFiche(html){
   $("card").hidden = false;
   const mp = document.getElementById("map"); if(mp) mp.classList.add("ficheOuverte");
 }
-// Attache l'info à un marqueur sans bulle : le clic remplit la fiche du coin.
+// Stocke l'info sur un marqueur (sans plus ouvrir de fiche popup au clic :
+// le clic est géré ailleurs pour sélectionner la station dans la liste).
 function infoMarqueur(m, html){
-  m.on("click", () => montrerFiche(html));
   m._info = html;
   return m;
 }
@@ -2818,7 +2817,6 @@ function renderList(cands, top, cutIndex){
       sep.innerHTML = `<span>Estimations à vol d'oiseau — non comparables aux coûts réels</span>`;
       ul.appendChild(sep);
     }
-    const col = priceColor(max > min ? (c.prix - min) / (max - min) : 0);
     const hw = String(c.s.pop || "").toUpperCase() === "A" ? PICTO_AUTOROUTE : "";
     // Détour aller-retour (celui qui est facturé dans le coût réel).
     const ar  = (c.aller != null && c.retour != null) ? c.aller + c.retour : null;
@@ -2848,15 +2846,13 @@ function renderList(cands, top, cutIndex){
           else if(cp.volume > 120){ seuil = "> " + Math.round(cp.volume) + " L"; cls = "ko"; }
           else { seuil = "dès " + cp.volume.toFixed(0) + " L"; cls = "ok"; }
           return `<tr class="rent-${cls}"><td class="rt-seuil">${seuil}</td>`
-               + `<td class="rt-ref">${refNom(cp.ref)}</td>`
-               + `<td class="rt-km">${refKm(cp.ref)}</td>`
-               + `<td class="rt-prix">${refPlein(cp.ref)}</td></tr>`;
+               + `<td class="rt-ref">${refNom(cp.ref)}</td></tr>`;
         });
         let extra = "";
-        if(sr.comps.length > 3) extra += `<tr class="rt-plus"><td colspan="4">…et ${sr.comps.length - 3} autre(s)</td></tr>`;
-        if(sr.impossible) extra += `<tr class="rent-ko"><td colspan="4">${refNom(sr.impossible.ref)} (${refKm(sr.impossible.ref)}) est plus proche et moins chère</td></tr>`;
+        if(sr.comps.length > 3) extra += `<tr class="rt-plus"><td colspan="2">…et ${sr.comps.length - 3} autre(s)</td></tr>`;
+        if(sr.impossible) extra += `<tr class="rent-ko"><td colspan="2">${refNom(sr.impossible.ref)} (${refKm(sr.impossible.ref)}) est plus proche et moins chère</td></tr>`;
         rentPhrase = tableauResultat(c, kmSeul, minSeul, eurFr(c.prix * resv), resv)
-                   + `<table class="rentT rentT2"><thead><tr><th class="rt-seuil">Rentable</th><th class="rt-ref">Face à</th><th class="rt-km">Dist.</th><th class="rt-prix">Plein</th></tr></thead>`
+                   + `<table class="rentT rentT2"><thead><tr><th class="rt-seuil">Rentable</th><th class="rt-ref">Face à</th></tr></thead>`
                    + `<tbody>${rangs.join("")}${extra}</tbody></table>`;
       }else if(sr && sr.impossible){
         rentPhrase = tableauResultat(c, kmSeul, minSeul, eurFr(c.prix * resv), resv)
@@ -2884,7 +2880,7 @@ function renderList(cands, top, cutIndex){
         `<div class="r-head">`
       +   `<span class="r-num">${i + 1}</span>`
       +   `<div class="r-title"><b>${titre}</b><span class="tag">${esc(c.s.cp || "")}</span>${hw}</div>`
-      +   `<span class="r-pill" style="background:${col}">${c.prix.toFixed(3)}<small>€/L</small></span>`
+      +   `<span class="r-pill">${c.prix.toFixed(3)}<small>€/L</small></span>`
       + `</div>`
       // Ligne 2 : ville — adresse.
       + `<div class="r-adr">${soust}</div>`
@@ -2912,8 +2908,8 @@ function renderList(cands, top, cutIndex){
     // aller-retour qui sera cadré une fois calculé — inutile de bouger deux fois.
     if(mode !== "around")
       recadrerStation(c.la, c.lo);
-    const m = markers.get(rang);
-    if(m && m._info) montrerFiche(m._info);
+    // (plus de fiche popup au clic : on met en avant la station dans la liste et
+    //  on trace son aller-retour, sans ouvrir de bulle sur la carte)
     if(mode === "around") tracerAllerRetour(c, brandOf(c.s));
     else if(c.snap)       tracerDetour(c, brandOf(c.s));
   };
