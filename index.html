@@ -2789,14 +2789,22 @@ function afficherResultats(cands, top){
 
 // Zone « cette station » du tableau de résultat : en-têtes Dist. A/R | Plein, puis
 // la ligne de la station elle-même (nom complet non tronqué, distance sur 2 lignes).
-function tableauResultat(c, kmSeul, minSeul, pleinTxt, resv){
-  // Tableau « cette station » : en-têtes Distance A/R | Plein estimé, puis la ligne station.
+function tableauResultat(c, kmSeul, minSeul, resv){
+  // Tableau « cette station » : Distance A/R | Coût réel, puis la décomposition.
+  // Le coût réel (plein + carburant brûlé par le détour) est la grandeur qui sert
+  // au classement : c'est donc elle qui doit être affichée, pas le prix du plein seul.
+  const eur = v => v.toFixed(2).replace(".", ",") + " €";
+  const plein  = c.prix * resv;
+  const detour = c.surcout != null ? c.surcout : 0;
+  const total  = c.total != null ? c.total : plein + detour;
   return `<table class="rentT rentT1"><thead><tr>`
-       + `<th class="rt-self-nom"></th><th class="rt-km">Distance A/R</th><th class="rt-prix">Plein estimé</th></tr></thead>`
+       + `<th class="rt-self-nom"></th><th class="rt-km">Distance A/R</th><th class="rt-prix">Coût réel</th></tr></thead>`
        + `<tbody><tr class="rt-self">`
        + `<td class="rt-self-nom">Cette station</td>`
        + `<td class="rt-km">${kmSeul}${minSeul ? "<br>(" + minSeul + ")" : ""}</td>`
-       + `<td class="rt-prix rt-self-euro">${pleinTxt}</td></tr></tbody></table>`;
+       + `<td class="rt-prix rt-self-euro">${eur(total)}</td></tr>`
+       + `<tr class="rt-plus"><td colspan="3">plein ${eur(plein)} + détour ${eur(detour)}</td></tr>`
+       + `</tbody></table>`;
 }
 
 function renderList(cands, top, cutIndex){
@@ -2840,8 +2848,11 @@ function renderList(cands, top, cutIndex){
       const sr = seuilContreLesPlusProches(c, retenues, conso);
       if(sr && sr.comps && sr.comps.length){
         const comps = sr.comps.slice(0, 3);   // les 3 plus proches (déjà triées par distance)
-        // Prix du plein à une station de référence (au volume choisi).
-        const refPlein = r => (r && isFinite(r.prix)) ? eurFr(r.prix * resv) : "";
+        // Coût réel à une station de référence (plein + détour), pour rester
+        // comparable à la colonne « Coût réel » de la station courante.
+        const refPlein = r => !r ? ""
+          : (r.total != null ? eurFr(r.total)
+             : (isFinite(r.prix) ? eurFr(r.prix * resv) : ""));
         // Tableau compact : une ligne par station de référence.
         const rangs = comps.map(cp => {
           let seuil, cls;
@@ -2856,18 +2867,18 @@ function renderList(cands, top, cutIndex){
         let extra = "";
         if(sr.comps.length > 3) extra += `<tr class="rt-plus"><td colspan="4">…et ${sr.comps.length - 3} autre(s)</td></tr>`;
         if(sr.impossible) extra += `<tr class="rent-ko"><td colspan="4">${refNom(sr.impossible.ref)} (${refKm(sr.impossible.ref)}) est plus proche et moins chère</td></tr>`;
-        rentPhrase = tableauResultat(c, kmSeul, minSeul, eurFr(c.prix * resv), resv)
-                   + `<table class="rentT rentT2"><thead><tr><th class="rt-seuil">Rentable</th><th class="rt-ref">Face à</th><th class="rt-km"></th><th class="rt-prix"></th></tr></thead>`
+        rentPhrase = tableauResultat(c, kmSeul, minSeul, resv)
+                   + `<table class="rentT rentT2"><thead><tr><th class="rt-seuil">Rentable</th><th class="rt-ref">Face à</th><th class="rt-km">Dist. A/R</th><th class="rt-prix">Coût réel</th></tr></thead>`
                    + `<tbody>${rangs.join("")}${extra}</tbody></table>`;
       }else if(sr && sr.impossible){
-        rentPhrase = tableauResultat(c, kmSeul, minSeul, eurFr(c.prix * resv), resv)
+        rentPhrase = tableauResultat(c, kmSeul, minSeul, resv)
                    + `<div class="r-comp-t r-comp-ko">${refNom(sr.impossible.ref)} (${refKm(sr.impossible.ref)}) est plus proche et moins chère</div>`;
       }
     }
     // Si aucune ligne de rentabilité (station reléguée ou sans comparaison), on affiche
     // quand même sa distance et le prix de son plein.
     if(!rentPhrase){
-      rentPhrase = tableauResultat(c, kmSeul, minSeul, eurFr(c.prix * resv), resv);
+      rentPhrase = tableauResultat(c, kmSeul, minSeul, resv);
     }
     const estBest = i === 0 && !c.relegue && c.distanceMode === "road";
     const li = document.createElement("li");
@@ -4609,7 +4620,14 @@ $("geoBtn").onclick = () => {
   const reporter = () => {
     if(wCarb && vraiCarb && wCarb.dataset.value){ vraiCarb.value = wCarb.dataset.value; vraiCarb.dispatchEvent(new Event("change")); }
     if(wRayonBtns && vraiRayon && wRayonBtns.dataset.km){ vraiRayon.value = wRayonBtns.dataset.km; vraiRayon.dispatchEvent(new Event("input")); }
-    if(wConso && vraiConso){ vraiConso.value = wConso.value; vraiConso.dispatchEvent(new Event("input")); }
+    if(wConso && vraiConso){
+      const vc = parseFloat(wConso.value);
+      // majConso() borne la valeur ET rafraîchit le champ #consoNum de la puce carte,
+      // qui restait sinon figé sur l'ancienne valeur alors que le calcul, lui, changeait.
+      if(isFinite(vc) && typeof majConso === "function") majConso(vc, false);
+      else vraiConso.value = wConso.value;
+      vraiConso.dispatchEvent(new Event("input"));
+    }
     if(wRes && vraiRes){ vraiRes.value = wRes.value; vraiRes.dispatchEvent(new Event("input")); }
     if(wNoHw && vraiNoHw && vraiNoHw.checked !== wNoHw.checked){ vraiNoHw.checked = wNoHw.checked; vraiNoHw.dispatchEvent(new Event("change")); }
     if(wMajor && vraiMajor && vraiMajor.checked !== wMajor.checked){ vraiMajor.checked = wMajor.checked; vraiMajor.dispatchEvent(new Event("change")); }
