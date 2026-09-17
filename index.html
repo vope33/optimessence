@@ -271,8 +271,9 @@ button.clear:hover{color:var(--text)}
 .item{display:block;padding:12px 20px;cursor:pointer;border-left:3px solid transparent}
 /* Ligne 1 : n° + badge prix coloré + marque + code postal */
 .r-head{display:flex;align-items:center;gap:10px}
-.r-num{font:700 12px var(--liste);color:var(--muted);flex:0 0 auto;
-  width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);
+.r-num{font:700 12px var(--liste);color:#fff;flex:0 0 auto;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--numc,var(--panel2));border:1.5px solid var(--numc,var(--line));
   display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
 .r-pill{flex:0 0 auto;font:700 15px var(--liste);color:#fff;border-radius:8px;background:var(--accent);
   padding:6px 9px;text-align:center;line-height:1.1;font-variant-numeric:tabular-nums}
@@ -294,13 +295,13 @@ button.clear:hover{color:var(--text)}
 /* Titre de la zone de comparaison (niveau 3) */
 .r-comp-t{font:600 11px var(--liste);color:var(--muted);margin-top:11px;line-height:1.35}
 .r-comp-t.r-comp-ko{color:#98a2b1;font-weight:500}
-.item.on .r-num,.item:hover .r-num{color:var(--accent);border-color:var(--accent)}
+.item.on .r-num,.item:hover .r-num{box-shadow:0 0 0 2px var(--accent)}
 .item:hover,.item.on{background:var(--panel2);border-left-color:var(--accent)}
 .item.relegue{opacity:.42}
 .item.relegue .r-pill{filter:grayscale(1)}
 /* meilleur choix : liseré vert + fond très léger + point */
 .item.best{border-left-color:#22c55e;background:rgba(34,197,94,.05)}
-.item.best .r-num{color:#22c55e;border-color:#22c55e}
+.item.best .r-num{box-shadow:0 0 0 2px #22c55e}
 .why{display:block;font:600 9.5px var(--mono);color:var(--warn);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
 .rent.ok{color:#8fbf9f}   /* vert désaturé, doux pour les yeux */
 .rent.ko{color:#98a2b1}
@@ -497,11 +498,19 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   /* La carte occupe tout l'écran ; le panneau devient une feuille coulissante par-dessus. */
   #app{flex-direction:column;position:relative}
   #app.droite{flex-direction:column}
-  #map{order:0;position:fixed;inset:0;height:100dvh;width:100%;min-height:0;z-index:0}
+  /* Firefox pour Android : avec la barre d'outils dynamique, 100dvh peut dépasser
+     la hauteur réellement visible. Le document devenait alors plus haut que l'écran,
+     laissant une bande vide sous le pied de page. Rien n'a besoin de défiler au
+     niveau du document (carte, volet et pied sont en position:fixed) : on le
+     verrouille, et on cale les hauteurs sur --vph, mesuré en JS. */
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+  #app{height:var(--vph,100dvh)}
+  #map{order:0;position:fixed;inset:0;height:var(--vph,100dvh);width:100%;min-height:0;z-index:0}
 
   #side{
     order:1;position:fixed;left:0;right:0;bottom:var(--cafe-h, 104px);width:100%;
-    height:calc(90dvh - var(--cafe-h, 104px));max-height:calc(90dvh - var(--cafe-h, 104px));z-index:1400;
+    height:calc(var(--vph, 100dvh) * 0.9 - var(--cafe-h, 104px));
+    max-height:calc(var(--vph, 100dvh) * 0.9 - var(--cafe-h, 104px));z-index:1400;
     border-right:0;border-top:0;border-radius:18px 18px 0 0;
     background:var(--panel);box-shadow:0 -8px 30px rgba(0,0,0,.5);
     display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;
@@ -605,6 +614,7 @@ li.sep span{font:600 10px var(--mono);letter-spacing:.05em;text-transform:upperc
   .status{font-size:16px;padding:14px 18px;line-height:1.5}
   .legend{font-size:14px}
   /* Nouvelle structure d'un résultat — tailles mobiles. */
+  .r-num{width:28px;height:28px;font-size:14.5px}
   .r-title b{font-size:17px}
   .r-pill{font-size:16px}
   .r-adr{font-size:14px}
@@ -1104,6 +1114,28 @@ label.chk.mc-check span{display:none}   /* parenthèses secondaires (« sans pri
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 "use strict";
+
+// ------------------------------------------------------ hauteur réellement visible
+// 100dvh n'est pas fiable partout (Firefox pour Android, Safari iOS) : la barre
+// d'outils escamotable peut le rendre plus grand que l'écran visible, ce qui rendait
+// le document scrollable et laissait une bande vide sous le pied de page. On publie
+// la hauteur mesurée dans --vph. Les mises à jour sont ignorées tant qu'un champ a
+// le focus, pour que l'ouverture du clavier ne fasse pas sauter la mise en page.
+(function hauteurVisible(){
+  const maj = () => {
+    const a = document.activeElement;
+    if(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+    const vv = window.visualViewport;
+    const h = Math.round((vv && vv.height) || window.innerHeight || 0);
+    if(h > 0) document.documentElement.style.setProperty("--vph", h + "px");
+  };
+  maj();
+  window.addEventListener("resize", maj);
+  window.addEventListener("orientationchange", () => setTimeout(maj, 150));
+  if(window.visualViewport) window.visualViewport.addEventListener("resize", maj);
+  // Au retour du focus (clavier refermé), on reprend la mesure.
+  document.addEventListener("focusout", () => setTimeout(maj, 150));
+})();
 
 // ------------------------------------------------------------ endpoints
 const GEOCODE    = "https://data.geopf.fr/geocodage/search";
@@ -2881,11 +2913,16 @@ function renderList(cands, top, cutIndex){
       rentPhrase = tableauResultat(c, kmSeul, minSeul, resv);
     }
     const estBest = i === 0 && !c.relegue && c.distanceMode === "road";
+    // Pastille du numéro remplie de la même couleur que le badge sur la carte :
+    // vert = la moins chère de la liste, rouge = la plus chère, gris = écartée.
+    const couleurNum = c.relegue ? "#6b7280"
+      : priceColor(max > min ? (c.prix - min) / (max - min) : 0);
     const li = document.createElement("li");
     li.className = "item" + (c.relegue ? " relegue" : "")
                  + (estBest ? " best" : "")
                  + (c.distanceMode !== "road" ? " est" : "");
     li.tabIndex = 0;
+    li.style.setProperty("--numc", couleurNum);
     c.rang = i + 1;
     const marque = brandOf(c.s);
     const titre  = marque ? esc(marque) : esc(c.s.ville || "?");
